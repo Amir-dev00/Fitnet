@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from gymui.pdthemes.de/html/shop.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 29 Sep 2026 20:00:14 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - gymui Fitness Center</title>
+
+    <link rel="stylesheet" href="assets/css/fonts.css">
+    <link rel="stylesheet" href="assets/css/tailwind.min.css">
+    <script defer src="assets/js/alpine.min.js"></script>
+    <style>
+        :root { --brand-yellow: #e1ff00; }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #111111; overflow-x: hidden; }
+        h1, h2, h3, h4, h5, h6, .font-oswald { font-family: 'Oswald', sans-serif; }
+        .text-brand { color: var(--brand-yellow); }
+        .bg-brand { background-color: var(--brand-yellow); }
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
+        .marquee-content { display: flex; animation: marquee 20s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Custom range slider */
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: #e5e7eb; border-radius: 2px; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #e1ff00; border-radius: 50%; cursor: pointer; border: 3px solid #111; }
+        input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; background: #e1ff00; border-radius: 50%; cursor: pointer; border: 3px solid #111; }
+    </style>
+
+    <script src="assets/js/gsap.min.js"></script>
+    <script src="assets/js/ScrollTrigger.min.js"></script>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-[#0a0a0a] text-white py-4 px-6 fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-brand rounded-full flex items-center justify-center text-black font-bold">G</div>
+                <span class="text-xl font-oswald font-bold tracking-wider">gymui</span>
+            </div>
+            <nav class="hidden md:flex gap-8 text-sm font-medium uppercase tracking-wider text-gray-300">
+                <a href="index.html" class="hover:text-brand transition">Home</a>
+                <a href="about.html" class="hover:text-brand transition">About</a>
+                <a href="#" class="hover:text-brand transition">Services</a>
+                <a href="shop.html" class="text-white hover:text-brand transition">Shop</a>
+                <a href="blog.html" class="hover:text-brand transition">Blog</a>
+                <a href="contact.html" class="hover:text-brand transition">Contact</a>
+            </nav>
+            <div class="flex items-center gap-6">
+                <button class="text-white hover:text-brand"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
+                <button class="text-white hover:text-brand relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="absolute -top-2 -right-2 bg-brand text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+                </button>
+                <a href="contact.html" class="bg-brand text-black font-oswald font-bold px-6 py-2 text-sm uppercase tracking-wider hover:bg-white transition">Get a Quote</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="relative pt-32 pb-24 bg-[#0a0a0a] text-white overflow-hidden">
+        <div class="absolute inset-0 flex items-center justify-center overflow-hidden z-0 opacity-[0.03]">
+            <h1 class="text-[14rem] md:text-[20rem] font-oswald font-bold leading-none tracking-tighter whitespace-nowrap">OUR SHOP</h1>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
+            <span class="bg-brand text-black px-4 py-1 text-xs font-bold uppercase tracking-wider font-oswald mb-6 inline-block">Fitness Gear</span>
+            <h1 class="text-5xl md:text-7xl font-oswald font-bold uppercase leading-tight mb-6">Shop</h1>
+            <div class="flex items-center justify-center gap-3 text-sm text-gray-400">
+                <a href="index.html" class="hover:text-brand transition">Home</a>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                <span class="text-brand">Shop</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop Content -->
+    <section class="py-20 px-6 max-w-7xl mx-auto" x-data="{ 
+        mobileFilters: false,
+        view: 'grid',
+        sort: 'popular',
+        priceMin: 0,
+        priceMax: 300,
+        selectedCategories: [],
+        selectedSizes: [],
+        selectedColors: [],
+        toggleCategory(cat) { this.selectedCategories.includes(cat) ? this.selectedCategories = this.selectedCategories.filter(c => c !== cat) : this.selectedCategories.push(cat) },
+        toggleSize(s) { this.selectedSizes.includes(s) ? this.selectedSizes = this.selectedSizes.filter(x => x !== s) : this.selectedSizes.push(s) },
+        toggleColor(c) { this.selectedColors.includes(c) ? this.selectedColors = this.selectedColors.filter(x => x !== c) : this.selectedColors.push(c) }
+    }">
+
+        <!-- Top Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+            <div>
+                <p class="text-sm text-gray-500">Showing <span class="font-bold text-black">1–12</span> of <span class="font-bold text-black">48</span> results</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Mobile filter toggle -->
+                <button @click="mobileFilters = !mobileFilters" class="lg:hidden flex items-center gap-2 border border-gray-200 px-4 py-2 text-sm font-bold uppercase tracking-wider rounded-sm hover:bg-brand hover:text-black hover:border-brand transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                    Filters
+                </button>
+                <!-- View toggle -->
+                <div class="flex border border-gray-200 rounded-sm overflow-hidden">
+                    <button @click="view = 'grid'" :class="view === 'grid' ? 'bg-brand text-black' : 'text-gray-400 hover:text-black'" class="p-2 transition">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><rect x="0" y="0" width="7" height="7" rx="1"/><rect x="9" y="0" width="7" height="7" rx="1"/><rect x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/></svg>
+                    </button>
+                    <button @click="view = 'list'" :class="view === 'list' ? 'bg-brand text-black' : 'text-gray-400 hover:text-black'" class="p-2 transition border-l border-gray-200">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="3" rx="1"/><rect x="0" y="5" width="16" height="3" rx="1"/><rect x="0" y="10" width="16" height="3" rx="1"/></svg>
+                    </button>
+                </div>
+                <!-- Sort -->
+                <select x-model="sort" class="border border-gray-200 px-4 py-2 text-sm rounded-sm focus:outline-none focus:border-brand bg-white cursor-pointer">
+                    <option value="popular">Sort by: Popular</option>
+                    <option value="newest">Sort by: Newest</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating">Sort by: Rating</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10">
+
+            <!-- Sidebar Filters -->
+            <aside class="space-y-8" :class="mobileFilters ? 'block' : 'hidden lg:block'">
+
+                <!-- Search -->
+                <div>
+                    <h4 class="font-oswald font-bold uppercase text-lg mb-4 pb-3 border-b border-gray-200">Search Products</h4>
+                    <form class="flex border border-gray-200 rounded-sm overflow-hidden">
+                        <input type="text" placeholder="Search..." class="p-3 w-full text-sm focus:outline-none">
+                        <button type="submit" class="bg-brand text-black px-4 hover:bg-black hover:text-brand transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Categories -->
+                <div>
+                    <h4 class="font-oswald font-bold uppercase text-lg mb-4 pb-3 border-b border-gray-200">Categories</h4>
+                    <ul class="space-y-2">
+                        <li>
+                            <label class="flex items-center gap-3 cursor-pointer group" @click="toggleCategory('supplements')">
+                                <div class="w-5 h-5 border-2 border-gray-300 rounded-sm flex items-center justify-center transition" :class="selectedCategories.includes('supplements') ? 'bg-brand border-brand' : 'group-hover:border-brand'">
+                                    <svg x-show="selectedCategories.includes('supplements')" class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <span class="text-sm text-gray-600 group-hover:text-black transition-colors">Supplements</span>
+                                <span class="ml-auto text-xs text-gray-400">(14)</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-3 cursor-pointer group" @click="toggleCategory('equipment')">
+                                <div class="w-5 h-5 border-2 border-gray-300 rounded-sm flex items-center justify-center transition" :class="selectedCategories.includes('equipment') ? 'bg-brand border-brand' : 'group-hover:border-brand'">
+                                    <svg x-show="selectedCategories.includes('equipment')" class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <span class="text-sm text-gray-600 group-hover:text-black transition-colors">Equipment</span>
+                                <span class="ml-auto text-xs text-gray-400">(10)</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-3 cursor-pointer group" @click="toggleCategory('apparel')">
+                                <div class="w-5 h-5 border-2 border-gray-300 rounded-sm flex items-center justify-center transition" :class="selectedCategories.includes('apparel') ? 'bg-brand border-brand' : 'group-hover:border-brand'">
+                                    <svg x-show="selectedCategories.includes('apparel')" class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <span class="text-sm text-gray-600 group-hover:text-black transition-colors">Apparel</span>
+                                <span class="ml-auto text-xs text-gray-400">(12)</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-3 cursor-pointer group" @click="toggleCategory('accessories')">
+                                <div class="w-5 h-5 border-2 border-gray-300 rounded-sm flex items-center justify-center transition" :class="selectedCategories.includes('accessories') ? 'bg-brand border-brand' : 'group-hover:border-brand'">
+                                    <svg x-show="selectedCategories.includes('accessories')" class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <span class="text-sm text-gray-600 group-hover:text-black transition-colors">Accessories</span>
+                                <span class="ml-auto text-xs text-gray-400">(8)</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-3 cursor-pointer group" @click="toggleCategory('footwear')">
+                                <div class="w-5 h-5 border-2 border-gray-300 rounded-sm flex items-center justify-center transition" :class="selectedCategories.includes('footwear') ? 'bg-brand border-brand' : 'group-hover:border-brand'">
+                                    <svg x-show="selectedCategories.includes('footwear')" class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <span class="text-sm text-gray-600 group-hover:text-black transition-colors">Footwear</span>
+                                <span class="ml-auto text-xs text-gray-400">(4)</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Price Range -->
+                <div>
+                    <h4 class="font-oswald font-bold uppercase text-lg mb-4 pb-3 border-b border-gray-200">Price Range</h4>
+                    <div class="px-1">
+                        <input type="range" min="0" max="500" x-model="priceMax" class="w-full mb-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="font-bold">$0</span>
+                            <span class="font-bold text-brand font-oswald">$<span x-text="priceMax"></span></span>
+                        </div>
+                    </div>
+                    <button class="mt-4 w-full bg-[#111] text-white font-oswald font-bold uppercase text-xs py-3 tracking-widest hover:bg-brand hover:text-black transition-colors rounded-sm">Apply Filter</button>
+                </div>
+
+                <!-- Size -->
+                <div>
+                    <h4 class="font-oswald font-bold uppercase text-lg mb-4 pb-3 border-b border-gray-200">Size</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <template x-for="size in ['XS', 'S', 'M', 'L', 'XL', 'XXL']">
+                            <button @click="toggleSize(size)" :class="selectedSizes.includes(size) ? 'bg-brand text-black border-brand' : 'border-gray-200 text-gray-600 hover:border-brand'" class="w-11 h-11 border-2 flex items-center justify-center text-xs font-bold uppercase rounded-sm transition" x-text="size"></button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Color -->
+                <div>
+                    <h4 class="font-oswald font-bold uppercase text-lg mb-4 pb-3 border-b border-gray-200">Color</h4>
+                    <div class="flex flex-wrap gap-3">
+                        <template x-for="color in [{name:'Black', hex:'#111'}, {name:'White', hex:'#fff'}, {name:'Red', hex:'#ef4444'}, {name:'Blue', hex:'#3b82f6'}, {name:'Green', hex:'#22c55e'}, {name:'Yellow', hex:'#e1ff00'}]">
+                            <button @click="toggleColor(color.name)" class="w-8 h-8 rounded-full border-2 transition relative" :style="'background-color:' + color.hex" :class="selectedColors.includes(color.name) ? 'border-brand ring-2 ring-brand ring-offset-2' : 'border-gray-200 hover:border-gray-400'" :title="color.name">
+                                <svg x-show="selectedColors.includes(color.name)" class="w-4 h-4 absolute inset-0 m-auto" :class="color.name === 'White' || color.name === 'Yellow' ? 'text-black' : 'text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Brand -->
+                <div>
+                    <h4 class="font-oswald font-bold uppercase text-lg mb-4 pb-3 border-b border-gray-200">Brand</h4>
+                    <ul class="space-y-2">
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm text-gray-600 hover:text-black transition"><input type="checkbox" class="accent-[#e1ff00] w-4 h-4"> gymui Original</label></li>
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm text-gray-600 hover:text-black transition"><input type="checkbox" class="accent-[#e1ff00] w-4 h-4"> Nike Training</label></li>
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm text-gray-600 hover:text-black transition"><input type="checkbox" class="accent-[#e1ff00] w-4 h-4"> Under Armour</label></li>
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm text-gray-600 hover:text-black transition"><input type="checkbox" class="accent-[#e1ff00] w-4 h-4"> Optimum Nutrition</label></li>
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm text-gray-600 hover:text-black transition"><input type="checkbox" class="accent-[#e1ff00] w-4 h-4"> Rogue Fitness</label></li>
+                    </ul>
+                </div>
+
+                <!-- Rating Filter -->
+                <div>
+                    <h4 class="font-oswald font-bold uppercase text-lg mb-4 pb-3 border-b border-gray-200">Rating</h4>
+                    <ul class="space-y-2">
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="radio" name="rating" class="accent-[#e1ff00] w-4 h-4"><span class="flex text-brand"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span><span class="text-gray-400">&amp; Up</span></label></li>
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="radio" name="rating" class="accent-[#e1ff00] w-4 h-4"><span class="flex text-brand"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span><span class="text-gray-400">&amp; Up</span></label></li>
+                        <li><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="radio" name="rating" class="accent-[#e1ff00] w-4 h-4"><span class="flex text-brand"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span><span class="text-gray-400">&amp; Up</span></label></li>
+                    </ul>
+                </div>
+
+                <!-- Sidebar CTA -->
+                <div class="bg-[#111] p-6 rounded-sm text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 text-[5rem] font-oswald font-bold opacity-[0.03] leading-none text-white">SALE</div>
+                    <span class="text-5xl font-oswald font-bold text-brand block mb-2">70%</span>
+                    <p class="text-white font-oswald font-bold uppercase text-lg mb-1">OFF EVERYTHING</p>
+                    <p class="text-xs text-gray-400 mb-4">Limited time offer for members</p>
+                    <a href="#" class="inline-block bg-brand text-black font-oswald font-bold uppercase text-xs px-6 py-3 tracking-widest hover:bg-white transition rounded-sm">Shop Now</a>
+                </div>
+            </aside>
+
+            <!-- Product Grid -->
+            <div>
+                <!-- Grid View -->
+                <div x-show="view === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
+                    <!-- Product 1 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-50 rounded-sm mb-4">
+                            <img src="assets/images/photo-1526506118085-60ce8714f8c5.jpg" alt="Product" class="w-full h-72 object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 left-3"><span class="bg-brand text-black px-2 py-0.5 text-[10px] font-bold uppercase font-oswald">New</span></div>
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-colors duration-300">
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition" title="Add to Wishlist"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition" title="Quick View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            </div>
+                            <button class="absolute bottom-0 left-0 right-0 bg-[#111] text-white font-oswald font-bold uppercase text-xs py-3 tracking-widest text-center opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-colors duration-300 hover:bg-brand hover:text-black">Add to Cart</button>
+                        </div>
+                        <div class="flex text-brand text-xs mb-1"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Supplements</p>
+                        <h3 class="font-oswald font-bold uppercase text-sm mb-2 group-hover:text-brand transition-colors">Premium Whey Protein Isolate</h3>
+                        <div class="flex items-center gap-2"><span class="font-oswald font-bold text-lg">$49.99</span><span class="text-sm text-gray-400 line-through">$69.99</span></div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-50 rounded-sm mb-4">
+                            <img src="assets/images/photo-1571019613454-1cb2f99b2d8b.jpg" alt="Product" class="w-full h-72 object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 left-3"><span class="bg-red-500 text-white px-2 py-0.5 text-[10px] font-bold uppercase font-oswald">-30%</span></div>
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-colors duration-300">
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            </div>
+                            <button class="absolute bottom-0 left-0 right-0 bg-[#111] text-white font-oswald font-bold uppercase text-xs py-3 tracking-widest text-center opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-colors duration-300 hover:bg-brand hover:text-black">Add to Cart</button>
+                        </div>
+                        <div class="flex text-brand text-xs mb-1"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current opacity-30" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Apparel</p>
+                        <h3 class="font-oswald font-bold uppercase text-sm mb-2 group-hover:text-brand transition-colors">Performance Training Tank Top</h3>
+                        <div class="flex items-center gap-2"><span class="font-oswald font-bold text-lg">$24.99</span><span class="text-sm text-gray-400 line-through">$35.99</span></div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-50 rounded-sm mb-4">
+                            <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" alt="Product" class="w-full h-72 object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-colors duration-300">
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            </div>
+                            <button class="absolute bottom-0 left-0 right-0 bg-[#111] text-white font-oswald font-bold uppercase text-xs py-3 tracking-widest text-center opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-colors duration-300 hover:bg-brand hover:text-black">Add to Cart</button>
+                        </div>
+                        <div class="flex text-brand text-xs mb-1"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Equipment</p>
+                        <h3 class="font-oswald font-bold uppercase text-sm mb-2 group-hover:text-brand transition-colors">Adjustable Dumbbell Set 50lb</h3>
+                        <div class="flex items-center gap-2"><span class="font-oswald font-bold text-lg">$189.99</span></div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-50 rounded-sm mb-4">
+                            <img src="assets/images/photo-1517836357463-d25dfe09ce18.jpg" alt="Product" class="w-full h-72 object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 left-3"><span class="bg-brand text-black px-2 py-0.5 text-[10px] font-bold uppercase font-oswald">Hot</span></div>
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-colors duration-300">
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            </div>
+                            <button class="absolute bottom-0 left-0 right-0 bg-[#111] text-white font-oswald font-bold uppercase text-xs py-3 tracking-widest text-center opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-colors duration-300 hover:bg-brand hover:text-black">Add to Cart</button>
+                        </div>
+                        <div class="flex text-brand text-xs mb-1"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current opacity-30" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Accessories</p>
+                        <h3 class="font-oswald font-bold uppercase text-sm mb-2 group-hover:text-brand transition-colors">Resistance Band Set Pro (5 Pack)</h3>
+                        <div class="flex items-center gap-2"><span class="font-oswald font-bold text-lg">$29.99</span></div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-50 rounded-sm mb-4">
+                            <img src="assets/images/photo-1541534741688-6078c6bfb5c5.jpg" alt="Product" class="w-full h-72 object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 left-3"><span class="bg-red-500 text-white px-2 py-0.5 text-[10px] font-bold uppercase font-oswald">-20%</span></div>
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-colors duration-300">
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            </div>
+                            <button class="absolute bottom-0 left-0 right-0 bg-[#111] text-white font-oswald font-bold uppercase text-xs py-3 tracking-widest text-center opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-colors duration-300 hover:bg-brand hover:text-black">Add to Cart</button>
+                        </div>
+                        <div class="flex text-brand text-xs mb-1"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Apparel</p>
+                        <h3 class="font-oswald font-bold uppercase text-sm mb-2 group-hover:text-brand transition-colors">Women's Compression Leggings</h3>
+                        <div class="flex items-center gap-2"><span class="font-oswald font-bold text-lg">$39.99</span><span class="text-sm text-gray-400 line-through">$49.99</span></div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-50 rounded-sm mb-4">
+                            <img src="assets/images/photo-1583454110551-21f2fa2afe61.jpg" alt="Product" class="w-full h-72 object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-colors duration-300">
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></button>
+                                <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-brand transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            </div>
+                            <button class="absolute bottom-0 left-0 right-0 bg-[#111] text-white font-oswald font-bold uppercase text-xs py-3 tracking-widest text-center opacity-0 group-hover:opacity-100 translate-y-full group-hover:translate-y-0 transition-colors duration-300 hover:bg-brand hover:text-black">Add to Cart</button>
+                        </div>
+                        <div class="flex text-brand text-xs mb-1"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current opacity-30" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Supplements</p>
+                        <h3 class="font-oswald font-bold uppercase text-sm mb-2 group-hover:text-brand transition-colors">BCAA Energy Powder Berry Blast</h3>
+                        <div class="flex items-center gap-2"><span class="font-oswald font-bold text-lg">$34.99</span></div>
+                    </div>
+
+                </div>
+
+                <!-- List View -->
+                <div x-show="view === 'list'" class="space-y-6">
+
+                    <!-- List Product 1 -->
+                    <div class="flex flex-col sm:flex-row gap-6 border border-gray-100 rounded-sm overflow-hidden group hover:shadow-lg transition-colors">
+                        <div class="relative overflow-hidden w-full sm:w-64 shrink-0">
+                            <img src="assets/images/photo-1526506118085-60ce8714f8c5.jpg" alt="Product" class="w-full h-56 sm:h-full object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 left-3"><span class="bg-brand text-black px-2 py-0.5 text-[10px] font-bold uppercase font-oswald">New</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-center">
+                            <div class="flex text-brand text-xs mb-2"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> <span class="ml-2 text-gray-400">(24 reviews)</span></div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Supplements</p>
+                            <h3 class="text-xl font-oswald font-bold uppercase mb-2 group-hover:text-brand transition-colors">Premium Whey Protein Isolate</h3>
+                            <p class="text-sm text-gray-500 mb-4">High-quality whey protein isolate with 25g protein per serving. Perfect for post-workout recovery and muscle growth.</p>
+                            <div class="flex items-center gap-3 mb-4"><span class="font-oswald font-bold text-xl">$49.99</span><span class="text-sm text-gray-400 line-through">$69.99</span></div>
+                            <button class="bg-[#111] text-white font-oswald font-bold uppercase text-xs px-6 py-3 tracking-widest hover:bg-brand hover:text-black transition-colors rounded-sm w-fit">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- List Product 2 -->
+                    <div class="flex flex-col sm:flex-row gap-6 border border-gray-100 rounded-sm overflow-hidden group hover:shadow-lg transition-colors">
+                        <div class="relative overflow-hidden w-full sm:w-64 shrink-0">
+                            <img src="assets/images/photo-1571019613454-1cb2f99b2d8b.jpg" alt="Product" class="w-full h-56 sm:h-full object-cover group-hover:scale-105 transition-colors duration-500">
+                            <div class="absolute top-3 left-3"><span class="bg-red-500 text-white px-2 py-0.5 text-[10px] font-bold uppercase font-oswald">-30%</span></div>
+                        </div>
+                        <div class="p-6 flex flex-col justify-center">
+                            <div class="flex text-brand text-xs mb-2"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg class="w-3.5 h-3.5 fill-current opacity-30" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> <span class="ml-2 text-gray-400">(18 reviews)</span></div>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-1">Apparel</p>
+                            <h3 class="text-xl font-oswald font-bold uppercase mb-2 group-hover:text-brand transition-colors">Performance Training Tank Top</h3>
+                            <p class="text-sm text-gray-500 mb-4">Lightweight, breathable training tank designed for intense workouts. Moisture-wicking fabric keeps you cool and dry.</p>
+                            <div class="flex items-center gap-3 mb-4"><span class="font-oswald font-bold text-xl">$24.99</span><span class="text-sm text-gray-400 line-through">$35.99</span></div>
+                            <button class="bg-[#111] text-white font-oswald font-bold uppercase text-xs px-6 py-3 tracking-widest hover:bg-brand hover:text-black transition-colors rounded-sm w-fit">Add to Cart</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-center gap-2 mt-16">
+                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-sm hover:bg-brand hover:text-black hover:border-brand transition text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                    <button class="w-10 h-10 flex items-center justify-center bg-brand text-black font-oswald font-bold rounded-sm text-sm">1</button>
+                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-sm hover:bg-brand hover:text-black hover:border-brand transition font-oswald font-bold text-sm">2</button>
+                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-sm hover:bg-brand hover:text-black hover:border-brand transition font-oswald font-bold text-sm">3</button>
+                    <span class="text-gray-400 px-2">...</span>
+                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-sm hover:bg-brand hover:text-black hover:border-brand transition font-oswald font-bold text-sm">6</button>
+                    <button class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-sm hover:bg-brand hover:text-black hover:border-brand transition text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Bar -->
+    <section class="bg-[#111] text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 border border-gray-700 rounded-full flex items-center justify-center shrink-0"><svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg></div>
+                <div><h4 class="font-oswald font-bold uppercase text-sm">Free Shipping</h4><p class="text-[10px] text-gray-400">On orders over $50</p></div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 border border-gray-700 rounded-full flex items-center justify-center shrink-0"><svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div>
+                <div><h4 class="font-oswald font-bold uppercase text-sm">Easy Returns</h4><p class="text-[10px] text-gray-400">30-day return policy</p></div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 border border-gray-700 rounded-full flex items-center justify-center shrink-0"><svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg></div>
+                <div><h4 class="font-oswald font-bold uppercase text-sm">Secure Payment</h4><p class="text-[10px] text-gray-400">100% protected checkout</p></div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 border border-gray-700 rounded-full flex items-center justify-center shrink-0"><svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>
+                <div><h4 class="font-oswald font-bold uppercase text-sm">24/7 Support</h4><p class="text-[10px] text-gray-400">Dedicated help center</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Banner -->
+    <div class="bg-brand py-4 border-y border-black/10 marquee-container">
+        <div class="marquee-content font-oswald font-bold uppercase tracking-wider text-sm flex gap-12 items-center">
+            <span>• 10+ Years of Experience</span><span>• Become A Team Members</span><span>• Hurry up to Join 70% Discount</span><span>• Experience Gym Trainer</span>
+            <span>• 10+ Years of Experience</span><span>• Become A Team Members</span><span>• Hurry up to Join 70% Discount</span><span>• Experience Gym Trainer</span>
+            <span>• 10+ Years of Experience</span><span>• Become A Team Members</span><span>• Hurry up to Join 70% Discount</span><span>• Experience Gym Trainer</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#0a0a0a] text-white pt-20 pb-10 px-6 border-t border-gray-900 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 relative z-10">
+            <div>
+                <div class="flex items-center gap-2 mb-6"><div class="w-8 h-8 bg-brand rounded-full flex items-center justify-center text-black font-bold">G</div><span class="text-xl font-oswald font-bold tracking-wider">gymui</span></div>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">We're completely dedicated to helping achieve your health and wellness fitness goals.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-400 hover:text-brand"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-brand"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-brand"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+            <div><h4 class="font-oswald font-bold uppercase text-lg mb-6">Working Hours</h4><ul class="space-y-3 text-sm text-gray-400"><li class="flex justify-between border-b border-gray-800 pb-2"><span>Monday - Friday</span><span>05:30 - 24:00</span></li><li class="flex justify-between border-b border-gray-800 pb-2"><span>Weekdays</span><span>00:00 - 24:00</span></li></ul></div>
+            <div><h4 class="font-oswald font-bold uppercase text-lg mb-6">Location</h4><address class="not-italic text-sm text-gray-400 space-y-3"><p>345 Madison Avenue, Suite 1000<br>New York, NY 10016, USA</p><p class="hover:text-brand"><a href="https://gymui.pdthemes.de/cdn-cgi/l/email-protection#dab9b5b4aebbb9ae9abda3b7afb3f4b9b5b7"><span class="__cf_email__" data-cfemail="52313d3c2633312612352b3f273b7c313d3f">[email&#160;protected]</span></a></p><p class="hover:text-brand"><a href="tel:+1800888254">+1-800-888-254</a></p></address></div>
+            <div><h4 class="font-oswald font-bold uppercase text-lg mb-6">Newsletter</h4><p class="text-sm text-gray-400 mb-4">Stay connected with latest fitness trends, expert tips, and offers.</p><form class="flex border border-gray-700 rounded overflow-hidden"><input type="email" placeholder="Email Address" class="bg-transparent text-sm p-3 w-full focus:outline-none text-white"><button type="submit" class="bg-brand text-black font-bold uppercase text-xs px-4 font-oswald hover:bg-white transition">Subscribe</button></form></div>
+        </div>
+        <div class="max-w-7xl mx-auto pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 relative z-10">
+            <p>Copyright &copy; 2025 Clear Themes. All Rights Reserved.</p>
+            <div class="flex gap-4 mt-4 md:mt-0"><a href="#" class="hover:text-white">Privacy Policy</a><a href="#" class="hover:text-white">Terms of Use</a><a href="#" class="hover:text-white">FAQs</a></div>
+        </div>
+        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full text-center z-0 pointer-events-none"><h1 class="text-[8rem] md:text-[14rem] font-oswald font-bold text-gray-900/40 leading-none tracking-tighter">gymui</h1></div>
+    </footer>
+
+    
+    <!-- Global GSAP Animations -->
+    <script data-cfasync="false" src="assets/js/email-decode.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                // --- 1. Hero Section Cinematic Reveal ---
+                const heroSection = document.querySelector('section:first-of-type');
+                if (heroSection) {
+                    const heroTl = gsap.timeline();
+                    const eyebrow = heroSection.querySelector('.text-xs.font-bold.tracking-\\[0\.3em\\]');
+                    const title = heroSection.querySelector('h1, h2');
+                    const desc = heroSection.querySelector('p');
+                    const ctas = heroSection.querySelectorAll('a, button');
+                    const stats = heroSection.querySelectorAll('.grid > div, .flex > div:not(.absolute)');
+
+                    if (eyebrow) heroTl.from(eyebrow, { y: 20, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.2 });
+                    if (title) heroTl.from(title, { y: 40, opacity: 0, duration: 1, ease: "power4.out" }, "-=0.5");
+                    if (desc) heroTl.from(desc, { y: 20, opacity: 0, duration: 0.8, ease: "power3.out" }, "-=0.5");
+                    if (ctas.length > 0) heroTl.from(ctas, { y: 20, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }, "-=0.6");
+                    if (stats.length > 0) heroTl.from(stats, { y: 30, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }, "-=0.4");
+                }
+
+                // --- 2. Smart ScrollTriggers for All Other Sections ---
+                const sections = document.querySelectorAll('section:not(:first-of-type)');
+                sections.forEach(sec => {
+                    
+                    // A. Parallax Background Images
+                    const bgImage = sec.querySelector('.absolute.inset-0 > img');
+                    if (bgImage) {
+                        gsap.to(bgImage, {
+                            scale: 1.15,
+                            yPercent: 10,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: sec,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: true
+                            }
+                        });
+                    }
+
+                    // B. Parallax Large Background Text
+                    const bgText = sec.querySelector('.absolute.inset-0 .text-\\[8rem\\], .absolute.inset-0 .text-\\[10rem\\]');
+                    if (bgText) {
+                        gsap.to(bgText, {
+                            xPercent: -20,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: sec,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: true
+                            }
+                        });
+                    }
+
+                    // C. Section Headers Fade Up
+                    const headerWrapper = sec.querySelector('.text-center.mb-16, .text-center.mb-12, .mb-16:not(.grid)');
+                    if (headerWrapper) {
+                        gsap.from(headerWrapper, {
+                            y: 40, opacity: 0, duration: 0.8, ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: sec,
+                                start: "top 80%",
+                                toggleActions: "play none none reverse"
+                            }
+                        });
+                    }
+
+                    // D. Grid Cards Staggered Fade Up
+                    // Finds the primary grid in the section and animates its direct children
+                    const grids = sec.querySelectorAll('.grid');
+                    grids.forEach(grid => {
+                        const cards = grid.querySelectorAll(':scope > div.group, :scope > div.bg-\\[\\#111\\], :scope > div.bg-white, :scope > div.border');
+                        if (cards.length > 0) {
+                            gsap.from(cards, {
+                                y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out",
+                                scrollTrigger: {
+                                    trigger: grid,
+                                    start: "top 85%",
+                                    toggleActions: "play none none reverse"
+                                }
+                            });
+                        }
+                    });
+
+                    // E. Split Content (e.g. About, Testimonials)
+                    // If it's a 2-column layout that isn't cards
+                    const splitLayouts = sec.querySelectorAll('.grid-cols-1.lg\\:grid-cols-2, .grid-cols-1.lg\\:grid-cols-\\[1fr_1\.2fr\\]');
+                    splitLayouts.forEach(split => {
+                        const leftCol = split.children[0];
+                        const rightCol = split.children[1];
+                        if (leftCol && rightCol) {
+                            gsap.from(leftCol, {
+                                x: -50, opacity: 0, duration: 1, ease: "power3.out",
+                                scrollTrigger: {
+                                    trigger: split,
+                                    start: "top 80%",
+                                    toggleActions: "play none none reverse"
+                                }
+                            });
+                            gsap.from(rightCol, {
+                                x: 50, opacity: 0, duration: 1, ease: "power3.out",
+                                scrollTrigger: {
+                                    trigger: split,
+                                    start: "top 80%",
+                                    toggleActions: "play none none reverse"
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // --- 3. Testimonials / Swiper Layout Protection ---
+                const swipers = document.querySelectorAll('.swiper');
+                swipers.forEach(swiper => {
+                    if (!swiper.parentElement.classList.contains('gs-swiper-wrapper')) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'gs-swiper-wrapper min-w-0 w-full';
+                        swiper.parentNode.insertBefore(wrapper, swiper);
+                        wrapper.appendChild(swiper);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
