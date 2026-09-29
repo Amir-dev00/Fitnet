@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="assets/css/tailwind.min.css">
     <link rel="stylesheet" href="assets/css/swiper-bundle.min.css" />
     <link rel="stylesheet" href="assets/css/rtl-fa.css" />
+    <link rel="stylesheet" href="assets/css/fitnet.css" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:image" content="https://fitnet.ir/assets/images/photo-1534438327276-14e5300c3a48.jpg">
     <script defer src="assets/js/alpine.min.js"></script>
     <style>
         :root { --brand: #e1ff00; --gold: #c9a84c; --dark: #16120e; }
@@ -346,6 +349,79 @@
             font-weight: 700; font-size: 22px; color: var(--gold); margin-top: 4px;
         }
         .au-mini-card .sub { font-size: 9px; color: rgba(232,220,200,.4); margin-top: 4px; letter-spacing: .15em; }
+        .prostep-card {
+            position: absolute;
+            z-index: 6;
+            width: 232px;
+            padding: 16px 16px 14px;
+            background: linear-gradient(165deg, rgba(48,38,26,.82), rgba(12,10,8,.78));
+            border: 1px solid rgba(201,168,76,.45);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 28px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(243,234,220,.14);
+        }
+        .prostep-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 16px; right: 16px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .prostep-top {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            direction: ltr;
+            margin-bottom: 12px;
+        }
+        .prostep-mark {
+            width: 28px; height: 28px;
+            border: 1px solid rgba(201,168,76,.5);
+            display: grid;
+            place-items: center;
+        }
+        .prostep-mark::after {
+            content: "";
+            width: 7px; height: 7px;
+            background: var(--gold);
+            box-shadow: 0 0 14px rgba(201,168,76,.9);
+        }
+        .prostep-name {
+            font-size: 11px;
+            color: var(--gold);
+        }
+        .prostep-line {
+            margin: 0 0 14px;
+            font-family: "Vazirmatn", sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 1.55;
+            letter-spacing: 0;
+            color: #f4ecdf;
+        }
+        .prostep-meter {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .prostep-meter i {
+            display: block;
+            height: 3px;
+            flex: 1;
+            background: rgba(201,168,76,.22);
+        }
+        .prostep-meter i:nth-child(-n+3) {
+            background: var(--gold);
+            box-shadow: 0 0 10px rgba(201,168,76,.55);
+        }
+        .prostep-note {
+            margin: 0;
+            font-family: "Vazirmatn", sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            letter-spacing: 0;
+            color: rgba(232,220,200,.62);
+        }
         .au-anim-in {
             opacity: 0;
             animation: au-fade-up .9s cubic-bezier(.2,.7,.2,1) forwards;
@@ -388,11 +464,11 @@
         </button>
     </div>
     <nav class="flex-1 px-6 py-6 text-xs overflow-y-auto">
-        <a href="#gyms" @click="mobOpen=false" class="flex justify-between py-4 border-b gold-border font-bold uppercase tracking-wider text-[#e8dcc8]/50 hover:text-gold transition">باشگاه‌ها <span>&larr;</span></a>
+        <a href="#gyms" @click="mobOpen=false" class="flex justify-between py-4 border-b gold-border font-bold uppercase tracking-wider text-[#e8dcc8]/50 hover:text-gold transition">کشف فیت‌نت <span>&larr;</span></a>
         <a href="#events" @click="mobOpen=false" class="flex justify-between py-4 border-b gold-border font-bold uppercase tracking-wider text-[#e8dcc8]/50 hover:text-gold transition">رویدادها <span>&larr;</span></a>
         <a href="#how-it-works"    @click="mobOpen=false" class="flex justify-between py-4 border-b gold-border font-bold uppercase tracking-wider text-[#e8dcc8]/50 hover:text-gold transition">نحوه کار <span>&larr;</span></a>
         <a href="#plans"        @click="mobOpen=false" class="flex justify-between py-4 border-b gold-border font-bold uppercase tracking-wider text-[#e8dcc8]/50 hover:text-gold transition">پلن‌ها <span>&larr;</span></a>
-        <a href="#partners" @click="mobOpen=false" class="flex justify-between py-4 font-bold uppercase tracking-wider text-[#e8dcc8]/20 hover:text-gold transition">همکاری با فیت‌نت <span>&larr;</span></a>
+        <a href="#partners" @click="mobOpen=false" class="flex justify-between py-4 font-bold uppercase tracking-wider text-[#e8dcc8]/20 hover:text-gold transition">همکاری <span>&larr;</span></a>
     </nav>
     <div class="px-6 pb-8"><a href="#download" @click="mobOpen=false" class="block bg-gold text-black font-oswald font-bold uppercase text-xs tracking-widest py-4 text-center hover:bg-brand transition" style="background:var(--gold)">دسترسی زودهنگام</a></div>
 </div>
@@ -420,7 +496,7 @@
             <div class="relative" @mouseenter="openMenu('gyms')" @mouseleave="closeMenu()">
                 <button class="flex items-center gap-1.5 px-5 py-3 text-[11px] font-bold uppercase tracking-widest transition"
                         :class="menu==='gyms' ? 'text-gold' : 'text-[#e8dcc8]/50 hover:text-[#e8dcc8]'">
-                    باشگاه‌ها <svg class="w-3 h-3 transition-transform duration-200" :class="menu==='gyms'?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    کشف فیت‌نت <svg class="w-3 h-3 transition-transform duration-200" :class="menu==='gyms'?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
                 </button>
             </div>
             <div class="relative" @mouseenter="openMenu('events')" @mouseleave="closeMenu()">
@@ -441,7 +517,7 @@
                     پلن‌ها <svg class="w-3 h-3 transition-transform duration-200" :class="menu==='plans'?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
                 </button>
             </div>
-            <a href="#partners" class="px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-[#e8dcc8]/20 hover:text-gold transition">همکاری با فیت‌نت</a>
+            <a href="#partners" class="px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-[#e8dcc8]/20 hover:text-gold transition">همکاری</a>
         </nav>
 
         <div class="flex items-center gap-2 mis-auto">
@@ -515,15 +591,15 @@
         <div class="max-w-[1440px] mx-auto px-6 py-8 grid grid-cols-4 gap-5">
             <a href="#events" class="group overflow-hidden relative h-40" x-for-placeholder>
                 <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-colors duration-500 brightness-50">
-                <div class="absolute inset-0 p-4 flex flex-col justify-end"><p class="ml-t group-hover:text-gold transition-colors">رویداد ورزشی</p><p class="ml-d">نمونه · رزرو با اعتبار</p></div>
+                <div class="absolute inset-0 p-4 flex flex-col justify-end"><p class="ml-t group-hover:text-gold transition-colors">رویداد ورزشی</p><p class="ml-d">رزرو با اعتبار</p></div>
             </a>
             <a href="#events" class="group overflow-hidden relative h-40">
                 <img src="assets/images/photo-1571019613454-1cb2f99b2d8b.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-colors duration-500 brightness-50">
-                <div class="absolute inset-0 p-4 flex flex-col justify-end"><p class="ml-t group-hover:text-gold transition-colors">امروز در دسترس</p><p class="ml-d">نمونه · رزرو برای امروز</p></div>
+                <div class="absolute inset-0 p-4 flex flex-col justify-end"><p class="ml-t group-hover:text-gold transition-colors">امروز در دسترس</p><p class="ml-d">رزرو برای امروز</p></div>
             </a>
             <a href="#events" class="group overflow-hidden relative h-40">
                 <img src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-colors duration-500 brightness-50">
-                <div class="absolute inset-0 p-4 flex flex-col justify-end"><p class="ml-t group-hover:text-gold transition-colors">باشگاه‌های نزدیک</p><p class="ml-d">نمونه · اطراف تو</p></div>
+                <div class="absolute inset-0 p-4 flex flex-col justify-end"><p class="ml-t group-hover:text-gold transition-colors">باشگاه‌های نزدیک</p><p class="ml-d">اطراف تو</p></div>
             </a>
             <a href="#events" class="group overflow-hidden relative h-40">
                 <img src="assets/images/photo-1581009146145-b5ef050c2e1e.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-colors duration-500 brightness-50">
@@ -581,13 +657,13 @@
             <div class="mega-divider mx-2"></div>
             <div class="px-8">
                 <p class="col-head">پاداش</p>
-                <a href="#plans" class="mega-link"><div class="ml-icon"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><div><div class="ml-t">Pro Step</div><div class="ml-d">هدیه بعد از حد تعیین‌شده</div></div></a>
+                <a href="#plans" class="mega-link"><div class="ml-icon"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><div><div class="ml-t">Pro Step</div><div class="ml-d">پیشرفت با حضور انجام‌شده</div></div></a>
                 <a href="#plans" class="mega-link mt-1"><div class="ml-icon"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01"/></svg></div><div><div class="ml-t">دعوت دوستان</div><div class="ml-d">پاداش بعد از اشتراک دوست</div></div></a>
             </div>
             <div class="mega-divider ml-2"></div>
             <div class="pl-8">
                 <p class="text-[9px] uppercase tracking-widest mb-3" style="color:rgba(201,168,76,.4);font-weight:700">ساختار پلن</p>
-                <p class="text-[#e8dcc8]/40 text-xs leading-relaxed mb-5">نام، قیمت و تعداد اعتبار هر پلن از محصول می‌آید. این‌جا فقط ساختار است.</p>
+                <p class="text-[#e8dcc8]/40 text-xs leading-relaxed mb-5">جزئیات پلن‌ها هم‌زمان با شروع فیت‌نت اعلام می‌شود.</p>
                 <a href="#plans" class="block text-center font-oswald font-bold uppercase text-[10px] tracking-widest py-3 hover:bg-brand transition" style="background:var(--gold);color:#0f0c09">مشاهده پلن‌ها</a>
             </div>
         </div>
@@ -648,25 +724,25 @@
             <div class="flex flex-wrap items-center gap-6 mb-10 au-anim-in au-d1">
                 <span class="au-eyebrow">
                     <span class="ornament"></span>
-                    <span>یک حساب. یک اعتبار. انتخاب‌های بیشتر.</span>
+                    <span>یک حساب. یک کیف پول. انتخاب‌های بیشتر.</span>
                 </span>
                 <span class="au-badge">
                     <span class="seal" dir="ltr">F</span>
-                    <span>ورود با QR</span>
+                    <span>در مسیر شروع در تهران</span>
                 </span>
             </div>
 
             <!-- Title -->
             <h1 class="au-title mb-8 au-anim-in au-d2 select-none">
-                <span class="l1">هر تمرین</span>
-                <span class="l2">هر جا</span>
-                <span class="l3">با فیت‌نت</span>
+                <span class="l1">شهر،</span>
+                <span class="l2">زمین تمرین</span>
+                <span class="l3">توست.</span>
             </h1>
 
             <!-- Description with ornament -->
             <div class="flex items-start gap-5 max-w-xl mb-10 au-anim-in au-d3">
                 <div class="hero-rule flex-shrink-0 mt-2 hidden md:block" style="width:30px;height:1px;background:linear-gradient(to right,var(--gold),transparent)"></div>
-                <p class="text-base md:text-lg leading-relaxed" style="color:rgba(232,220,200,.55)">باشگاه همکار و رویداد ورزشی را پیدا کن، زمان را رزرو کن و با اعتبار و QR وارد شو.</p>
+                <p class="text-base md:text-lg leading-relaxed" style="color:rgba(232,220,200,.55)">باشگاه‌های همکار و رویدادهای ورزشی را کشف کن، زمان مناسب را رزرو کن و با اعتبار فیت‌نت و QR وارد شو.</p>
             </div>
 
             <!-- CTAs -->
@@ -676,7 +752,7 @@
                     <svg class="icon-fwd w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
                 </a>
                 <a href="#how-it-works" class="au-cta-ghost">
-                    <span>نحوه کار</span>
+                    <span>فیت‌نت چطور کار می‌کند؟</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
                 </a>
             </div>
@@ -692,8 +768,8 @@
                     <span class="l">کیف پول</span>
                 </div>
                 <div class="au-metric">
-                    <span class="v warm">۲</span>
-                    <span class="l">مسیر</span>
+                    <span class="v warm word">رزرو</span>
+                    <span class="l">زمان ورود</span>
                 </div>
                 <div class="au-metric">
                     <span class="v warm" dir="ltr">QR</span>
@@ -701,25 +777,31 @@
                 </div>
             </div>
 
-            <!-- Mini floating card -->
-            <div class="au-mini-card float-rating au-anim-in au-d6 hidden xl:block" style="right:-20px; top:40%;">
-                <div class="lbl">Pro Step</div>
-                <div class="v">هدیه</div>
-                <div class="sub">بعد از حد تعیین‌شده</div>
-            </div>
         </div>
 
         <!-- Right: AMENITY SWIPER SIDEBAR -->
         <div class="hero-side hidden lg:flex flex-col border-l py-8 pl-8 au-anim-in au-d5 relative" style="border-color:rgba(201,168,76,.12)">
 
+            <!-- prostep-card temporarily hidden
+            <div class="prostep-card float-rating hidden xl:block">
+                <div class="prostep-top">
+                    <span class="prostep-mark" aria-hidden="true"></span>
+                    <span class="brand-latin prostep-name" dir="ltr">PRO STEP</span>
+                </div>
+                <p class="prostep-line">تمرین کن.<br>به هدیه نزدیک‌تر شو.</p>
+                <div class="prostep-meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                <p class="prostep-note">هر رزرو انجام‌شده، یک قدم</p>
+            </div>
+            -->
+
             <div class="au-side-head">
                 <div>
-                    <div class="h-sub"><span>انتخاب بیشتر، ساده‌تر</span></div>
-                    <div class="h-title">فیت‌نت را کشف کن</div>
+                    <div class="h-sub"><span>نزدیک خانه، محل کار یا گوشه‌ای تازه از شهر.</span></div>
+                    <div class="h-title">تمرین بعدی‌ات را پیدا کن.</div>
                 </div>
                 <div class="text-end">
                     <span class="text-[9px] uppercase tracking-[.3em] font-bold block mb-1" style="color:rgba(201,168,76,.5)">کشف</span>
-                    <span class="text-[9px] uppercase tracking-[.3em] font-bold" style="color:var(--gold)">چهار مسیر</span>
+                    <span class="text-[9px] uppercase tracking-[.3em] font-bold" style="color:var(--gold)">پیش‌نمایش</span>
                 </div>
             </div>
 
@@ -735,8 +817,8 @@
                             <span class="h-px flex-1" style="background:rgba(201,168,76,.25)"></span>
                             <span class="text-[9px] uppercase tracking-widest font-bold" style="color:rgba(232,220,200,.3)">نزدیک شما</span>
                         </div>
-                        <h4 class="font-oswald font-bold text-2xl uppercase text-white leading-tight mb-2">باشگاه‌های نزدیک</h4>
-                        <p class="text-white/40 text-xs leading-relaxed">مجموعه‌های اطرافت را پیدا کن و گزینه مناسب را ببین.</p>
+                        <h4 class="font-oswald font-bold text-2xl uppercase text-white leading-tight mb-2">نزدیک تو</h4>
+                        <p class="text-white/40 text-xs leading-relaxed">گزینه‌های اطرافت را راحت‌تر پیدا کن.</p>
                     </div>
                 </div>
 
@@ -745,24 +827,24 @@
                     <div class="au-mini-row">
                         <span class="au-mini-num">02</span>
                         <div class="flex-1 min-w-0">
-                            <p class="au-mini-title">امروز در دسترس</p>
-                            <p class="au-mini-sub">رزرو برای امروز</p>
+                            <p class="au-mini-title">برای امروز</p>
+                            <p class="au-mini-sub">بازه‌های قابل رزرو امروز را ببین.</p>
                         </div>
                         <span class="au-mini-meta">در دسترس</span>
                     </div>
                     <div class="au-mini-row">
                         <span class="au-mini-num">03</span>
                         <div class="flex-1 min-w-0">
-                            <p class="au-mini-title">رویدادهای ورزشی</p>
-                            <p class="au-mini-sub">رزرو با اعتبار فیت‌نت</p>
+                            <p class="au-mini-title">فراتر از باشگاه</p>
+                            <p class="au-mini-sub">رویدادهای ورزشی را کشف کن.</p>
                         </div>
                         <span class="au-mini-meta">رویداد</span>
                     </div>
                     <div class="au-mini-row">
                         <span class="au-mini-num">04</span>
                         <div class="flex-1 min-w-0">
-                            <p class="au-mini-title">نقشه فیت‌نت</p>
-                            <p class="au-mini-sub">لیست و نقشه</p>
+                            <p class="au-mini-title">روی نقشه</p>
+                            <p class="au-mini-sub">موقعیت‌ها را مقایسه کن.</p>
                         </div>
                         <span class="au-mini-meta">موقعیت</span>
                     </div>
@@ -783,7 +865,7 @@
         <div class="max-w-[1440px] mx-auto flex items-center justify-between text-[9px] uppercase tracking-[.3em] font-bold font-oswald" style="color:rgba(201,168,76,.4)">
             <div class="flex items-center gap-3">
                 <span class="w-1.5 h-1.5 rounded-full" style="background:var(--gold)"></span>
-                <span>یک حساب. یک اعتبار.</span>
+                <span>یک حساب. یک کیف پول.</span>
             </div>
             <div class="flex items-center gap-6">
                 <span>↓ ادامه بده</span>
@@ -807,34 +889,35 @@
     <div class="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1fr] gap-24 items-center">
         <div>
             <div class="h-px w-16 mb-8" style="background:var(--gold)"></div>
-            <h2 class="font-oswald font-black text-6xl uppercase leading-none mb-8" style="color:#e8dcc8">یک عضویت.<br><span style="color:var(--gold)">انتخاب‌های بیشتر.</span></h2>
-            <p style="color:rgba(232,220,200,.45)" class="text-base leading-relaxed mb-6">فیت‌نت یک مارکت‌پلیس ورزشی است. با یک حساب و کیف پول اعتباری، باشگاه همکار و رویداد ورزشی در دسترس‌تر می‌شود.</p>
-            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed mb-10">اعتبار بگیر، گزینه را پیدا کن، زمان ورود را رزرو کن و با QR وارد شو. با ساخت حساب، ۱ اعتبار شروع می‌گیری.</p>
-            <div class="grid grid-cols-3 gap-6 pt-8 border-t" style="border-color:rgba(201,168,76,.1)">
-                <div><p class="font-oswald font-black text-5xl glow-gold leading-none">۱</p><p class="text-[9px] uppercase tracking-widest mt-2" style="color:rgba(232,220,200,.3)">اعتبار بگیر</p></div>
-                <div class="stat-split border-l pl-6" style="border-color:rgba(201,168,76,.1)"><p class="font-oswald font-black text-5xl leading-none" style="color:#e8dcc8">۲</p><p class="text-[9px] uppercase tracking-widest mt-2" style="color:rgba(232,220,200,.3)">پیدا کن</p></div>
-                <div class="stat-split border-l pl-6" style="border-color:rgba(201,168,76,.1)"><p class="font-oswald font-black text-5xl leading-none" style="color:#e8dcc8">۳</p><p class="text-[9px] uppercase tracking-widest mt-2" style="color:rgba(232,220,200,.3)">رزرو کن</p></div>
+            <h2 class="font-oswald font-black text-6xl uppercase leading-none mb-8" style="color:#e8dcc8">از انتخاب تا ورود،<br><span style="color:var(--gold)">چهار قدم.</span></h2>
+            <p style="color:rgba(232,220,200,.45)" class="text-base leading-relaxed mb-6">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن. بعد باشگاه یا رویداد را ببین، زمان را چک کن و رزرو را تأیید کن.</p>
+            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed mb-10">QR یا کد رزرو را نشان بده و تمرینت را شروع کن. با ساخت حساب، ۱ اعتبار شروع دریافت می‌کنی.</p>
+            <div class="grid grid-cols-2 gap-6 pt-8 border-t" style="border-color:rgba(201,168,76,.1)">
+                <div><p class="font-oswald font-black text-4xl glow-gold leading-none">۱</p><p class="text-sm mt-2" style="color:#e8dcc8">اعتبار بگیر</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن.</p></div>
+                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۲</p><p class="text-sm mt-2" style="color:#e8dcc8">پیدا کن</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">باشگاه یا رویداد دلخواهت را ببین.</p></div>
+                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۳</p><p class="text-sm mt-2" style="color:#e8dcc8">رزرو کن</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">زمان و اعتبار موردنیاز را بررسی و رزروت را تأیید کن.</p></div>
+                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۴</p><p class="text-sm mt-2" style="color:#e8dcc8">وارد شو</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">QR یا کد رزرو را نشان بده و تمرینت را شروع کن.</p></div>
             </div>
         </div>
         <!-- Image collage -->
         <div class="grid grid-cols-2 gap-3 h-[520px]">
             <div class="overflow-hidden facility-card row-span-2 relative">
-                <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-full h-full object-cover">
+                <img loading="lazy" alt="" src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-0 left-0 right-0 p-5" style="background:linear-gradient(to top, rgba(15,12,9,.9), transparent)">
                     <p class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">نزدیک‌ترین انتخاب‌ها</p>
                     <p class="font-oswald font-bold text-sm uppercase text-white">روی نقشه</p>
                 </div>
             </div>
             <div class="overflow-hidden facility-card relative">
-                <img src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover">
+                <img loading="lazy" alt="" src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-0 left-0 right-0 p-4" style="background:linear-gradient(to top, rgba(15,12,9,.9), transparent)">
                     <p class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">لیست و نقشه</p>
                 </div>
             </div>
             <div class="overflow-hidden facility-card relative">
-                <img src="assets/images/photo-1581009146145-b5ef050c2e1e.jpg" class="w-full h-full object-cover">
+                <img loading="lazy" alt="" src="assets/images/photo-1581009146145-b5ef050c2e1e.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-0 left-0 right-0 p-4" style="background:linear-gradient(to top, rgba(15,12,9,.9), transparent)">
-                    <p class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">مسیریابی بیرونی</p>
+                    <p class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">پیش‌نمایش تجربه فیت‌نت</p>
                 </div>
             </div>
         </div>
@@ -847,9 +930,9 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
             <div>
                 <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-                <h2 class="font-oswald font-black text-6xl uppercase leading-none" style="color:#e8dcc8">همه‌چیز برای<br><span style="color:var(--gold)">یک تجربه ساده‌تر.</span></h2>
+                <h2 class="font-oswald font-black text-6xl uppercase leading-none" style="color:#e8dcc8">یک کیف پول،<br><span style="color:var(--gold)">برای انتخاب‌های بیشتر.</span></h2>
             </div>
-            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed max-w-xs">جستجو، نقشه، اعتبار، بازه ورود، رزرو، QR، کیف پول و علاقه‌مندی. همه در یک حساب.</p>
+            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed max-w-xs">اعتبارت را یک‌جا ببین، برای باشگاه و رویداد خرج کن و از تاریخچه و زمان انقضای آن خبر داشته باش.</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 border" style="border-color:rgba(201,168,76,.1)">
             <div class="p-8 border-r border-b" style="border-color:rgba(201,168,76,.08)">
@@ -867,9 +950,9 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">نقشه فیت‌نت</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">بین لیست و نقشه جابه‌جا شو. مسیریابی را اپ نقشه انجام می‌دهد.</p>
+                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">بین لیست و نقشه جابه‌جا شو و موقعیت‌ها را کنار هم ببین.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
-                    <p>نقشه</p><p>فاصله</p><p>مسیریابی</p>
+                    <p>نقشه</p><p>فاصله</p><p>مقایسه</p>
                 </div>
             </div>
             <div class="p-8 border-r border-b" style="border-color:rgba(201,168,76,.08)">
@@ -909,7 +992,7 @@
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">ورود با QR</h3>
                 <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">بعد از رزرو، QR یا کد ورود می‌گیری.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
-                    <p>QR</p><p dir="ltr">Check-in</p><p>ورود</p>
+                    <p>QR</p><p>ورود</p><p>کد رزرو</p>
                 </div>
             </div>
             <div class="p-8 border-r" style="border-color:rgba(201,168,76,.08)">
@@ -919,7 +1002,7 @@
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">کیف پول فیت‌نت</h3>
                 <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">موجودی، تاریخچه و اعتبار نزدیک به انقضا، یکجا.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
-                    <p dir="ltr">Wallet</p><p>اعتبار</p><p>تاریخچه</p>
+                    <p>کیف پول</p><p>اعتبار</p><p>تاریخچه</p>
                 </div>
             </div>
             <div class="p-8">
@@ -941,14 +1024,15 @@
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
             <div class="h-px w-16 mx-auto mb-8" style="background:linear-gradient(to right, transparent, var(--gold), transparent)"></div>
-            <h2 class="font-oswald font-black text-5xl uppercase leading-none" style="color:#e8dcc8">فیت‌نت برای <span style="color:var(--gold)">همه</span></h2>
+            <h2 class="font-oswald font-black text-5xl uppercase leading-none" style="color:#e8dcc8">باشگاه تو.<br><span style="color:var(--gold)">فرصت‌های تازه.</span></h2>
+            <p class="text-sm mt-5 max-w-lg mx-auto leading-relaxed" style="color:rgba(232,220,200,.4)">ظرفیت قابل رزرو را به کاربران فیت‌نت معرفی کن و رزروها، ورودها و وضعیت تسویه را یک‌جا مدیریت کن.</p>
         </div>
         <div class="swiper aurum-trainers overflow-hidden mb-6">
             <div class="swiper-wrapper">
                 <div class="swiper-slide !w-[300px]">
                     <div class="group border trainer-slide-card" style="border-color:rgba(201,168,76,.1)">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-full h-full object-cover object-top facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
+                            <img loading="lazy" alt="" src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-full h-full object-cover object-top facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
                             <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(22,18,14,.95), transparent 60%)"></div>
                         </div>
                         <div class="p-6">
@@ -962,21 +1046,21 @@
                 <div class="swiper-slide !w-[300px]">
                     <div class="group border trainer-slide-card" style="border-color:rgba(201,168,76,.1)">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="assets/images/photo-1571019614242-c5c5dee9f50b.jpg" class="w-full h-full object-cover facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
+                            <img loading="lazy" alt="" src="assets/images/photo-1571019614242-c5c5dee9f50b.jpg" class="w-full h-full object-cover facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
                             <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(22,18,14,.95), transparent 60%)"></div>
                         </div>
                         <div class="p-6">
                             <p class="text-[9px] uppercase tracking-widest font-bold mb-2" style="color:var(--gold)">باشگاه</p>
                             <h4 class="font-oswald font-bold text-xl uppercase" style="color:#e8dcc8">باشگاه‌های همکار</h4>
                             <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.4)">عملیات مجموعه</p>
-                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.35)">شعب، ظرفیت، رزروها و Check-in را از یک داشبورد ببین.</p>
+                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.35)">شعب، ظرفیت، رزروها و ورود را از یک داشبورد ببین.</p>
                         </div>
                     </div>
                 </div>
                 <div class="swiper-slide !w-[300px]">
                     <div class="group border trainer-slide-card" style="border-color:rgba(201,168,76,.1)">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
+                            <img loading="lazy" alt="" src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
                             <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(22,18,14,.95), transparent 60%)"></div>
                         </div>
                         <div class="p-6">
@@ -990,7 +1074,7 @@
                 <div class="swiper-slide !w-[300px]">
                     <div class="group border trainer-slide-card" style="border-color:rgba(201,168,76,.1)">
                         <div class="h-64 overflow-hidden relative">
-                            <img src="assets/images/photo-1517836357463-d25dfe09ce18.jpg" class="w-full h-full object-cover object-top facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
+                            <img loading="lazy" alt="" src="assets/images/photo-1517836357463-d25dfe09ce18.jpg" class="w-full h-full object-cover object-top facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
                             <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(22,18,14,.95), transparent 60%)"></div>
                         </div>
                         <div class="p-6">
@@ -1005,6 +1089,10 @@
             <div class="swiper-button-next" style="color:var(--gold)"></div>
             <div class="swiper-button-prev" style="color:var(--gold)"></div>
         </div>
+        <div class="flex flex-wrap justify-center gap-4 mt-10">
+            <a href="contact.html?path=gym" class="font-oswald font-bold uppercase text-xs tracking-widest px-6 py-4" style="background:var(--gold);color:#0f0c09">درخواست همکاری باشگاه</a>
+            <a href="contact.html?path=organizer" class="border font-oswald font-bold uppercase text-xs tracking-widest px-6 py-4 gold-border" style="color:var(--gold)">همکاری به‌عنوان برگزارکننده</a>
+        </div>
     </div>
 </section>
 
@@ -1014,53 +1102,26 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
                 <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-                <h2 class="font-oswald font-black text-6xl uppercase leading-none" style="color:#e8dcc8">پلن مناسب خودت<br><span style="color:var(--gold)">را انتخاب کن.</span></h2>
+                <h2 class="font-oswald font-black text-6xl uppercase leading-none" style="color:#e8dcc8">با ریتم خودت،<br><span style="color:var(--gold)">پلن انتخاب کن.</span></h2>
             </div>
-            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed max-w-xs">پلن‌ها بر اساس اعتبار ماهانه طراحی شده‌اند. نام، قیمت و تعداد اعتبار از محصول می‌آید.</p>
+            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed max-w-xs">پلن‌های ماهانه فیت‌نت با مقدار اعتبار متفاوت طراحی می‌شوند؛ انتخاب کن چقدر می‌خواهی برای تجربه‌های ورزشی‌ات کنار بگذاری.</p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 border" style="border-color:rgba(201,168,76,.1)">
-            <div class="tier-card p-10 border-r" data-fitnet-plan="1" style="border-color:rgba(201,168,76,.1)">
-                <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:rgba(201,168,76,.4)">پلن پیشنهادی</p>
-                <p class="font-oswald font-black text-5xl mb-1 leading-none" style="color:#e8dcc8">اعتبار</p>
-                <p class="text-xs mb-8" style="color:rgba(232,220,200,.3)">ماهانه · تعداد اعتبار، بعداً</p>
-                <ul class="space-y-3 mb-10">
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>اعتبار ماهانه</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>رزرو باشگاه</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>رزرو رویداد</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>ورود با QR</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.25)"><span style="color:rgba(201,168,76,.2)">—</span>قیمت، بعداً</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.25)"><span style="color:rgba(201,168,76,.2)">—</span>تعداد اعتبار، بعداً</li>
-                </ul>
-                <a href="#download" class="block text-center border font-oswald font-bold uppercase text-xs tracking-widest py-4 transition gold-border" style="color:var(--gold)" onmouseover="this.style.background='var(--gold)';this.style.color='#0f0c09'" onmouseout="this.style.background='';this.style.color='var(--gold)'">دسترسی زودهنگام</a>
+            <div class="tier-card p-10 border-r" style="border-color:rgba(201,168,76,.1)">
+                <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:rgba(201,168,76,.4)">معیار</p>
+                <p class="font-oswald font-black text-4xl mb-4 leading-none" style="color:#e8dcc8">اعتبار ماهانه</p>
+                <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">هر پلن مقدار مشخصی اعتبار برای باشگاه و رویداد دارد. یک اشتراک فعال در هر زمان کافی است.</p>
             </div>
-            <div class="p-10 border-r relative" data-fitnet-plan="2" style="background:rgba(201,168,76,.06);border-color:rgba(201,168,76,.2)">
-                <span class="absolute top-5 inset-e-5 text-[8px] font-bold uppercase tracking-widest px-2.5 py-1" style="background:var(--gold);color:#0f0c09">ساختار</span>
-                <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:var(--gold)">پلن محبوب</p>
-                <p class="font-oswald font-black text-5xl mb-1 leading-none" style="color:#e8dcc8">هر اعتبار</p>
-                <p class="text-xs mb-8" style="color:rgba(232,220,200,.3)">قیمت پلن ÷ اعتبار شامل‌شده</p>
-                <ul class="space-y-3 mb-10">
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>هزینه هر اعتبار</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>اعتبار ماهانه</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>باشگاه و رویداد</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>کیف پول</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span style="color:var(--gold)">✓</span>QR ورود</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.25)"><span style="color:rgba(201,168,76,.2)">—</span>قیمت، بعداً</li>
-                </ul>
+            <div class="p-10 border-r" style="background:rgba(201,168,76,.06);border-color:rgba(201,168,76,.2)">
+                <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:var(--gold)">معیار</p>
+                <p class="font-oswald font-black text-4xl mb-4 leading-none" style="color:#e8dcc8">هزینه هر اعتبار</p>
+                <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">وقتی قیمت‌ها اعلام شود، هزینه هر اعتبار از تقسیم قیمت پلن بر اعتبار شامل‌شده به دست می‌آید.</p>
+            </div>
+            <div class="tier-card p-10">
+                <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:rgba(225,255,0,.5)">اعلام</p>
+                <p class="font-oswald font-black text-4xl mb-4 leading-none text-brand">هم‌زمان با شروع</p>
+                <p class="text-sm leading-relaxed mb-8" style="color:rgba(232,220,200,.45)">جزئیات پلن‌ها هم‌زمان با شروع فیت‌نت اعلام می‌شود.</p>
                 <a href="#download" class="block text-center font-oswald font-bold uppercase text-xs tracking-widest py-4 hover:bg-brand transition" style="background:var(--gold);color:#0f0c09">دسترسی زودهنگام</a>
-            </div>
-            <div class="tier-card p-10" data-fitnet-plan="3">
-                <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:rgba(225,255,0,.4)">پلن پیشنهادی</p>
-                <p class="font-oswald font-black text-5xl mb-1 leading-none text-brand">ماهانه</p>
-                <p class="text-xs mb-8" style="color:rgba(232,220,200,.3)">مدت و اعتبار، قابل تنظیم</p>
-                <ul class="space-y-3 mb-10">
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span class="text-brand">✓</span>اعتبار برای رزرو</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span class="text-brand">✓</span>باشگاه همکار</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span class="text-brand">✓</span>رویداد تأییدشده</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span class="text-brand">✓</span>ورود با QR</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span class="text-brand">✓</span>کیف پول</li>
-                    <li class="flex gap-3 text-sm" style="color:rgba(232,220,200,.5)"><span class="text-brand">✓</span>قیمت، بعداً</li>
-                </ul>
-                <a href="#download" class="block text-center bg-brand text-black font-oswald font-bold uppercase text-xs tracking-widest py-4 hover:bg-white transition">دسترسی زودهنگام</a>
             </div>
         </div>
     </div>
@@ -1078,7 +1139,7 @@
                 <div class="flex gap-1 mb-5 text-[10px] uppercase tracking-widest font-bold" style="color:var(--gold)">ظرفیت</div>
                 <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.45)">رزروهای امروز و ظرفیت هر بازه ورود را ببین.</p>
                 <div class="flex items-center gap-3 pt-5 border-t" style="border-color:rgba(201,168,76,.08)">
-                    <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-10 h-10 rounded-full object-cover">
+                    <img loading="lazy" alt="" src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-10 h-10 rounded-full object-cover">
                     <div><p class="font-oswald font-bold text-sm uppercase" style="color:#e8dcc8">ظرفیتت را مدیریت کن</p><p class="text-[9px] uppercase tracking-widest" style="color:var(--gold)">داشبورد باشگاه</p></div>
                 </div>
             </div>
@@ -1086,15 +1147,15 @@
                 <div class="flex gap-1 mb-5 text-[10px] uppercase tracking-widest font-bold" style="color:var(--gold)">ورود</div>
                 <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.45)">QR کاربر یا کد ورود را بررسی کن.</p>
                 <div class="flex items-center gap-3 pt-5 border-t" style="border-color:rgba(201,168,76,.08)">
-                    <img src="assets/images/photo-1571019613454-1cb2f99b2d8b.jpg" class="w-10 h-10 rounded-full object-cover">
-                    <div><p class="font-oswald font-bold text-sm uppercase" style="color:#e8dcc8">ورود سریع‌تر</p><p class="text-[9px] uppercase tracking-widest" style="color:var(--gold)">Check-in</p></div>
+                    <img loading="lazy" alt="" src="assets/images/photo-1571019613454-1cb2f99b2d8b.jpg" class="w-10 h-10 rounded-full object-cover">
+                    <div><p class="font-oswald font-bold text-sm uppercase" style="color:#e8dcc8">ورود سریع‌تر</p><p class="text-[9px] uppercase tracking-widest" style="color:var(--gold)">ورود با QR</p></div>
                 </div>
             </div>
             <div class="p-8">
                 <div class="flex gap-1 mb-5 text-[10px] uppercase tracking-widest font-bold" style="color:var(--gold)">تسویه</div>
                 <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.45)">بازدیدهای انجام‌شده و وضعیت تسویه را دنبال کن.</p>
                 <div class="flex items-center gap-3 pt-5 border-t" style="border-color:rgba(201,168,76,.08)">
-                    <img src="assets/images/photo-1583454110551-21f2fa2afe61.jpg" class="w-10 h-10 rounded-full object-cover">
+                    <img loading="lazy" alt="" src="assets/images/photo-1583454110551-21f2fa2afe61.jpg" class="w-10 h-10 rounded-full object-cover">
                     <div><p class="font-oswald font-bold text-sm uppercase" style="color:#e8dcc8">عملکرد و تسویه</p><p class="text-[9px] uppercase tracking-widest" style="color:var(--gold)">داشبورد باشگاه</p></div>
                 </div>
             </div>
@@ -1102,60 +1163,71 @@
     </div>
 </section>
 
-<!-- ═══ EVENT CALENDAR ════════════════════════════════════════ -->
-<!-- DEMO_DATA: sample event cards for layout only. Replace from the events API. -->
+<!-- ═══ EVENT PREVIEW ════════════════════════════════════════ -->
 <section id="events" class="py-28 px-6 gs-faq" style="background:#120e0b">
     <div class="max-w-7xl mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
             <div>
                 <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-                <h2 class="font-oswald font-black text-5xl uppercase leading-none" style="color:#e8dcc8">رویدادهای<br><span style="color:var(--gold)">فیت‌نت.</span></h2>
-                <p class="text-sm mt-4" style="color:rgba(232,220,200,.35)">تمرین فقط باشگاه نیست.</p>
+                <h2 class="font-oswald font-black text-5xl uppercase leading-none" style="color:#e8dcc8">تمرین،<br><span style="color:var(--gold)">فقط باشگاه نیست.</span></h2>
+                <p class="text-sm mt-4 max-w-md leading-relaxed" style="color:rgba(232,220,200,.4)">از فضای همیشگی فاصله بگیر. رویدادهای ورزشی تأییدشده را پیدا کن و با اعتبار فیت‌نت همراه شو.</p>
             </div>
-            <a href="#partners" class="border font-oswald font-bold uppercase text-[10px] tracking-widest px-6 py-3 transition gold-border" style="color:var(--gold)" onmouseover="this.style.background='var(--gold)';this.style.color='#0f0c09'" onmouseout="this.style.background='';this.style.color='var(--gold)'">همکاری با فیت‌نت</a>
+            <a href="contact.html?path=organizer" class="border font-oswald font-bold uppercase text-[10px] tracking-widest px-6 py-3 transition gold-border" style="color:var(--gold)" onmouseover="this.style.background='var(--gold)';this.style.color='#0f0c09'" onmouseout="this.style.background='';this.style.color='var(--gold)'">همکاری به‌عنوان برگزارکننده</a>
         </div>
-        <div class="space-y-0 border" data-fitnet-events="DEMO_DATA" style="border-color:rgba(201,168,76,.1)">
+        <p class="text-xs mb-6" style="color:rgba(201,168,76,.7)">پیش‌نمایش تجربه فیت‌نت</p>
+        <div class="space-y-0 border" style="border-color:rgba(201,168,76,.1)">
             <div class="flex gap-0 border-b" style="border-color:rgba(201,168,76,.08)">
                 <div class="w-28 flex-shrink-0 p-6 border-r flex flex-col items-center justify-center" style="border-color:rgba(201,168,76,.08)">
                     <p class="font-oswald font-black text-3xl leading-none" style="color:var(--gold)">۰۱</p>
-                    <p class="text-[9px] uppercase tracking-widest mt-1" style="color:rgba(232,220,200,.3)">نمونه</p>
                 </div>
-                <div class="flex-1 p-6 flex flex-col md:flex-row justify-between gap-4">
-                    <div><h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">نمونه رویداد</h4><p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">پوشش، عنوان، تاریخ، مکان و اعتبار لازم. این کارت داده واقعی نیست.</p></div>
-                    <div class="flex flex-col items-start md:items-end gap-2 flex-shrink-0"><span class="text-[9px] uppercase tracking-widest font-bold px-3 py-1" style="background:rgba(201,168,76,.1);color:var(--gold)">همه</span><span class="text-xs" style="color:rgba(232,220,200,.3)">اعتبار · نمونه</span></div>
+                <div class="flex-1 p-6">
+                    <h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">تمرین گروهی</h4>
+                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">جلسه‌هایی که با دیگران و با یک زمان مشخص برگزار می‌شوند.</p>
                 </div>
             </div>
             <div class="flex gap-0 border-b" style="border-color:rgba(201,168,76,.08)">
                 <div class="w-28 flex-shrink-0 p-6 border-r flex flex-col items-center justify-center" style="border-color:rgba(201,168,76,.08)">
                     <p class="font-oswald font-black text-3xl leading-none" style="color:var(--gold)">۰۲</p>
-                    <p class="text-[9px] uppercase tracking-widest mt-1" style="color:rgba(232,220,200,.3)">نمونه</p>
                 </div>
-                <div class="flex-1 p-6 flex flex-col md:flex-row justify-between gap-4">
-                    <div><h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">نمونه رویداد</h4><p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">رزرو فقط با اعتبار فیت‌نت. بدون بلیت نقدی.</p></div>
-                    <div class="flex flex-col items-start md:items-end gap-2 flex-shrink-0"><span class="text-[9px] uppercase tracking-widest font-bold px-3 py-1" style="background:rgba(201,168,76,.1);color:var(--gold)">آقایان</span><span class="text-xs" style="color:rgba(232,220,200,.3)">ظرفیت · نمونه</span></div>
+                <div class="flex-1 p-6">
+                    <h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">تجربه در فضای باز</h4>
+                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">تمرین بیرون از سالن، وقتی رویداد تأیید شده باشد.</p>
                 </div>
             </div>
-            <div class="flex gap-0 border-b" style="border-color:rgba(201,168,76,.08)">
+            <div class="flex gap-0" style="border-color:rgba(201,168,76,.08)">
                 <div class="w-28 flex-shrink-0 p-6 border-r flex flex-col items-center justify-center" style="border-color:rgba(201,168,76,.08)">
                     <p class="font-oswald font-black text-3xl leading-none" style="color:var(--gold)">۰۳</p>
-                    <p class="text-[9px] uppercase tracking-widest mt-1" style="color:rgba(232,220,200,.3)">نمونه</p>
                 </div>
-                <div class="flex-1 p-6 flex flex-col md:flex-row justify-between gap-4">
-                    <div><h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">نمونه رویداد</h4><p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">پس از تأیید منتشر می‌شود. حضور با QR.</p></div>
-                    <div class="flex flex-col items-start md:items-end gap-2 flex-shrink-0"><span class="text-[9px] uppercase tracking-widest font-bold px-3 py-1" style="background:rgba(201,168,76,.1);color:var(--gold)">بانوان</span><span class="text-xs" style="color:rgba(232,220,200,.3)">مکان · نمونه</span></div>
-                </div>
-            </div>
-            <div class="flex gap-0">
-                <div class="w-28 flex-shrink-0 p-6 border-r flex flex-col items-center justify-center" style="border-color:rgba(201,168,76,.08)">
-                    <p class="font-oswald font-black text-3xl leading-none" style="color:var(--gold)">۰۴</p>
-                    <p class="text-[9px] uppercase tracking-widest mt-1" style="color:rgba(232,220,200,.3)">نمونه</p>
-                </div>
-                <div class="flex-1 p-6 flex flex-col md:flex-row justify-between gap-4">
-                    <div><h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">نمونه رویداد</h4><p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">تمرین فقط باشگاه نیست. رویداد تأییدشده، با اعتبار.</p></div>
-                    <div class="flex flex-col items-start md:items-end gap-2 flex-shrink-0"><span class="text-[9px] uppercase tracking-widest font-bold px-3 py-1" style="background:rgba(201,168,76,.1);color:var(--gold)">همه</span><span class="text-xs" style="color:rgba(232,220,200,.3)">اعتبار · نمونه</span></div>
+                <div class="flex-1 p-6">
+                    <h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">رویدادهای ویژه</h4>
+                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">برنامه‌هایی که بعد از بررسی، برای ثبت‌نام باز می‌شوند.</p>
                 </div>
             </div>
         </div>
+        <p class="text-sm mt-6" style="color:rgba(232,220,200,.4)">رویدادهای تأییدشده، با شروع فیت‌نت اینجا معرفی می‌شوند.</p>
+    </div>
+</section>
+
+<section id="rewards" class="py-28 px-6" style="background:var(--dark)">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-0 border" style="border-color:rgba(201,168,76,.12)">
+        <div class="p-10 md:p-14 border-b md:border-b-0 md:border-l" style="border-color:rgba(201,168,76,.12)">
+            <p class="text-[10px] uppercase tracking-[.3em] font-bold mb-4 brand-latin" dir="ltr" style="color:var(--gold)">PRO STEP</p>
+            <h2 class="font-oswald font-black text-4xl uppercase leading-none mb-5" style="color:#e8dcc8">تمرینت را ادامه بده.<br>به هدیه نزدیک‌تر شو.</h2>
+            <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">اعتباری که برای حضورهای انجام‌شده خرج می‌کنی، پیشرفت Pro Step را جلو می‌برد. با رسیدن به هدف، هدیه‌ات را انتخاب کن.</p>
+        </div>
+        <div class="p-10 md:p-14">
+            <p class="text-[10px] uppercase tracking-[.3em] font-bold mb-4" style="color:var(--gold)">دعوت</p>
+            <h2 class="font-oswald font-black text-4xl uppercase leading-none mb-5" style="color:#e8dcc8">رفیق تمرینت را هم خبر کن.</h2>
+            <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">لینک یا کد دعوتت را بفرست؛ بعد از اولین خرید اشتراک دوستت، اعتبار پاداش بگیر.</p>
+        </div>
+    </div>
+</section>
+
+<section id="faq" class="py-28 px-6" style="background:#120e0b">
+    <div class="max-w-3xl mx-auto">
+        <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
+        <h2 class="font-oswald font-black text-5xl uppercase leading-none mb-10" style="color:#e8dcc8">پرسش‌های<br><span style="color:var(--gold)">رایج</span></h2>
+        <div class="fn-faq" data-fn-faq></div>
     </div>
 </section>
 
@@ -1163,8 +1235,8 @@
 <section id="download" class="py-28 px-6 relative overflow-hidden gs-cta" style="background:var(--gold)">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 relative z-10">
         <div>
-            <h2 class="font-oswald font-black uppercase leading-none text-black" style="font-size:clamp(4rem,8vw,8rem)">انتخاب بعدی‌ت<br>با فیت‌نته.</h2>
-            <p class="text-black/50 text-base mt-6 max-w-md">با یک حساب و یک کیف پول اعتباری، باشگاه و رویداد بیشتری را کشف کن، رزرو کن و با QR وارد شو.</p>
+            <h2 class="font-oswald font-black uppercase leading-none text-black" style="font-size:clamp(3.2rem,7vw,6.5rem)">انتخاب بعدی‌ات،<br>یک تجربه تازه.</h2>
+            <p class="text-black/55 text-base mt-6 max-w-md leading-relaxed">فیت‌نت برای کشف باشگاه‌ها و رویدادهای ورزشی در کنار توست. برای شروع همراه شو.</p>
         </div>
         <div class="flex flex-col gap-4 min-w-[280px]">
             <a href="#contact" class="bg-black text-brand font-oswald font-bold uppercase text-sm tracking-widest px-10 py-5 hover:bg-white hover:text-black transition text-center">دسترسی زودهنگام</a>
@@ -1197,37 +1269,41 @@
         <div>
             <h4 class="font-oswald font-bold uppercase text-sm tracking-widest mb-6" style="color:#e8dcc8">کسب‌وکار</h4>
             <ul class="space-y-3 text-sm" style="color:rgba(232,220,200,.4)">
-                <li><a href="#partners" class="hover:text-gold transition">همکاری با باشگاه‌ها</a></li>
-                <li><a href="#partners" class="hover:text-gold transition">برگزارکنندگان</a></li>
-                <li><a href="#contact" class="hover:text-gold transition">ارتباط با ما</a></li>
+                <li><a href="contact.html?path=gym" class="hover:text-gold transition">همکاری با باشگاه‌ها</a></li>
+                <li><a href="contact.html?path=organizer" class="hover:text-gold transition">برگزارکنندگان</a></li>
+                <li><a href="contact.html" class="hover:text-gold transition">ارتباط با ما</a></li>
             </ul>
         </div>
         <div>
             <h4 id="contact" class="font-oswald font-bold uppercase text-sm tracking-widest mb-6" style="color:#e8dcc8">دسترسی زودهنگام</h4>
-            <p class="text-sm mb-5" style="color:rgba(232,220,200,.3)">نام و شماره موبایل را بگذار. ارسال فرم هنوز به سرور وصل نیست.</p>
-            <!-- TODO: connect early-access lead to Laravel. Do not fake a successful submit. -->
-            <form class="mb-5" @submit.prevent>
-                <input type="text" name="name" placeholder="نام" class="bg-transparent text-sm p-3 w-full border mb-2 focus:outline-none placeholder-[#e8dcc8]/20" style="color:#e8dcc8;border-color:rgba(201,168,76,.18)" aria-label="نام">
-                <div class="flex border overflow-hidden" style="border-color:rgba(201,168,76,.18)"><input type="tel" inputmode="numeric" dir="ltr" placeholder="09" class="bg-transparent text-sm p-3 w-full focus:outline-none placeholder-[#e8dcc8]/20" style="color:#e8dcc8" aria-label="شماره موبایل"><button class="font-bold uppercase text-xs px-4 font-oswald transition shrink-0 hover:bg-brand" style="background:var(--gold);color:#0f0c09">ثبت</button></div>
+            <p class="text-sm mb-4" style="color:rgba(232,220,200,.35)">این فرم در نسخه نمایشی ارسال نمی‌شود.</p>
+            <form class="mb-5" data-fitnet-form="early" novalidate>
+                <label class="block text-xs mb-1" style="color:rgba(232,220,200,.45)" for="ea-name">نام</label>
+                <input id="ea-name" type="text" name="name" required autocomplete="name" class="bg-transparent text-sm p-3 w-full border mb-3 focus:outline-none" style="color:#e8dcc8;border-color:rgba(201,168,76,.18)">
+                <label class="block text-xs mb-1" style="color:rgba(232,220,200,.45)" for="ea-mobile">شماره موبایل</label>
+                <div class="flex border overflow-hidden" style="border-color:rgba(201,168,76,.18)"><input id="ea-mobile" type="tel" name="mobile" required inputmode="numeric" dir="ltr" autocomplete="tel" class="bg-transparent text-sm p-3 w-full focus:outline-none" style="color:#e8dcc8"><button class="font-bold uppercase text-xs px-4 font-oswald transition shrink-0 hover:bg-brand" style="background:var(--gold);color:#0f0c09;min-height:44px">ثبت</button></div>
+                <p class="fn-form-msg text-xs mt-3" role="status"></p>
             </form>
             <div class="text-xs" style="color:rgba(232,220,200,.3)">
                 <p class="mb-1"><a href="https://fitnet.ir/" class="brand-latin" dir="ltr" style="color:#e8dcc8">fitnet.ir</a></p>
-                <p>راهنما · به‌زودی</p>
+                <p><a href="blog.html" class="hover:text-gold transition">راهنمای فیت‌نت</a></p>
             </div>
         </div>
     </div>
     <div class="max-w-7xl mx-auto pt-8 border-t flex flex-col md:flex-row justify-between items-center text-xs relative z-10" style="border-color:rgba(201,168,76,.08);color:rgba(232,220,200,.2)">
         <p>© 2026 Fitnet. تمامی حقوق محفوظ است.</p>
-        <div class="flex gap-5 mt-4 md:mt-0"><a href="#contact" class="hover:text-gold transition">راهنما</a><a href="#contact" class="hover:text-gold transition">قوانین استفاده</a><a href="#contact" class="hover:text-gold transition">حریم خصوصی</a></div>
+        <div class="flex gap-5 mt-4 md:mt-0"><a href="blog.html" class="hover:text-gold transition">راهنما</a><a href="terms.html" class="hover:text-gold transition">قوانین استفاده</a><a href="privacy.html" class="hover:text-gold transition">حریم خصوصی</a></div>
     </div>
     <div class="absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none select-none">
-        <h1 class="font-oswald font-black text-[11rem] leading-none tracking-tighter" style="color:rgba(201,168,76,.02)" dir="ltr">FITNET</h1>
+        <p class="font-oswald font-black text-[11rem] leading-none tracking-tighter" style="color:rgba(201,168,76,.02)" dir="ltr">FITNET</p>
     </div>
 </footer>
 
     <script src="assets/js/swiper-bundle.min.js"></script>
     <script src="assets/js/gsap.min.js"></script>
     <script src="assets/js/ScrollTrigger.min.js"></script>
+    <script src="assets/js/fitnet-content.js"></script>
+    <script src="assets/js/fitnet.js"></script>
 <script>
 /* PLACEHOLDER: bind from Laravel. Do not treat nulls as live prices. */
 const FITNET_PLANS = [
@@ -1258,15 +1334,16 @@ document.addEventListener('DOMContentLoaded', () => {
             navigation: {
                 nextEl: '.aurum-trainers .swiper-button-next',
                 prevEl: '.aurum-trainers .swiper-button-prev'
-            }
+            },
+            a11y: { nextSlideMessage: 'اسلاید بعد', prevSlideMessage: 'اسلاید قبل' }
         });
     }
-    new Swiper('.aurum-amenities', {
+    if (document.querySelector('.aurum-amenities .swiper-slide')) new Swiper('.aurum-amenities', {
         loop: true, autoplay: { delay: 4500 },
         navigation: { nextEl: '.aurum-next', prevEl: '.aurum-prev' },
         pagination: { el: '.aurum-amenities .swiper-pagination', clickable: true }
     });
-    new Swiper('.aurum-testi', {
+    if (document.querySelector('.aurum-testi .swiper-slide')) new Swiper('.aurum-testi', {
         loop: true, autoplay: { delay: 5500 }, spaceBetween: 20,
         navigation: { nextEl: '.aurum-testi .swiper-button-next', prevEl: '.aurum-testi .swiper-button-prev' },
         pagination: { el: '.aurum-testi .swiper-pagination', clickable: true },
@@ -1278,9 +1355,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
     
-    <!-- Global GSAP Animations -->
+    <!-- Global GSAP Animations: skipped when the page owns motion through .gs-hero -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            if (document.querySelector('.gs-hero')) return;
             if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                 gsap.registerPlugin(ScrollTrigger);
 
@@ -1411,6 +1489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- Global GSAP Animations (gs-* classes) -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
             if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                 gsap.registerPlugin(ScrollTrigger);
 

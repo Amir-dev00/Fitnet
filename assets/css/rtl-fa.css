@@ -169,7 +169,9 @@ html[dir="rtl"] .hero-rule {
 
 html[dir="rtl"] .float-rating {
   right: auto;
-  left: -20px;
+  left: 20px;
+  top: 124px;
+  bottom: auto;
 }
 
 html[dir="rtl"] .float-floors {
