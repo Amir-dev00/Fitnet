@@ -2,57 +2,15 @@
    Logical tweaks and typography only — the original layout stays intact. */
 
 @font-face {
-  font-family: "Vazirmatn";
+  font-family: "Estedad";
   font-style: normal;
-  font-weight: 300;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("../fonts/Vazirmatn-Light.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Vazirmatn";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/Vazirmatn-Regular.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Vazirmatn";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../fonts/Vazirmatn-Medium.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Vazirmatn";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("../fonts/Vazirmatn-SemiBold.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Vazirmatn";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../fonts/Vazirmatn-Bold.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Vazirmatn";
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("../fonts/Vazirmatn-ExtraBold.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Vazirmatn";
-  font-style: normal;
-  font-weight: 900;
-  font-display: swap;
-  src: url("../fonts/Vazirmatn-Black.woff2") format("woff2");
+  src: url("../fonts/Estedad-Variable.woff2") format("woff2");
 }
 
 html[dir="rtl"] body {
-  font-family: "Vazirmatn", sans-serif;
+  font-family: "Estedad", sans-serif;
 }
 
 html[dir="rtl"] h1,
@@ -78,7 +36,7 @@ html[dir="rtl"] .ml-t,
 html[dir="rtl"] .col-head,
 html[dir="rtl"] .s-tag,
 html[dir="rtl"] .mtrack {
-  font-family: "Vazirmatn", sans-serif;
+  font-family: "Estedad", sans-serif;
   letter-spacing: 0;
   text-transform: none;
 }
@@ -95,8 +53,9 @@ html[dir="rtl"] .brand-latin {
 }
 
 html[dir="rtl"] .au-title {
-  line-height: 1.08;
-  font-weight: 800;
+  line-height: 1.3;
+  font-weight: 900;
+  letter-spacing: 0;
 }
 
 html[dir="rtl"] .italic {
@@ -123,7 +82,10 @@ html[dir="rtl"] .hero-veil {
 
 html[dir="rtl"] .hero-copy {
   padding-right: 0;
-  padding-left: 3rem;
+  padding-left: 0;
+}
+@media (min-width: 1024px) {
+  html[dir="rtl"] .hero-copy { padding-left: 2.5rem; }
 }
 
 html[dir="rtl"] .hero-side {
@@ -206,7 +168,7 @@ html[dir="rtl"] .mtrack {
 
 html[dir="rtl"] .s-in {
   text-align: right;
-  font-family: "Vazirmatn", sans-serif;
+  font-family: "Estedad", sans-serif;
 }
 
 html[dir="rtl"] input[type="email"],

@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" href="assets/fonts/Estedad-Variable.woff2" as="font" type="font/woff2" crossorigin>
     <title>فیت‌نت | باشگاه و رویداد ورزشی با یک اعتبار</title>
     <meta name="description" content="فیت‌نت یک پلتفرم دسترسی به باشگاه‌های همکار و رویدادهای ورزشی است. باشگاه پیدا کن، اعتبار بگیر، رزرو کن و با QR وارد شو.">
     <link rel="canonical" href="https://fitnet.ir/">
@@ -27,8 +28,8 @@
     <style>
         :root { --brand: #e1ff00; --gold: #c9a84c; --dark: #16120e; }
         [x-cloak] { display: none !important; }
-        body { font-family: 'Inter', sans-serif; background: var(--dark); color: #e8dcc8; overflow-x: hidden; }
-        h1,h2,h3,h4,h5 { font-family: 'Oswald', sans-serif; }
+        body { font-family: 'Estedad', sans-serif; font-weight: 400; line-height: 1.85; letter-spacing: 0; background: var(--dark); color: #e8dcc8; overflow-x: hidden; }
+        h1,h2,h3,h4,h5 { font-family: 'Estedad', sans-serif; letter-spacing: 0; }
         .text-brand { color: var(--brand); }
         .bg-brand   { background: var(--brand); }
         .text-gold  { color: var(--gold); }
@@ -39,18 +40,18 @@
         .mega-link:hover { background:rgba(201,168,76,.06); }
         .mega-link:hover .ml-t { color:var(--gold); }
         .ml-icon { width:38px; height:38px; border:1px solid rgba(201,168,76,.18); display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--gold); }
-        .ml-t { font-family:'Oswald',sans-serif; font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:#d8c9b0; transition:color .2s; }
-        .ml-d { font-size:11px; color:rgba(232,220,200,.35); margin-top:2px; line-height:1.4; }
-        .col-head { font-family:'Oswald',sans-serif; font-weight:700; font-size:9px; text-transform:uppercase; letter-spacing:.3em; color:rgba(201,168,76,.4); padding:0 14px; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+        .ml-t { font-family:'Estedad',sans-serif; font-weight:600; font-size:0.875rem; line-height:1.6; text-transform:none; letter-spacing:0; color:#d8c9b0; transition:color .2s; }
+        .ml-d { font-size:0.8125rem; color:rgba(232,220,200,.78); margin-top:4px; line-height:1.7; letter-spacing:0; }
+        .col-head { font-family:'Estedad',sans-serif; font-weight:500; font-size:0.75rem; line-height:1.7; text-transform:none; letter-spacing:0; color:rgba(201,168,76,.85); padding:0 14px; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
         .col-head::after { content:''; flex:1; height:1px; background:rgba(201,168,76,.1); }
         .mega-divider { width:1px; background:rgba(201,168,76,.08); flex-shrink:0; }
 
         /* ── SEARCH PANEL ───────────────────────────────── */
         .search-panel { background:#0f0c09; border-top:1px solid rgba(201,168,76,.12); box-shadow:0 24px 80px rgba(0,0,0,.95); }
-        .s-in { background:rgba(201,168,76,.06); border:1px solid rgba(201,168,76,.18); color:#e8dcc8; font-family:'Inter',sans-serif; font-size:.9rem; outline:none; padding:14px 20px; width:100%; }
-        .s-in::placeholder { color:rgba(232,220,200,.25); }
+        .s-in { background:rgba(201,168,76,.06); border:1px solid rgba(201,168,76,.18); color:#e8dcc8; font-family:'Estedad',sans-serif; font-weight:400; font-size:1rem; line-height:1.85; letter-spacing:0; outline:none; padding:14px 20px; width:100%; }
+        .s-in::placeholder { color:rgba(232,220,200,.72); }
         .s-in:focus { border-color:var(--gold); }
-        .s-tag { border:1px solid rgba(201,168,76,.18); color:rgba(232,220,200,.4); font-family:'Oswald',sans-serif; font-weight:700; font-size:9px; text-transform:uppercase; letter-spacing:.2em; padding:5px 12px; cursor:pointer; transition:all .2s; }
+        .s-tag { border:1px solid rgba(201,168,76,.18); color:rgba(232,220,200,.84); font-family:'Estedad',sans-serif; font-weight:500; font-size:0.75rem; line-height:1.7; text-transform:none; letter-spacing:0; padding:6px 12px; cursor:pointer; transition:all .2s; }
         .s-tag:hover,.s-tag.active { background:var(--gold); color:#000; border-color:var(--gold); }
         .s-row { padding:10px 0; border-bottom:1px solid rgba(201,168,76,.06); font-size:13px; color:rgba(232,220,200,.5); cursor:pointer; transition:color .2s; display:flex; align-items:center; gap:10px; text-decoration:none; }
         .s-row:hover { color:var(--gold); }
@@ -116,28 +117,29 @@
         .au-vline-1 { left: 8%; }
         .au-vline-2 { right: 8%; }
         .au-title {
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            line-height: .88;
-            letter-spacing: -.01em;
-            font-size: clamp(3.75rem, 8vw, 8.5rem);
+            font-family: 'Estedad', sans-serif;
+            font-weight: 900;
+            text-transform: none;
+            line-height: 1.3;
+            letter-spacing: 0;
+            font-size: clamp(2.75rem, 5.2vw, 5.35rem);
             color: #e8dcc8;
         }
-        .au-title .l2 { color: var(--gold); text-shadow: 0 0 50px rgba(201,168,76,.4), 0 0 100px rgba(201,168,76,.15); display: block; }
+        .au-title > span { display: block; padding-block: 0.04em; }
+        .au-title .l2 { color: var(--gold); text-shadow: 0 0 28px rgba(201,168,76,.28); }
         .au-title .l3 {
-            -webkit-text-stroke: 1.5px rgba(232,220,200,.35);
+            -webkit-text-stroke: 1px rgba(243,234,220,.62);
             color: transparent;
-            display: block;
         }
         .au-eyebrow {
             display: inline-flex; align-items: center; gap: 14px;
             color: rgba(201,168,76,.6);
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: .35em;
+            font-family: 'Estedad', sans-serif;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-transform: none;
+            letter-spacing: 0;
+            line-height: 1.7;
         }
         .au-eyebrow .ornament {
             width: 50px; height: 1px;
@@ -149,11 +151,12 @@
             background: rgba(201,168,76,.08);
             border: 1px solid rgba(201,168,76,.25);
             color: var(--gold);
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: .25em;
+            font-family: 'Estedad', sans-serif;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-transform: none;
+            letter-spacing: 0;
+            line-height: 1.7;
         }
         .au-badge .seal {
             width: 22px; height: 22px;
@@ -165,12 +168,14 @@
         .au-cta-primary {
             background: var(--gold);
             color: #0f0c09;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: .25em;
-            padding: 18px 32px;
+            font-family: 'Estedad', sans-serif;
+            font-weight: 600;
+            text-transform: none;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            letter-spacing: 0;
+            min-height: 48px;
+            padding: 12px 28px;
             display: inline-flex; align-items: center; gap: 12px;
             position: relative;
             overflow: hidden;
@@ -186,13 +191,15 @@
         .au-cta-primary:hover { background: #fff; color: #0f0c09; transform: translateY(-2px); box-shadow: 0 20px 50px rgba(201,168,76,.3); }
         .au-cta-primary:hover::before { transform: translateX(100%); }
         .au-cta-ghost {
-            color: rgba(232,220,200,.6);
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: .25em;
-            padding: 18px 32px;
+            color: rgba(232,220,200,.86);
+            font-family: 'Estedad', sans-serif;
+            font-weight: 600;
+            text-transform: none;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            letter-spacing: 0;
+            min-height: 48px;
+            padding: 12px 28px;
             border: 1px solid rgba(201,168,76,.2);
             display: inline-flex; align-items: center; gap: 12px;
             transition: all .3s ease;
@@ -208,23 +215,41 @@
             background: linear-gradient(to bottom, var(--gold), transparent);
         }
         .au-metric .v {
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
+            font-family: 'Estedad', sans-serif;
+            font-weight: 800;
             font-size: clamp(2.5rem, 3.5vw, 3.75rem);
-            line-height: 1;
+            line-height: 1.2;
             color: var(--gold);
             display: block;
+            letter-spacing: 0;
             text-shadow: 0 0 30px rgba(201,168,76,.25);
         }
         .au-metric .v.warm { color: #e8dcc8; text-shadow: none; }
         .au-metric .l {
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: .3em;
-            color: rgba(232,220,200,.3);
-            font-weight: 700;
+            font-size: 0.8125rem;
+            text-transform: none;
+            letter-spacing: 0;
+            color: rgba(232,220,200,.82);
+            font-weight: 400;
             margin-top: 8px;
             display: block;
+            line-height: 1.75;
+        }
+        .hero-discover { display: flex; flex-direction: column; gap: 16px; }
+        .hero-discover .amenity-card,
+        .hero-discover .au-featured { height: 260px; min-height: 200px; }
+        .hero-side .au-mini-card.float-floors {
+            position: relative;
+            left: auto; right: auto; top: auto; bottom: auto;
+            width: 100%;
+            margin-top: 16px;
+        }
+        .hero-strip { padding: 18px 0 22px; border-top: 1px solid rgba(201,168,76,.14); }
+        @media (max-width: 767px) { .hero-strip { display: none; } }
+        @media (max-height: 820px) and (min-width: 1024px) {
+            .hero-discover .amenity-card,
+            .hero-discover .au-featured { height: 180px; min-height: 160px; }
+            .hero-copy { padding-top: 1.5rem; padding-bottom: 1.5rem; }
         }
         .amenity-card {
             position: relative;
@@ -264,51 +289,60 @@
             border-inline-start-color: var(--gold);
         }
         .au-mini-num {
-            font-family: 'Oswald', sans-serif;
-            font-weight: 300;
+            font-family: 'Estedad', sans-serif;
+            font-weight: 500;
             font-size: 22px;
-            color: rgba(201,168,76,.4);
-            line-height: 1;
-            font-style: italic;
+            color: rgba(201,168,76,.72);
+            line-height: 1.2;
+            font-style: normal;
         }
         .au-mini-title {
-            font-family: 'Oswald', sans-serif;
+            font-family: 'Estedad', sans-serif;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 0.875rem;
             color: #e8dcc8;
-            text-transform: uppercase;
-            letter-spacing: -.005em;
+            text-transform: none;
+            letter-spacing: 0;
+            line-height: 1.5;
         }
         .au-mini-sub {
-            font-size: 10px;
-            color: rgba(232,220,200,.3);
-            margin-top: 3px;
-            letter-spacing: .02em;
+            font-size: 0.8125rem;
+            color: rgba(232,220,200,.82);
+            margin-top: 4px;
+            letter-spacing: 0;
+            line-height: 1.75;
         }
         .au-mini-meta {
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 8px;
-            text-transform: uppercase;
-            letter-spacing: .25em;
-            padding: 4px 9px;
-            color: rgba(201,168,76,.55);
-            border: 1px solid rgba(201,168,76,.18);
-            white-space: nowrap;
+            font-family: 'Estedad', sans-serif;
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: none;
+            letter-spacing: 0;
+            padding: 6px 10px;
+            color: #e8d5a8;
+            border: 1px solid rgba(201,168,76,.35);
+            line-height: 1.7;
+            white-space: normal;
+            text-align: center;
         }
         .au-side-head {
-            display: flex; justify-content: space-between; align-items: flex-end;
+            display: flex; justify-content: space-between; align-items: flex-start;
+            flex-wrap: wrap; gap: 12px 16px;
             padding-bottom: 16px;
             margin-bottom: 16px;
             border-bottom: 1px solid rgba(201,168,76,.15);
         }
+        .au-side-head > div:first-child { flex: 1 1 16rem; min-width: 12rem; }
+        .au-side-head .text-end { flex: 0 0 auto; white-space: nowrap; }
+        .au-side-head .text-end span { display: inline; margin-inline-start: 8px; }
         .au-side-head .h-sub {
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: .3em;
-            color: rgba(201,168,76,.5);
-            font-weight: 700;
-            margin-bottom: 6px;
+            font-size: 0.8125rem;
+            text-transform: none;
+            letter-spacing: 0;
+            color: rgba(232,220,200,.78);
+            font-weight: 400;
+            line-height: 1.75;
+            margin-bottom: 8px;
             display: flex; align-items: center; gap: 8px;
         }
         .au-side-head .h-sub::before {
@@ -317,12 +351,12 @@
             background: var(--gold);
         }
         .au-side-head .h-title {
-            font-family: 'Oswald', sans-serif;
+            font-family: 'Estedad', sans-serif;
             font-weight: 700;
-            font-size: 20px;
+            font-size: clamp(1.25rem, 1.6vw, 1.5rem);
             color: #e8dcc8;
-            text-transform: uppercase;
-            line-height: 1.1;
+            text-transform: none;
+            line-height: 1.5;
         }
         .au-side-arrow {
             width: 36px; height: 36px;
@@ -337,18 +371,18 @@
             background: rgba(15,12,9,.85);
             border: 1px solid rgba(201,168,76,.3);
             padding: 14px 18px;
-            font-family: 'Oswald', sans-serif;
+            font-family: 'Estedad', sans-serif;
             backdrop-filter: blur(12px);
             box-shadow: 0 20px 50px rgba(0,0,0,.5);
             z-index: 5;
         }
         .au-mini-card .lbl {
-            font-size: 8px; letter-spacing: .3em; color: rgba(232,220,200,.4); font-weight: 700;
+            font-size: 8px; letter-spacing: .3em; color: rgba(232,220,200,.84); font-weight: 700;
         }
         .au-mini-card .v {
             font-weight: 700; font-size: 22px; color: var(--gold); margin-top: 4px;
         }
-        .au-mini-card .sub { font-size: 9px; color: rgba(232,220,200,.4); margin-top: 4px; letter-spacing: .15em; }
+        .au-mini-card .sub { font-size: 9px; color: rgba(232,220,200,.84); margin-top: 4px; letter-spacing: .15em; }
         .prostep-card {
             position: absolute;
             z-index: 6;
@@ -392,7 +426,7 @@
         }
         .prostep-line {
             margin: 0 0 14px;
-            font-family: "Vazirmatn", sans-serif;
+            font-family: "Estedad", sans-serif;
             font-weight: 700;
             font-size: 16px;
             line-height: 1.55;
@@ -416,7 +450,7 @@
         }
         .prostep-note {
             margin: 0;
-            font-family: "Vazirmatn", sans-serif;
+            font-family: "Estedad", sans-serif;
             font-size: 12px;
             line-height: 1.6;
             letter-spacing: 0;
@@ -484,11 +518,11 @@
 
         <a href="index.html" class="flex items-center gap-3 flex-shrink-0">
             <div class="w-10 h-10 border flex items-center justify-center gold-border">
-                <span class="font-oswald font-black text-lg" style="color:var(--gold)">F</span>
+                <span class="brand-latin font-oswald font-black text-lg" style="color:var(--gold)">F</span>
             </div>
             <div class="flex flex-col leading-none">
                 <span class="brand-latin font-oswald font-bold text-xl tracking-[.25em] text-[#e8dcc8]" dir="ltr">FITNET</span>
-                <span class="text-[7px] uppercase tracking-[.4em]" style="color:rgba(201,168,76,.4)">مارکت‌پلیس ورزشی</span>
+                <span class="text-[7px] uppercase tracking-[.4em]" style="color:rgba(201,168,76,.85)">مارکت‌پلیس ورزشی</span>
             </div>
         </a>
 
@@ -700,7 +734,7 @@
 <!-- ══════════════════════════════════════════════════════════
      HERO — cinematic dark + amenity SWIPER SIDEBAR
 ══════════════════════════════════════════════════════════════ -->
-<section class="aurum-hero relative min-h-screen flex overflow-hidden gs-hero" style="padding-top:80px">
+<section class="aurum-hero relative min-h-screen flex flex-col overflow-hidden gs-hero" style="padding-top:80px">
 
     <!-- Background image with refined overlay -->
     <div class="absolute inset-0">
@@ -715,10 +749,10 @@
     <!-- Background monogram -->
     <div class="au-deco-monogram" aria-hidden="true">F</div>
 
-    <div class="max-w-[1440px] mx-auto w-full px-6 grid lg:grid-cols-[1fr_420px] gap-0 relative z-10 min-h-[calc(100vh-80px)]">
+    <div class="max-w-[1440px] mx-auto w-full px-6 grid lg:grid-cols-[1fr_420px] gap-0 relative z-10 flex-1 items-center">
 
         <!-- Left editorial -->
-        <div class="hero-copy flex flex-col justify-center py-16 pr-12">
+        <div class="hero-copy flex flex-col justify-center py-12 lg:py-16">
 
             <!-- Top eyebrow + badge row -->
             <div class="flex flex-wrap items-center gap-6 mb-10 au-anim-in au-d1">
@@ -742,7 +776,7 @@
             <!-- Description with ornament -->
             <div class="flex items-start gap-5 max-w-xl mb-10 au-anim-in au-d3">
                 <div class="hero-rule flex-shrink-0 mt-2 hidden md:block" style="width:30px;height:1px;background:linear-gradient(to right,var(--gold),transparent)"></div>
-                <p class="text-base md:text-lg leading-relaxed" style="color:rgba(232,220,200,.55)">باشگاه‌های همکار و رویدادهای ورزشی را کشف کن، زمان مناسب را رزرو کن و با اعتبار فیت‌نت و QR وارد شو.</p>
+                <p class="text-base md:text-lg" style="color:rgba(232,220,200,.88)">باشگاه‌های همکار و رویدادهای ورزشی را کشف کن، زمان مناسب را رزرو کن و با اعتبار فیت‌نت و QR وارد شو.</p>
             </div>
 
             <!-- CTAs -->
@@ -806,16 +840,16 @@
             </div>
 
             <!-- FEATURED AMENITY (static showcase) -->
-            <div class="flex flex-col gap-4" style="height:min(480px,calc(100vh - 320px))">
+            <div class="hero-discover">
 
                 <!-- Main featured amenity -->
-                <div class="amenity-card au-featured au-anim-in au-d5 min-h-[280px]">
+                <div class="amenity-card au-featured au-anim-in au-d5">
                     <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" alt="فضای تمرین">
                     <div class="absolute bottom-0 left-0 right-0 p-6" style="z-index:2;">
                         <div class="flex items-center gap-2 mb-3">
                             <span class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">۰۱</span>
                             <span class="h-px flex-1" style="background:rgba(201,168,76,.25)"></span>
-                            <span class="text-[9px] uppercase tracking-widest font-bold" style="color:rgba(232,220,200,.3)">نزدیک شما</span>
+                            <span class="text-[9px] uppercase tracking-widest font-bold" style="color:rgba(232,220,200,.76)">نزدیک شما</span>
                         </div>
                         <h4 class="font-oswald font-bold text-2xl uppercase text-white leading-tight mb-2">نزدیک تو</h4>
                         <p class="text-white/40 text-xs leading-relaxed">گزینه‌های اطرافت را راحت‌تر پیدا کن.</p>
@@ -825,7 +859,7 @@
                 <!-- Other amenities compact list -->
                 <div class="au-mini-list au-anim-in au-d6">
                     <div class="au-mini-row">
-                        <span class="au-mini-num">02</span>
+                        <span class="au-mini-num">۰۲</span>
                         <div class="flex-1 min-w-0">
                             <p class="au-mini-title">برای امروز</p>
                             <p class="au-mini-sub">بازه‌های قابل رزرو امروز را ببین.</p>
@@ -833,7 +867,7 @@
                         <span class="au-mini-meta">در دسترس</span>
                     </div>
                     <div class="au-mini-row">
-                        <span class="au-mini-num">03</span>
+                        <span class="au-mini-num">۰۳</span>
                         <div class="flex-1 min-w-0">
                             <p class="au-mini-title">فراتر از باشگاه</p>
                             <p class="au-mini-sub">رویدادهای ورزشی را کشف کن.</p>
@@ -841,7 +875,7 @@
                         <span class="au-mini-meta">رویداد</span>
                     </div>
                     <div class="au-mini-row">
-                        <span class="au-mini-num">04</span>
+                        <span class="au-mini-num">۰۴</span>
                         <div class="flex-1 min-w-0">
                             <p class="au-mini-title">روی نقشه</p>
                             <p class="au-mini-sub">موقعیت‌ها را مقایسه کن.</p>
@@ -852,7 +886,7 @@
             </div>
 
             <!-- Mini floating card -->
-            <div class="au-mini-card float-floors hidden xl:block" style="left:-30px; bottom:30px;">
+            <div class="au-mini-card float-floors hidden xl:block">
                 <div class="lbl">دعوت دوستان</div>
                 <div class="v">لینک</div>
                 <div class="sub">پاداش بعد از اشتراک</div>
@@ -861,8 +895,8 @@
     </div>
 
     <!-- Bottom strip -->
-    <div class="absolute bottom-6 left-0 right-0 z-10 px-6 hidden md:block">
-        <div class="max-w-[1440px] mx-auto flex items-center justify-between text-[9px] uppercase tracking-[.3em] font-bold font-oswald" style="color:rgba(201,168,76,.4)">
+    <div class="hero-strip relative z-10 px-6">
+        <div class="max-w-[1440px] mx-auto flex items-center justify-between text-[0.8125rem] font-bold" style="color:rgba(232,220,200,.78)">
             <div class="flex items-center gap-3">
                 <span class="w-1.5 h-1.5 rounded-full" style="background:var(--gold)"></span>
                 <span>یک حساب. یک کیف پول.</span>
@@ -889,14 +923,14 @@
     <div class="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1fr] gap-24 items-center">
         <div>
             <div class="h-px w-16 mb-8" style="background:var(--gold)"></div>
-            <h2 class="font-oswald font-black text-6xl uppercase leading-none mb-8" style="color:#e8dcc8">از انتخاب تا ورود،<br><span style="color:var(--gold)">چهار قدم.</span></h2>
-            <p style="color:rgba(232,220,200,.45)" class="text-base leading-relaxed mb-6">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن. بعد باشگاه یا رویداد را ببین، زمان را چک کن و رزرو را تأیید کن.</p>
-            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed mb-10">QR یا کد رزرو را نشان بده و تمرینت را شروع کن. با ساخت حساب، ۱ اعتبار شروع دریافت می‌کنی.</p>
+            <h2 class="font-oswald font-black text-6xl fn-heading mb-8" style="color:#e8dcc8">از انتخاب تا ورود،<br><span style="color:var(--gold)">چهار قدم.</span></h2>
+            <p style="color:rgba(232,220,200,.86)" class="text-base leading-relaxed mb-6">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن. بعد باشگاه یا رویداد را ببین، زمان را چک کن و رزرو را تأیید کن.</p>
+            <p style="color:rgba(232,220,200,.8)" class="text-sm leading-relaxed mb-10">QR یا کد رزرو را نشان بده و تمرینت را شروع کن. با ساخت حساب، ۱ اعتبار شروع دریافت می‌کنی.</p>
             <div class="grid grid-cols-2 gap-6 pt-8 border-t" style="border-color:rgba(201,168,76,.1)">
-                <div><p class="font-oswald font-black text-4xl glow-gold leading-none">۱</p><p class="text-sm mt-2" style="color:#e8dcc8">اعتبار بگیر</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن.</p></div>
-                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۲</p><p class="text-sm mt-2" style="color:#e8dcc8">پیدا کن</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">باشگاه یا رویداد دلخواهت را ببین.</p></div>
-                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۳</p><p class="text-sm mt-2" style="color:#e8dcc8">رزرو کن</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">زمان و اعتبار موردنیاز را بررسی و رزروت را تأیید کن.</p></div>
-                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۴</p><p class="text-sm mt-2" style="color:#e8dcc8">وارد شو</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.35)">QR یا کد رزرو را نشان بده و تمرینت را شروع کن.</p></div>
+                <div><p class="font-oswald font-black text-4xl glow-gold leading-none">۱</p><p class="text-sm mt-2" style="color:#e8dcc8">اعتبار بگیر</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.8)">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن.</p></div>
+                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۲</p><p class="text-sm mt-2" style="color:#e8dcc8">پیدا کن</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.8)">باشگاه یا رویداد دلخواهت را ببین.</p></div>
+                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۳</p><p class="text-sm mt-2" style="color:#e8dcc8">رزرو کن</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.8)">زمان و اعتبار موردنیاز را بررسی و رزروت را تأیید کن.</p></div>
+                <div><p class="font-oswald font-black text-4xl leading-none" style="color:#e8dcc8">۴</p><p class="text-sm mt-2" style="color:#e8dcc8">وارد شو</p><p class="text-xs mt-1 leading-relaxed" style="color:rgba(232,220,200,.8)">QR یا کد رزرو را نشان بده و تمرینت را شروع کن.</p></div>
             </div>
         </div>
         <!-- Image collage -->
@@ -930,9 +964,9 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
             <div>
                 <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-                <h2 class="font-oswald font-black text-6xl uppercase leading-none" style="color:#e8dcc8">یک کیف پول،<br><span style="color:var(--gold)">برای انتخاب‌های بیشتر.</span></h2>
+                <h2 class="font-oswald font-black text-6xl fn-heading" style="color:#e8dcc8">یک کیف پول،<br><span style="color:var(--gold)">برای انتخاب‌های بیشتر.</span></h2>
             </div>
-            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed max-w-xs">اعتبارت را یک‌جا ببین، برای باشگاه و رویداد خرج کن و از تاریخچه و زمان انقضای آن خبر داشته باش.</p>
+            <p style="color:rgba(232,220,200,.8)" class="text-sm leading-relaxed max-w-xs">اعتبارت را یک‌جا ببین، برای باشگاه و رویداد خرج کن و از تاریخچه و زمان انقضای آن خبر داشته باش.</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 border" style="border-color:rgba(201,168,76,.1)">
             <div class="p-8 border-r border-b" style="border-color:rgba(201,168,76,.08)">
@@ -940,7 +974,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">جستجو و کشف</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">باشگاه‌ها را با نام یا منطقه پیدا کن.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">باشگاه‌ها را با نام یا منطقه پیدا کن.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>جستجو</p><p>نزدیک شما</p><p>فیلتر</p>
                 </div>
@@ -950,7 +984,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">نقشه فیت‌نت</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">بین لیست و نقشه جابه‌جا شو و موقعیت‌ها را کنار هم ببین.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">بین لیست و نقشه جابه‌جا شو و موقعیت‌ها را کنار هم ببین.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>نقشه</p><p>فاصله</p><p>مقایسه</p>
                 </div>
@@ -960,7 +994,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">قیمت اعتباری</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">قبل از رزرو ببین هر فرصت چند اعتبار لازم دارد.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">قبل از رزرو ببین هر فرصت چند اعتبار لازم دارد.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>اعتبار</p><p>شفاف</p><p>قبل از رزرو</p>
                 </div>
@@ -970,7 +1004,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">بازه‌های ورود</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">تاریخ و بازه ورود موجود را انتخاب کن.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">تاریخ و بازه ورود موجود را انتخاب کن.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>تاریخ</p><p>زمان</p><p>ظرفیت</p>
                 </div>
@@ -980,7 +1014,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">رزرو سریع</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">فرصت مناسب را انتخاب کن و رزرو را تأیید کن.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">فرصت مناسب را انتخاب کن و رزرو را تأیید کن.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>رزرو</p><p>ظرفیت</p><p>تأیید</p>
                 </div>
@@ -990,7 +1024,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">ورود با QR</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">بعد از رزرو، QR یا کد ورود می‌گیری.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">بعد از رزرو، QR یا کد ورود می‌گیری.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>QR</p><p>ورود</p><p>کد رزرو</p>
                 </div>
@@ -1000,7 +1034,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">کیف پول فیت‌نت</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">موجودی، تاریخچه و اعتبار نزدیک به انقضا، یکجا.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">موجودی، تاریخچه و اعتبار نزدیک به انقضا، یکجا.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>کیف پول</p><p>اعتبار</p><p>تاریخچه</p>
                 </div>
@@ -1010,7 +1044,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <h3 class="font-oswald font-bold text-xl uppercase mb-3" style="color:#e8dcc8">علاقه‌مندی‌ها</h3>
-                <p style="color:rgba(232,220,200,.4)" class="text-sm leading-relaxed mb-4">باشگاه‌های موردعلاقه‌ات را ذخیره کن و سریع برگرد.</p>
+                <p style="color:rgba(232,220,200,.84)" class="text-sm leading-relaxed mb-4">باشگاه‌های موردعلاقه‌ات را ذخیره کن و سریع برگرد.</p>
                 <div class="space-y-1.5 text-[10px] uppercase tracking-widest font-bold" style="color:rgba(201,168,76,.4)">
                     <p>ذخیره</p><p>علاقه‌مندی</p><p>دسترسی سریع</p>
                 </div>
@@ -1024,8 +1058,8 @@
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
             <div class="h-px w-16 mx-auto mb-8" style="background:linear-gradient(to right, transparent, var(--gold), transparent)"></div>
-            <h2 class="font-oswald font-black text-5xl uppercase leading-none" style="color:#e8dcc8">باشگاه تو.<br><span style="color:var(--gold)">فرصت‌های تازه.</span></h2>
-            <p class="text-sm mt-5 max-w-lg mx-auto leading-relaxed" style="color:rgba(232,220,200,.4)">ظرفیت قابل رزرو را به کاربران فیت‌نت معرفی کن و رزروها، ورودها و وضعیت تسویه را یک‌جا مدیریت کن.</p>
+            <h2 class="font-oswald font-black text-5xl fn-heading" style="color:#e8dcc8">باشگاه تو.<br><span style="color:var(--gold)">فرصت‌های تازه.</span></h2>
+            <p class="text-sm mt-5 max-w-lg mx-auto leading-relaxed" style="color:rgba(232,220,200,.84)">ظرفیت قابل رزرو را به کاربران فیت‌نت معرفی کن و رزروها، ورودها و وضعیت تسویه را یک‌جا مدیریت کن.</p>
         </div>
         <div class="swiper aurum-trainers overflow-hidden mb-6">
             <div class="swiper-wrapper">
@@ -1038,8 +1072,8 @@
                         <div class="p-6">
                             <p class="text-[9px] uppercase tracking-widest font-bold mb-2" style="color:var(--gold)">کاربر</p>
                             <h4 class="font-oswald font-bold text-xl uppercase" style="color:#e8dcc8">کاربر فیت‌نت</h4>
-                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.4)">کشف تا ورود</p>
-                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.35)">کشف، اعتبار، رزرو و QR در یک تجربه ساده.</p>
+                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.84)">کشف تا ورود</p>
+                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.8)">کشف، اعتبار، رزرو و QR در یک تجربه ساده.</p>
                         </div>
                     </div>
                 </div>
@@ -1052,8 +1086,8 @@
                         <div class="p-6">
                             <p class="text-[9px] uppercase tracking-widest font-bold mb-2" style="color:var(--gold)">باشگاه</p>
                             <h4 class="font-oswald font-bold text-xl uppercase" style="color:#e8dcc8">باشگاه‌های همکار</h4>
-                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.4)">عملیات مجموعه</p>
-                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.35)">شعب، ظرفیت، رزروها و ورود را از یک داشبورد ببین.</p>
+                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.84)">عملیات مجموعه</p>
+                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.8)">شعب، ظرفیت، رزروها و ورود را از یک داشبورد ببین.</p>
                         </div>
                     </div>
                 </div>
@@ -1066,8 +1100,8 @@
                         <div class="p-6">
                             <p class="text-[9px] uppercase tracking-widest font-bold mb-2" style="color:var(--gold)">رویداد</p>
                             <h4 class="font-oswald font-bold text-xl uppercase" style="color:#e8dcc8">برگزارکنندگان</h4>
-                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.4)">انتشار پس از تأیید</p>
-                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.35)">رویداد بساز، ثبت‌نام‌ها را ببین و حضور را مدیریت کن.</p>
+                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.84)">انتشار پس از تأیید</p>
+                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.8)">رویداد بساز، ثبت‌نام‌ها را ببین و حضور را مدیریت کن.</p>
                         </div>
                     </div>
                 </div>
@@ -1080,8 +1114,8 @@
                         <div class="p-6">
                             <p class="text-[9px] uppercase tracking-widest font-bold mb-2" style="color:var(--gold)">عملیات</p>
                             <h4 class="font-oswald font-bold text-xl uppercase" style="color:#e8dcc8">همکاران فیت‌نت</h4>
-                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.4)">ارتباط و پشتیبانی</p>
-                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.35)">ارتباط با باشگاه‌ها، بررسی مجموعه‌ها و پشتیبانی از عملیات.</p>
+                            <p class="text-sm mt-1 mb-4" style="color:rgba(232,220,200,.84)">ارتباط و پشتیبانی</p>
+                            <p class="text-xs leading-relaxed" style="color:rgba(232,220,200,.8)">ارتباط با باشگاه‌ها، بررسی مجموعه‌ها و پشتیبانی از عملیات.</p>
                         </div>
                     </div>
                 </div>
@@ -1102,25 +1136,25 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
                 <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-                <h2 class="font-oswald font-black text-6xl uppercase leading-none" style="color:#e8dcc8">با ریتم خودت،<br><span style="color:var(--gold)">پلن انتخاب کن.</span></h2>
+                <h2 class="font-oswald font-black text-6xl fn-heading" style="color:#e8dcc8">با ریتم خودت،<br><span style="color:var(--gold)">پلن انتخاب کن.</span></h2>
             </div>
-            <p style="color:rgba(232,220,200,.35)" class="text-sm leading-relaxed max-w-xs">پلن‌های ماهانه فیت‌نت با مقدار اعتبار متفاوت طراحی می‌شوند؛ انتخاب کن چقدر می‌خواهی برای تجربه‌های ورزشی‌ات کنار بگذاری.</p>
+            <p style="color:rgba(232,220,200,.8)" class="text-sm leading-relaxed max-w-xs">پلن‌های ماهانه فیت‌نت با مقدار اعتبار متفاوت طراحی می‌شوند؛ انتخاب کن چقدر می‌خواهی برای تجربه‌های ورزشی‌ات کنار بگذاری.</p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 border" style="border-color:rgba(201,168,76,.1)">
             <div class="tier-card p-10 border-r" style="border-color:rgba(201,168,76,.1)">
                 <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:rgba(201,168,76,.4)">معیار</p>
-                <p class="font-oswald font-black text-4xl mb-4 leading-none" style="color:#e8dcc8">اعتبار ماهانه</p>
-                <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">هر پلن مقدار مشخصی اعتبار برای باشگاه و رویداد دارد. یک اشتراک فعال در هر زمان کافی است.</p>
+                <p class="font-oswald font-black text-4xl fn-card-title mb-4" style="color:#e8dcc8">اعتبار ماهانه</p>
+                <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.86)">هر پلن مقدار مشخصی اعتبار برای باشگاه و رویداد دارد. یک اشتراک فعال در هر زمان کافی است.</p>
             </div>
             <div class="p-10 border-r" style="background:rgba(201,168,76,.06);border-color:rgba(201,168,76,.2)">
                 <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:var(--gold)">معیار</p>
-                <p class="font-oswald font-black text-4xl mb-4 leading-none" style="color:#e8dcc8">هزینه هر اعتبار</p>
-                <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">وقتی قیمت‌ها اعلام شود، هزینه هر اعتبار از تقسیم قیمت پلن بر اعتبار شامل‌شده به دست می‌آید.</p>
+                <p class="font-oswald font-black text-4xl fn-card-title mb-4" style="color:#e8dcc8">هزینه هر اعتبار</p>
+                <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.86)">وقتی قیمت‌ها اعلام شود، هزینه هر اعتبار از تقسیم قیمت پلن بر اعتبار شامل‌شده به دست می‌آید.</p>
             </div>
             <div class="tier-card p-10">
                 <p class="text-[9px] uppercase tracking-widest font-bold mb-5" style="color:rgba(225,255,0,.5)">اعلام</p>
-                <p class="font-oswald font-black text-4xl mb-4 leading-none text-brand">هم‌زمان با شروع</p>
-                <p class="text-sm leading-relaxed mb-8" style="color:rgba(232,220,200,.45)">جزئیات پلن‌ها هم‌زمان با شروع فیت‌نت اعلام می‌شود.</p>
+                <p class="font-oswald font-black text-4xl fn-card-title mb-4 text-brand">هم‌زمان با شروع</p>
+                <p class="text-sm leading-relaxed mb-8" style="color:rgba(232,220,200,.86)">جزئیات پلن‌ها هم‌زمان با شروع فیت‌نت اعلام می‌شود.</p>
                 <a href="#download" class="block text-center font-oswald font-bold uppercase text-xs tracking-widest py-4 hover:bg-brand transition" style="background:var(--gold);color:#0f0c09">دسترسی زودهنگام</a>
             </div>
         </div>
@@ -1132,12 +1166,12 @@
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-14">
             <div class="h-px w-16 mx-auto mb-8" style="background:linear-gradient(to right, transparent, var(--gold), transparent)"></div>
-            <h2 class="font-oswald font-black text-5xl uppercase leading-none" style="color:#e8dcc8">مزایای همکاری<br><span style="color:var(--gold)">با فیت‌نت</span></h2>
+            <h2 class="font-oswald font-black text-5xl fn-heading" style="color:#e8dcc8">مزایای همکاری<br><span style="color:var(--gold)">با فیت‌نت</span></h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border" style="border-color:rgba(201,168,76,.1)">
             <div class="p-8 border-r" style="border-color:rgba(201,168,76,.08)">
                 <div class="flex gap-1 mb-5 text-[10px] uppercase tracking-widest font-bold" style="color:var(--gold)">ظرفیت</div>
-                <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.45)">رزروهای امروز و ظرفیت هر بازه ورود را ببین.</p>
+                <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.86)">رزروهای امروز و ظرفیت هر بازه ورود را ببین.</p>
                 <div class="flex items-center gap-3 pt-5 border-t" style="border-color:rgba(201,168,76,.08)">
                     <img loading="lazy" alt="" src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-10 h-10 rounded-full object-cover">
                     <div><p class="font-oswald font-bold text-sm uppercase" style="color:#e8dcc8">ظرفیتت را مدیریت کن</p><p class="text-[9px] uppercase tracking-widest" style="color:var(--gold)">داشبورد باشگاه</p></div>
@@ -1145,7 +1179,7 @@
             </div>
             <div class="p-8 border-r" style="border-color:rgba(201,168,76,.08)">
                 <div class="flex gap-1 mb-5 text-[10px] uppercase tracking-widest font-bold" style="color:var(--gold)">ورود</div>
-                <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.45)">QR کاربر یا کد ورود را بررسی کن.</p>
+                <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.86)">QR کاربر یا کد ورود را بررسی کن.</p>
                 <div class="flex items-center gap-3 pt-5 border-t" style="border-color:rgba(201,168,76,.08)">
                     <img loading="lazy" alt="" src="assets/images/photo-1571019613454-1cb2f99b2d8b.jpg" class="w-10 h-10 rounded-full object-cover">
                     <div><p class="font-oswald font-bold text-sm uppercase" style="color:#e8dcc8">ورود سریع‌تر</p><p class="text-[9px] uppercase tracking-widest" style="color:var(--gold)">ورود با QR</p></div>
@@ -1153,7 +1187,7 @@
             </div>
             <div class="p-8">
                 <div class="flex gap-1 mb-5 text-[10px] uppercase tracking-widest font-bold" style="color:var(--gold)">تسویه</div>
-                <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.45)">بازدیدهای انجام‌شده و وضعیت تسویه را دنبال کن.</p>
+                <p class="text-sm leading-relaxed mb-6" style="color:rgba(232,220,200,.86)">بازدیدهای انجام‌شده و وضعیت تسویه را دنبال کن.</p>
                 <div class="flex items-center gap-3 pt-5 border-t" style="border-color:rgba(201,168,76,.08)">
                     <img loading="lazy" alt="" src="assets/images/photo-1583454110551-21f2fa2afe61.jpg" class="w-10 h-10 rounded-full object-cover">
                     <div><p class="font-oswald font-bold text-sm uppercase" style="color:#e8dcc8">عملکرد و تسویه</p><p class="text-[9px] uppercase tracking-widest" style="color:var(--gold)">داشبورد باشگاه</p></div>
@@ -1169,8 +1203,8 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
             <div>
                 <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-                <h2 class="font-oswald font-black text-5xl uppercase leading-none" style="color:#e8dcc8">تمرین،<br><span style="color:var(--gold)">فقط باشگاه نیست.</span></h2>
-                <p class="text-sm mt-4 max-w-md leading-relaxed" style="color:rgba(232,220,200,.4)">از فضای همیشگی فاصله بگیر. رویدادهای ورزشی تأییدشده را پیدا کن و با اعتبار فیت‌نت همراه شو.</p>
+                <h2 class="font-oswald font-black text-5xl fn-heading" style="color:#e8dcc8">تمرین،<br><span style="color:var(--gold)">فقط باشگاه نیست.</span></h2>
+                <p class="text-sm mt-4 max-w-md leading-relaxed" style="color:rgba(232,220,200,.84)">از فضای همیشگی فاصله بگیر. رویدادهای ورزشی تأییدشده را پیدا کن و با اعتبار فیت‌نت همراه شو.</p>
             </div>
             <a href="contact.html?path=organizer" class="border font-oswald font-bold uppercase text-[10px] tracking-widest px-6 py-3 transition gold-border" style="color:var(--gold)" onmouseover="this.style.background='var(--gold)';this.style.color='#0f0c09'" onmouseout="this.style.background='';this.style.color='var(--gold)'">همکاری به‌عنوان برگزارکننده</a>
         </div>
@@ -1182,7 +1216,7 @@
                 </div>
                 <div class="flex-1 p-6">
                     <h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">تمرین گروهی</h4>
-                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">جلسه‌هایی که با دیگران و با یک زمان مشخص برگزار می‌شوند.</p>
+                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.84)">جلسه‌هایی که با دیگران و با یک زمان مشخص برگزار می‌شوند.</p>
                 </div>
             </div>
             <div class="flex gap-0 border-b" style="border-color:rgba(201,168,76,.08)">
@@ -1191,7 +1225,7 @@
                 </div>
                 <div class="flex-1 p-6">
                     <h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">تجربه در فضای باز</h4>
-                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">تمرین بیرون از سالن، وقتی رویداد تأیید شده باشد.</p>
+                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.84)">تمرین بیرون از سالن، وقتی رویداد تأیید شده باشد.</p>
                 </div>
             </div>
             <div class="flex gap-0" style="border-color:rgba(201,168,76,.08)">
@@ -1200,11 +1234,11 @@
                 </div>
                 <div class="flex-1 p-6">
                     <h4 class="font-oswald font-bold text-lg uppercase" style="color:#e8dcc8">رویدادهای ویژه</h4>
-                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.4)">برنامه‌هایی که بعد از بررسی، برای ثبت‌نام باز می‌شوند.</p>
+                    <p class="text-sm mt-1" style="color:rgba(232,220,200,.84)">برنامه‌هایی که بعد از بررسی، برای ثبت‌نام باز می‌شوند.</p>
                 </div>
             </div>
         </div>
-        <p class="text-sm mt-6" style="color:rgba(232,220,200,.4)">رویدادهای تأییدشده، با شروع فیت‌نت اینجا معرفی می‌شوند.</p>
+        <p class="text-sm mt-6" style="color:rgba(232,220,200,.84)">رویدادهای تأییدشده، با شروع فیت‌نت اینجا معرفی می‌شوند.</p>
     </div>
 </section>
 
@@ -1212,13 +1246,13 @@
     <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-0 border" style="border-color:rgba(201,168,76,.12)">
         <div class="p-10 md:p-14 border-b md:border-b-0 md:border-l" style="border-color:rgba(201,168,76,.12)">
             <p class="text-[10px] uppercase tracking-[.3em] font-bold mb-4 brand-latin" dir="ltr" style="color:var(--gold)">PRO STEP</p>
-            <h2 class="font-oswald font-black text-4xl uppercase leading-none mb-5" style="color:#e8dcc8">تمرینت را ادامه بده.<br>به هدیه نزدیک‌تر شو.</h2>
-            <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">اعتباری که برای حضورهای انجام‌شده خرج می‌کنی، پیشرفت Pro Step را جلو می‌برد. با رسیدن به هدف، هدیه‌ات را انتخاب کن.</p>
+            <h2 class="font-oswald font-black text-4xl fn-heading mb-5" style="color:#e8dcc8">تمرینت را ادامه بده.<br>به هدیه نزدیک‌تر شو.</h2>
+            <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.86)">اعتباری که برای حضورهای انجام‌شده خرج می‌کنی، پیشرفت Pro Step را جلو می‌برد. با رسیدن به هدف، هدیه‌ات را انتخاب کن.</p>
         </div>
         <div class="p-10 md:p-14">
             <p class="text-[10px] uppercase tracking-[.3em] font-bold mb-4" style="color:var(--gold)">دعوت</p>
-            <h2 class="font-oswald font-black text-4xl uppercase leading-none mb-5" style="color:#e8dcc8">رفیق تمرینت را هم خبر کن.</h2>
-            <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.45)">لینک یا کد دعوتت را بفرست؛ بعد از اولین خرید اشتراک دوستت، اعتبار پاداش بگیر.</p>
+            <h2 class="font-oswald font-black text-4xl fn-heading mb-5" style="color:#e8dcc8">رفیق تمرینت را هم خبر کن.</h2>
+            <p class="text-sm leading-relaxed" style="color:rgba(232,220,200,.86)">لینک یا کد دعوتت را بفرست؛ بعد از اولین خرید اشتراک دوستت، اعتبار پاداش بگیر.</p>
         </div>
     </div>
 </section>
@@ -1226,7 +1260,7 @@
 <section id="faq" class="py-28 px-6" style="background:#120e0b">
     <div class="max-w-3xl mx-auto">
         <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-        <h2 class="font-oswald font-black text-5xl uppercase leading-none mb-10" style="color:#e8dcc8">پرسش‌های<br><span style="color:var(--gold)">رایج</span></h2>
+        <h2 class="font-oswald font-black text-5xl fn-heading mb-10" style="color:#e8dcc8">پرسش‌های<br><span style="color:var(--gold)">رایج</span></h2>
         <div class="fn-faq" data-fn-faq></div>
     </div>
 </section>
@@ -1235,7 +1269,7 @@
 <section id="download" class="py-28 px-6 relative overflow-hidden gs-cta" style="background:var(--gold)">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 relative z-10">
         <div>
-            <h2 class="font-oswald font-black uppercase leading-none text-black" style="font-size:clamp(3.2rem,7vw,6.5rem)">انتخاب بعدی‌ات،<br>یک تجربه تازه.</h2>
+            <h2 class="font-oswald font-black fn-heading text-black" style="font-size:clamp(2.4rem,5.5vw,4.6rem)">انتخاب بعدی‌ات،<br>یک تجربه تازه.</h2>
             <p class="text-black/55 text-base mt-6 max-w-md leading-relaxed">فیت‌نت برای کشف باشگاه‌ها و رویدادهای ورزشی در کنار توست. برای شروع همراه شو.</p>
         </div>
         <div class="flex flex-col gap-4 min-w-[280px]">
@@ -1251,15 +1285,15 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 relative z-10">
         <div class="lg:col-span-2">
             <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 border flex items-center justify-center gold-border"><span class="font-oswald font-black text-lg" style="color:var(--gold)">F</span></div>
-                <div><span class="brand-latin text-xl font-oswald font-bold tracking-[.2em] block leading-none" style="color:#e8dcc8" dir="ltr">FITNET</span><span class="text-[7px] uppercase tracking-[.4em]" style="color:rgba(201,168,76,.35)">مارکت‌پلیس ورزشی</span></div>
+                <div class="w-10 h-10 border flex items-center justify-center gold-border"><span class="brand-latin font-oswald font-black text-lg" style="color:var(--gold)">F</span></div>
+                <div><span class="brand-latin text-xl font-oswald font-bold tracking-[.2em] block leading-none" style="color:#e8dcc8" dir="ltr">FITNET</span><span class="text-[7px] uppercase tracking-[.4em]" style="color:rgba(201,168,76,.85)">مارکت‌پلیس ورزشی</span></div>
             </div>
-            <p class="text-sm leading-relaxed mb-6 max-w-xs" style="color:rgba(232,220,200,.3)">باشگاه و رویداد ورزشی، با یک تجربه ساده‌تر.</p>
+            <p class="text-sm leading-relaxed mb-6 max-w-xs" style="color:rgba(232,220,200,.76)">باشگاه و رویداد ورزشی، با یک تجربه ساده‌تر.</p>
             <p class="text-sm"><a href="https://fitnet.ir/" class="brand-latin" dir="ltr" style="color:rgba(201,168,76,.55)">fitnet.ir</a></p>
         </div>
         <div>
             <h4 class="font-oswald font-bold uppercase text-sm tracking-widest mb-6" style="color:#e8dcc8">محصول</h4>
-            <ul class="space-y-3 text-sm" style="color:rgba(232,220,200,.4)">
+            <ul class="space-y-3 text-sm" style="color:rgba(232,220,200,.84)">
                 <li><a href="#gyms" class="hover:text-gold transition">باشگاه‌ها</a></li>
                 <li><a href="#events" class="hover:text-gold transition">رویدادها</a></li>
                 <li><a href="#plans" class="hover:text-gold transition">پلن‌ها</a></li>
@@ -1268,7 +1302,7 @@
         </div>
         <div>
             <h4 class="font-oswald font-bold uppercase text-sm tracking-widest mb-6" style="color:#e8dcc8">کسب‌وکار</h4>
-            <ul class="space-y-3 text-sm" style="color:rgba(232,220,200,.4)">
+            <ul class="space-y-3 text-sm" style="color:rgba(232,220,200,.84)">
                 <li><a href="contact.html?path=gym" class="hover:text-gold transition">همکاری با باشگاه‌ها</a></li>
                 <li><a href="contact.html?path=organizer" class="hover:text-gold transition">برگزارکنندگان</a></li>
                 <li><a href="contact.html" class="hover:text-gold transition">ارتباط با ما</a></li>
@@ -1276,26 +1310,26 @@
         </div>
         <div>
             <h4 id="contact" class="font-oswald font-bold uppercase text-sm tracking-widest mb-6" style="color:#e8dcc8">دسترسی زودهنگام</h4>
-            <p class="text-sm mb-4" style="color:rgba(232,220,200,.35)">این فرم در نسخه نمایشی ارسال نمی‌شود.</p>
+            <p class="text-sm mb-4" style="color:rgba(232,220,200,.8)">این فرم در نسخه نمایشی ارسال نمی‌شود.</p>
             <form class="mb-5" data-fitnet-form="early" novalidate>
-                <label class="block text-xs mb-1" style="color:rgba(232,220,200,.45)" for="ea-name">نام</label>
+                <label class="block text-xs mb-1" style="color:rgba(232,220,200,.86)" for="ea-name">نام</label>
                 <input id="ea-name" type="text" name="name" required autocomplete="name" class="bg-transparent text-sm p-3 w-full border mb-3 focus:outline-none" style="color:#e8dcc8;border-color:rgba(201,168,76,.18)">
-                <label class="block text-xs mb-1" style="color:rgba(232,220,200,.45)" for="ea-mobile">شماره موبایل</label>
+                <label class="block text-xs mb-1" style="color:rgba(232,220,200,.86)" for="ea-mobile">شماره موبایل</label>
                 <div class="flex border overflow-hidden" style="border-color:rgba(201,168,76,.18)"><input id="ea-mobile" type="tel" name="mobile" required inputmode="numeric" dir="ltr" autocomplete="tel" class="bg-transparent text-sm p-3 w-full focus:outline-none" style="color:#e8dcc8"><button class="font-bold uppercase text-xs px-4 font-oswald transition shrink-0 hover:bg-brand" style="background:var(--gold);color:#0f0c09;min-height:44px">ثبت</button></div>
                 <p class="fn-form-msg text-xs mt-3" role="status"></p>
             </form>
-            <div class="text-xs" style="color:rgba(232,220,200,.3)">
+            <div class="text-xs" style="color:rgba(232,220,200,.76)">
                 <p class="mb-1"><a href="https://fitnet.ir/" class="brand-latin" dir="ltr" style="color:#e8dcc8">fitnet.ir</a></p>
                 <p><a href="blog.html" class="hover:text-gold transition">راهنمای فیت‌نت</a></p>
             </div>
         </div>
     </div>
-    <div class="max-w-7xl mx-auto pt-8 border-t flex flex-col md:flex-row justify-between items-center text-xs relative z-10" style="border-color:rgba(201,168,76,.08);color:rgba(232,220,200,.2)">
+    <div class="max-w-7xl mx-auto pt-8 border-t flex flex-col md:flex-row justify-between items-center text-xs relative z-10" style="border-color:rgba(201,168,76,.08);color:rgba(232,220,200,.72)">
         <p>© 2026 Fitnet. تمامی حقوق محفوظ است.</p>
         <div class="flex gap-5 mt-4 md:mt-0"><a href="blog.html" class="hover:text-gold transition">راهنما</a><a href="terms.html" class="hover:text-gold transition">قوانین استفاده</a><a href="privacy.html" class="hover:text-gold transition">حریم خصوصی</a></div>
     </div>
     <div class="absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none select-none">
-        <p class="font-oswald font-black text-[11rem] leading-none tracking-tighter" style="color:rgba(201,168,76,.02)" dir="ltr">FITNET</p>
+        <p class="fn-watermark font-oswald font-black text-[11rem] leading-none tracking-tighter" style="color:rgba(201,168,76,.02)" dir="ltr">FITNET</p>
     </div>
 </footer>
 
