@@ -5,6 +5,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script>
+        (function () {
+            var reduce = false;
+            try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+            if (reduce) return;
+            var seen = false;
+            try { seen = sessionStorage.getItem('fn-preload') === '1'; } catch (e) {}
+            if (seen) return;
+            try { sessionStorage.setItem('fn-preload', '1'); } catch (e) {}
+            document.documentElement.classList.add('fn-preloading');
+        })();
+    </script>
     <link rel="preload" href="assets/fonts/Estedad-Variable.woff2" as="font" type="font/woff2" crossorigin>
     <title>فیت‌نت | باشگاه و رویداد ورزشی با یک اعتبار</title>
     <meta name="description" content="فیت‌نت یک پلتفرم دسترسی به باشگاه‌های همکار و رویدادهای ورزشی است. باشگاه پیدا کن، اعتبار بگیر، رزرو کن و با QR وارد شو.">
@@ -486,6 +498,46 @@
     <link rel="stylesheet" href="assets/css/brand.css">
 </head>
 <body class="antialiased" x-data="aurumApp()" x-cloak @keydown.escape.window="dismiss()">
+<script>
+    if (document.documentElement.classList.contains('fn-preloading')) {
+        document.body.removeAttribute('x-cloak');
+    }
+</script>
+<div id="fn-pre" aria-hidden="true">
+    <div class="fn-pre-mark">
+        <img class="fn-pre-ring" alt="" width="1124" height="1078" src="assets/brand/preloader-ring.png">
+        <img class="fn-pre-dot" alt="" width="1124" height="1078" src="assets/brand/preloader-dot.png">
+    </div>
+</div>
+<div id="fn-page">
+<script>
+    (function () {
+        var root = document.documentElement;
+        if (!root.classList.contains('fn-preloading')) return;
+        var pre = document.getElementById('fn-pre');
+        var page = document.getElementById('fn-page');
+        if (page) page.inert = true;
+        var done = false;
+        function finish() {
+            if (done) return;
+            done = true;
+            root.classList.remove('fn-preloading');
+            if (page) page.inert = false;
+            if (pre && pre.parentNode) pre.parentNode.removeChild(pre);
+        }
+        var timer = setTimeout(finish, 1500);
+        if (pre) {
+            pre.addEventListener('animationend', function (event) {
+                if (event.animationName !== 'fn-pre-out') return;
+                clearTimeout(timer);
+                finish();
+            });
+        }
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) finish();
+        });
+    })();
+</script>
 
 <div class="mob-overlay fixed inset-0 bg-black/80 z-20" :class="{'open': mobOpen || menu!==null}" @click="mobOpen=false;menu=null;searchOpen=false"></div>
 
@@ -1177,6 +1229,7 @@
         <p class="fn-watermark font-oswald font-black text-[11rem] leading-none tracking-tighter" style="color:color-mix(in srgb, var(--fn-ink) 2%, transparent)" dir="ltr">FITNET</p>
     </div>
 </footer>
+</div>
 
     <script src="assets/js/swiper-bundle.min.js"></script>
     <script src="assets/js/gsap.min.js"></script>

@@ -1052,7 +1052,76 @@ footer form button {
   }
 }
 
+#fn-pre {
+  display: none;
+}
+
+html.fn-preloading {
+  overflow: hidden;
+}
+
+html.fn-preloading #fn-pre {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #FFFFFF;
+  animation: fn-pre-out 800ms var(--ease-out) both;
+}
+
+.fn-pre-mark {
+  position: relative;
+  width: 96px;
+  aspect-ratio: 1124 / 1078;
+}
+
+.fn-pre-ring,
+.fn-pre-dot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Dot centroid (900.50, 844.16) to ring center (561.72, 540.66) on 1124×1078. */
+.fn-pre-dot {
+  animation: fn-pre-dot 800ms var(--ease-out) both;
+}
+
+@keyframes fn-pre-dot {
+  0%, 15% { transform: none; }
+  67.5%, 100% { transform: translate(-30.14%, -28.15%); }
+}
+
+@keyframes fn-pre-out {
+  0%, 80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+html.fn-preloading .gs-hero .au-title > span {
+  animation: none;
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+@media (min-width: 768px) {
+  .fn-pre-mark {
+    width: 120px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  #fn-pre {
+    display: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.fn-preloading .gs-hero .au-title > span,
   .gs-hero .au-title > span,
   .mtrack {
     animation: none;
