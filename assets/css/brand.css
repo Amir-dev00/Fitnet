@@ -1,0 +1,525 @@
+/* Fitnet brand tokens. HEX values are the approved digital palette. */
+
+:root {
+  --fitnet-indigo: #170B93;
+  --fitnet-orange: #E36F2E;
+  --fitnet-light-blue: #C3DBFC;
+  --fitnet-white: #FFFFFF;
+  --fn-ink: var(--fitnet-indigo);
+  --fn-fill: var(--fitnet-white);
+  --fn-action: var(--fitnet-indigo);
+  --fn-action-ink: var(--fitnet-white);
+  --fn-logo-size: 40px;
+  --brand: var(--fitnet-indigo);
+  --gold: var(--fitnet-indigo);
+  --dark: var(--fitnet-white);
+  --fn-danger: #9f1239;
+}
+
+.fn-on-indigo {
+  --fn-ink: var(--fitnet-white);
+  --fn-fill: var(--fitnet-indigo);
+  --fn-action: var(--fitnet-white);
+  --fn-action-ink: var(--fitnet-indigo);
+  --gold: var(--fitnet-white);
+  color: var(--fitnet-white);
+}
+
+.fn-on-blue {
+  --fn-ink: var(--fitnet-indigo);
+  --fn-fill: var(--fitnet-light-blue);
+  --fn-action: var(--fitnet-indigo);
+  --fn-action-ink: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+}
+
+.mega-panel,
+.search-panel {
+  --fn-ink: var(--fitnet-indigo);
+  --fn-fill: var(--fitnet-white);
+  --fn-action: var(--fitnet-indigo);
+  --fn-action-ink: var(--fitnet-white);
+  --gold: var(--fitnet-indigo);
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+  border-top: 1px solid color-mix(in srgb, var(--fitnet-indigo) 12%, transparent);
+  box-shadow: 0 24px 48px rgba(23, 11, 147, 0.12);
+}
+
+body {
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+}
+
+#hdrAurum,
+#hdrAurum.hdr-scrolled {
+  background: var(--fitnet-indigo) !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--fitnet-white) 18%, transparent) !important;
+  backdrop-filter: none;
+}
+
+.fn-logo-frame {
+  display: flex;
+  flex: 0 0 auto;
+  padding: calc(var(--fn-logo-size) * 1124 / 1078 / 4.37);
+  line-height: 0;
+}
+
+.fn-logo {
+  display: block;
+  height: var(--fn-logo-size);
+  width: auto;
+  aspect-ratio: 1124 / 1078;
+  max-width: none;
+  opacity: 1;
+  filter: none;
+  box-shadow: none;
+  transform: none;
+  background: transparent;
+}
+
+html[dir="rtl"] .fn-logo,
+.fn-logo-frame,
+.fn-brand {
+  transform: none;
+  filter: none;
+  opacity: 1;
+}
+
+.fn-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+  color: inherit;
+  min-height: 44px;
+}
+
+.fn-brand-lockup,
+.fn-brand > .fn-brand-name,
+.fn-brand > .brand-latin {
+  margin-inline-start: 2px;
+}
+
+.fn-brand-name {
+  color: var(--fn-ink);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.fn-brand-sub {
+  display: block;
+  margin-top: 2px;
+  color: color-mix(in srgb, var(--fn-ink) 82%, transparent);
+  font-family: var(--fn-font, "Estedad", sans-serif);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.fn-foot .fn-brand,
+.mob-drawer .fn-brand {
+  --fn-logo-size: 32px;
+}
+
+.fn-display {
+  color: var(--fitnet-orange);
+}
+
+.fn-on-blue .fn-display {
+  color: var(--fitnet-indigo);
+}
+
+.au-title {
+  color: var(--fitnet-white);
+  text-shadow: none;
+}
+
+.au-title .l2 {
+  color: var(--fitnet-orange);
+  text-shadow: none;
+}
+
+.au-title .l3 {
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--fitnet-white) 72%, transparent);
+  color: transparent;
+}
+
+.au-deco-monogram {
+  display: none;
+}
+
+.au-eyebrow,
+.au-badge,
+.au-metric .l,
+.au-side-head .h-sub,
+.au-side-head .h-title,
+.hero-strip {
+  color: var(--fitnet-white);
+}
+
+.au-badge {
+  background: color-mix(in srgb, var(--fitnet-white) 10%, transparent);
+  border-color: color-mix(in srgb, var(--fitnet-white) 28%, transparent);
+  color: var(--fitnet-white);
+}
+
+.au-badge .seal {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fitnet-orange);
+  font-size: 0;
+}
+
+.au-cta-primary {
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+  box-shadow: none;
+}
+
+.au-cta-primary:hover {
+  background: var(--fitnet-light-blue);
+  color: var(--fitnet-indigo);
+  box-shadow: none;
+}
+
+.au-cta-ghost {
+  color: var(--fitnet-white);
+  border-color: color-mix(in srgb, var(--fitnet-white) 55%, transparent);
+}
+
+.au-cta-ghost:hover {
+  color: var(--fitnet-indigo);
+  background: var(--fitnet-white);
+  border-color: var(--fitnet-white);
+}
+
+.au-metric .v,
+.au-metric .v.warm {
+  color: var(--fitnet-white);
+  text-shadow: none;
+}
+
+.au-metric::before,
+.h-px,
+.au-side-head .h-sub::before {
+  background: var(--fitnet-orange);
+}
+
+.fn-on-blue .h-px,
+#faq .h-px,
+#plans .h-px,
+#events .h-px,
+#how-it-works .h-px {
+  background: var(--fitnet-orange);
+}
+
+.aurum-hero {
+  background: var(--fitnet-indigo);
+}
+
+.aurum-hero::before,
+.aurum-hero::after,
+.au-vline {
+  opacity: 0.35;
+}
+
+.fn-on-indigo .au-mini-list,
+.fn-on-indigo .au-mini-row,
+.fn-on-indigo .au-mini-card {
+  --fn-ink: var(--fitnet-indigo);
+  background: var(--fitnet-light-blue);
+  color: var(--fitnet-indigo);
+  border-color: transparent;
+}
+
+.fn-band {
+  background: var(--fitnet-orange);
+  color: var(--fitnet-indigo);
+}
+
+html[dir="rtl"] .fn-band .mtrack,
+.fn-band .mtrack,
+.fn-band .text-black {
+  color: var(--fitnet-indigo);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.45;
+}
+
+.text-gold,
+.glow-gold,
+.col-head,
+.ml-icon,
+.s-row:hover,
+.mega-link:hover .ml-t {
+  color: var(--fn-ink);
+  text-shadow: none;
+}
+
+.glow-gold {
+  color: var(--fitnet-indigo);
+  text-shadow: none;
+}
+
+.fn-on-indigo .glow-gold {
+  color: var(--fitnet-orange);
+}
+
+.mega-panel .glow-gold,
+.search-panel .glow-gold {
+  color: var(--fitnet-indigo);
+}
+
+.s-tag:hover,
+.s-tag.active,
+.fn-tabs button[aria-selected="true"] {
+  background: var(--fitnet-indigo);
+  color: var(--fitnet-white);
+  border-color: var(--fitnet-indigo);
+}
+
+.brand-border {
+  border-color: color-mix(in srgb, var(--fn-ink) 22%, transparent);
+}
+
+.fn-on-indigo nav button,
+.fn-on-indigo nav > a {
+  color: color-mix(in srgb, var(--fitnet-white) 86%, transparent);
+}
+
+.fn-on-indigo nav button.text-gold {
+  color: var(--fitnet-white);
+  box-shadow: inset 0 -2px 0 var(--fitnet-orange);
+}
+
+.swiper-pagination-bullet {
+  background: color-mix(in srgb, var(--fitnet-indigo) 28%, transparent) !important;
+}
+
+.swiper-pagination-bullet-active,
+.prostep-meter i:nth-child(-n+3) {
+  background: var(--fitnet-orange) !important;
+  box-shadow: none;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--fitnet-indigo) !important;
+}
+
+#download .text-black,
+#download a.bg-black,
+#download .border-black\/25 {
+  color: var(--fitnet-white);
+}
+
+#download .text-black\/55,
+#download .text-black\/40 {
+  color: color-mix(in srgb, var(--fitnet-white) 84%, transparent);
+}
+
+#download a.bg-black {
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+}
+
+#download a.border-2 {
+  border-color: color-mix(in srgb, var(--fitnet-white) 50%, transparent);
+  color: var(--fitnet-white);
+}
+
+#download a.border-2:hover,
+#download a.bg-black:hover {
+  background: var(--fitnet-light-blue);
+  color: var(--fitnet-indigo);
+}
+
+.fn-on-blue .grid > .p-8,
+.gs-testimonials .grid > .p-8,
+#plans .grid > .tier-card,
+#plans .grid > .p-10:not(.fn-on-indigo),
+#rewards .grid > div,
+#events .grid > div {
+  background: var(--fitnet-white);
+}
+
+#gyms .grid > div,
+#partners .grid > div {
+  background: var(--fitnet-white);
+}
+
+.text-\[\#e8dcc8\],
+.hover\:text-\[\#e8dcc8\]:hover {
+  color: var(--fn-ink);
+}
+
+.text-\[\#e8dcc8\]\/20,
+.text-\[\#e8dcc8\]\/25,
+.text-\[\#e8dcc8\]\/30 {
+  color: color-mix(in srgb, var(--fn-ink) 78%, transparent);
+}
+
+.text-\[\#e8dcc8\]\/40,
+.text-\[\#e8dcc8\]\/50 {
+  color: color-mix(in srgb, var(--fn-ink) 86%, transparent);
+}
+
+.hover\:bg-brand:hover {
+  background: var(--fitnet-light-blue);
+  color: var(--fitnet-indigo);
+}
+
+.hover\:text-gold:hover {
+  color: var(--fitnet-light-blue);
+}
+
+.fn-on-blue .hover\:text-gold:hover,
+.mega-panel .hover\:text-gold:hover,
+.search-panel .hover\:text-gold:hover {
+  color: var(--fitnet-indigo);
+}
+
+.fn-page {
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+}
+
+.fn-top {
+  background: var(--fitnet-indigo);
+  border-bottom: 0;
+}
+
+.fn-top a {
+  color: var(--fitnet-white);
+}
+
+.fn-top a:hover {
+  color: var(--fitnet-light-blue);
+}
+
+.fn-top .fn-btn,
+.fn-btn {
+  background: var(--fitnet-indigo);
+  color: var(--fitnet-white);
+}
+
+.fn-top .fn-btn {
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+}
+
+.fn-btn.ghost {
+  background: transparent;
+  color: var(--fitnet-indigo);
+  border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 45%, transparent);
+}
+
+.fn-kicker,
+.fn-note,
+.fn-crumbs a,
+#fn-guide-related a {
+  color: var(--fitnet-indigo);
+}
+
+.fn-card {
+  background: var(--fitnet-light-blue);
+  border-color: transparent;
+}
+
+.fn-card p,
+.fn-prose p,
+.fn-lead {
+  color: color-mix(in srgb, var(--fitnet-indigo) 88%, transparent);
+}
+
+.fn-foot {
+  background: var(--fitnet-indigo);
+  color: var(--fitnet-white);
+  border-top: 0;
+}
+
+.fn-foot a {
+  color: var(--fitnet-white);
+}
+
+.fn-field label,
+.fn-form-msg,
+.fn-faq summary,
+.fn-faq .fn-a {
+  color: var(--fitnet-indigo);
+}
+
+.fn-form-msg.is-error {
+  color: var(--fn-danger);
+}
+
+.fn-on-indigo .fn-form-msg.is-error {
+  color: #fecdd3;
+}
+
+.fn-field input,
+.fn-field textarea,
+.fn-field select,
+.fn-search input,
+.s-in {
+  color: var(--fitnet-indigo);
+  background: var(--fitnet-white);
+  border-color: color-mix(in srgb, var(--fitnet-indigo) 28%, transparent);
+}
+
+.fn-on-indigo .fn-field input,
+.fn-on-indigo .fn-field textarea,
+.fn-on-indigo input,
+.fn-on-indigo textarea {
+  color: var(--fitnet-indigo);
+  background: var(--fitnet-white);
+  border-color: transparent;
+}
+
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: var(--fn-danger) !important;
+}
+
+.fn-faq details {
+  border-bottom-color: color-mix(in srgb, var(--fitnet-indigo) 16%, transparent);
+}
+
+.fn-faq summary::after {
+  color: var(--fitnet-indigo);
+}
+
+.fn-tabs button,
+.fn-cats button {
+  color: var(--fitnet-indigo);
+  border-color: color-mix(in srgb, var(--fitnet-indigo) 28%, transparent);
+  background: transparent;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+.fn-btn:focus-visible {
+  outline: 2px solid var(--fitnet-light-blue);
+  outline-offset: 3px;
+}
+
+.fn-on-indigo :focus-visible {
+  outline-color: var(--fitnet-light-blue);
+}
+
+:root :focus-visible {
+  outline-color: var(--fitnet-indigo);
+}
+
+.fn-on-indigo :focus-visible {
+  outline-color: var(--fitnet-white);
+}

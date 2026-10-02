@@ -77,7 +77,7 @@ html[dir="rtl"] .text-\[9px\] {
 }
 
 html[dir="rtl"] .hero-veil {
-  background: linear-gradient(to left, rgba(15,12,9,.92) 0%, rgba(15,12,9,.85) 45%, rgba(22,18,14,.55) 100%) !important;
+  background: linear-gradient(to left, rgba(23,11,147,.94) 0%, rgba(23,11,147,.86) 46%, rgba(23,11,147,.55) 100%) !important;
 }
 
 html[dir="rtl"] .hero-copy {
@@ -122,11 +122,11 @@ html[dir="rtl"] .border-r {
 }
 
 html[dir="rtl"] .au-eyebrow .ornament {
-  background: linear-gradient(to left, transparent, var(--gold));
+  background: linear-gradient(to left, transparent, var(--fitnet-orange));
 }
 
 html[dir="rtl"] .hero-rule {
-  background: linear-gradient(to left, var(--gold), transparent) !important;
+  background: linear-gradient(to left, var(--fitnet-orange), transparent) !important;
 }
 
 html[dir="rtl"] .float-rating {

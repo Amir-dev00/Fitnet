@@ -1,6 +1,12 @@
 /* Fitnet presentation layer. Unlayered rules beat Tailwind utilities. */
 
 :root {
+  --fitnet-indigo: #170B93;
+  --fitnet-orange: #E36F2E;
+  --fitnet-light-blue: #C3DBFC;
+  --fitnet-white: #FFFFFF;
+  --fn-ink: var(--fitnet-indigo);
+  --fn-fill: var(--fitnet-white);
   --fn-font: "Estedad", sans-serif;
   --fn-font-brand: "Oswald", sans-serif;
   --fn-space-2: 8px;
@@ -160,7 +166,7 @@ section[id], #contact { scroll-margin-top: 96px; }
 }
 
 .fn-faq details {
-    border-bottom: 1px solid rgba(201,168,76,.16);
+    border-bottom: 1px solid color-mix(in srgb, var(--fitnet-indigo) 16%, transparent);
 }
 .fn-faq summary {
     list-style: none;
@@ -171,7 +177,7 @@ section[id], #contact { scroll-margin-top: 96px; }
     justify-content: space-between;
     gap: 16px;
     padding: 18px 0;
-    color: #e8dcc8;
+    color: var(--fitnet-indigo);
     font-size: 1.02rem;
 }
 .fn-faq summary::-webkit-details-marker { display: none; }
@@ -182,12 +188,12 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-    outline: 2px solid #c9a84c;
+    outline: 2px solid var(--fitnet-indigo);
     outline-offset: 3px;
 }
 .fn-faq summary::after {
     content: "+";
-    color: #c9a84c;
+    color: var(--fitnet-indigo);
     font-family: inherit;
     font-weight: 500;
     font-size: 1.4rem;
@@ -195,33 +201,33 @@ select:focus-visible {
 }
 .fn-faq details[open] summary::after { content: "–"; }
 .fn-faq .fn-a {
-    color: rgba(232,220,200,.84);
+    color: color-mix(in srgb, var(--fitnet-indigo) 84%, transparent);
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.85;
     padding: 0 0 18px;
 }
 
-.fn-form-msg { min-height: 1.25rem; color: #e8dcc8; line-height: 1.7; }
+.fn-form-msg { min-height: 1.25rem; color: var(--fitnet-indigo); line-height: 1.7; }
 .fn-form-msg.is-error { color: #e7b3a0; }
 .fn-review {
     margin-top: 14px;
     padding: 14px 16px;
-    border: 1px solid rgba(201,168,76,.22);
-    color: rgba(232,220,200,.75);
+    border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 22%, transparent);
+    color: color-mix(in srgb, var(--fitnet-indigo) 75%, transparent);
     font-size: .9rem;
     line-height: 1.8;
     white-space: pre-line;
 }
 .fn-field { margin-bottom: 14px; }
-.fn-field label { display: block; font-size: .8rem; margin-bottom: 6px; color: rgba(232,220,200,.7); }
+.fn-field label { display: block; font-size: .8rem; margin-bottom: 6px; color: color-mix(in srgb, var(--fitnet-indigo) 70%, transparent); }
 .fn-field input,
 .fn-field textarea,
 .fn-field select {
     width: 100%;
     background: transparent;
-    color: #e8dcc8;
-    border: 1px solid rgba(201,168,76,.22);
+    color: var(--fitnet-indigo);
+    border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 22%, transparent);
     padding: 12px 14px;
     font: inherit;
     min-height: 44px;
@@ -230,18 +236,18 @@ select:focus-visible {
 .fn-tabs button {
     min-height: 44px;
     padding: 0 16px;
-    border: 1px solid rgba(201,168,76,.28);
+    border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 28%, transparent);
     background: transparent;
-    color: #e8dcc8;
+    color: var(--fitnet-indigo);
     cursor: pointer;
 }
-.fn-tabs button[aria-selected="true"] { background: #c9a84c; color: #0f0c09; }
+.fn-tabs button[aria-selected="true"] { background: var(--fitnet-indigo); color: var(--fitnet-white); }
 .fn-panel[hidden] { display: none; }
 body.fn-lock { overflow: hidden; }
 
-.fn-page { background: #16120e; color: #e8dcc8; min-height: 100vh; }
+.fn-page { background: var(--fitnet-white); color: var(--fitnet-indigo); min-height: 100vh; }
 .fn-wrap { max-width: 1120px; margin: 0 auto; padding: 48px 24px 80px; }
-.fn-kicker { color: #c9a84c; font-size: .875rem; letter-spacing: 0; margin-bottom: 14px; line-height: 1.7; font-weight: 500; }
+.fn-kicker { color: var(--fitnet-indigo); font-size: .875rem; letter-spacing: 0; margin-bottom: 14px; line-height: 1.7; font-weight: 500; }
 .fn-page h1 {
     font-family: var(--fn-font);
     font-weight: 800;
@@ -249,50 +255,50 @@ body.fn-lock { overflow: hidden; }
     line-height: 1.4;
     margin: 0 0 18px;
 }
-.fn-lead { max-width: 40rem; font-size: 1.05rem; line-height: 1.9; color: rgba(232,220,200,.86); margin-bottom: 32px; }
+.fn-lead { max-width: 40rem; font-size: 1.05rem; line-height: 1.9; color: color-mix(in srgb, var(--fitnet-indigo) 86%, transparent); margin-bottom: 32px; }
 .fn-card {
-    border: 1px solid rgba(201,168,76,.14);
+    border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 14%, transparent);
     padding: 22px;
-    background: #120e0b;
+    background: var(--fitnet-light-blue);
 }
 .fn-grid { display: grid; gap: 14px; }
 @media (min-width: 768px) { .fn-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } .fn-grid.cols-2 { grid-template-columns: 1fr 1fr; } }
 .fn-card h2, .fn-card h3 { font-family: var(--fn-font); font-weight: 700; font-size: 1.35rem; line-height: 1.5; margin: 0 0 12px; }
-.fn-card p, .fn-prose p { font-size: 1rem; font-weight: 400; line-height: 1.85; color: rgba(232,220,200,.84); }
+.fn-card p, .fn-prose p { font-size: 1rem; font-weight: 400; line-height: 1.85; color: color-mix(in srgb, var(--fitnet-indigo) 84%, transparent); }
 .fn-prose h2 { font-family: var(--fn-font); font-weight: 800; font-size: clamp(1.45rem, 2vw, 1.8rem); line-height: 1.4; margin: 32px 0 12px; }
-.fn-note { font-size: .8125rem; font-weight: 400; line-height: 1.75; color: rgba(201,168,76,.85); margin-top: 18px; }
+.fn-note { font-size: .8125rem; font-weight: 400; line-height: 1.75; color: color-mix(in srgb, var(--fitnet-indigo) 85%, transparent); margin-top: 18px; }
 .fn-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 44px;
     padding: 10px 18px;
-    background: #c9a84c;
-    color: #0f0c09;
+    background: var(--fitnet-indigo);
+    color: var(--fitnet-white);
     text-decoration: none;
     white-space: normal;
 }
-.fn-btn.ghost { background: transparent; color: #c9a84c; border: 1px solid rgba(201,168,76,.45); }
+.fn-btn.ghost { background: transparent; color: var(--fitnet-indigo); border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 45%, transparent); }
 .fn-top {
     position: sticky; top: 0; z-index: 30;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
     padding: 16px 24px;
     background: rgba(15,12,9,.92);
-    border-bottom: 1px solid rgba(201,168,76,.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--fitnet-indigo) 12%, transparent);
     backdrop-filter: blur(10px);
 }
 .fn-top nav { display: flex; flex-wrap: wrap; gap: 8px 16px; }
-.fn-top a { color: rgba(232,220,200,.75); text-decoration: none; font-size: .85rem; min-height: 44px; display: inline-flex; align-items: center; }
-.fn-top a:hover { color: #c9a84c; }
-.fn-foot { border-top: 1px solid rgba(201,168,76,.12); padding: 28px 24px 40px; color: rgba(232,220,200,.72); font-size: .875rem; font-weight: 400; line-height: 1.75; }
+.fn-top a { color: color-mix(in srgb, var(--fitnet-indigo) 75%, transparent); text-decoration: none; font-size: .85rem; min-height: 44px; display: inline-flex; align-items: center; }
+.fn-top a:hover { color: var(--fitnet-indigo); }
+.fn-foot { border-top: 1px solid color-mix(in srgb, var(--fitnet-indigo) 12%, transparent); padding: 28px 24px 40px; color: color-mix(in srgb, var(--fitnet-indigo) 72%, transparent); font-size: .875rem; font-weight: 400; line-height: 1.75; }
 .fn-foot .fn-wrap { padding: 0; display: flex; flex-wrap: wrap; gap: 12px 22px; justify-content: space-between; }
-.fn-crumbs { font-size: .8125rem; font-weight: 400; line-height: 1.75; color: rgba(232,220,200,.72); margin-bottom: 18px; }
-.fn-crumbs a { color: #c9a84c; }
+.fn-crumbs { font-size: .8125rem; font-weight: 400; line-height: 1.75; color: color-mix(in srgb, var(--fitnet-indigo) 72%, transparent); margin-bottom: 18px; }
+.fn-crumbs a { color: var(--fitnet-indigo); }
 .fn-search { margin: 8px 0 22px; }
-.fn-search input { min-height: 44px; width: min(100%, 360px); background: transparent; color: #e8dcc8; border: 1px solid rgba(201,168,76,.28); padding: 0 12px; }
+.fn-search input { min-height: 44px; width: min(100%, 360px); background: transparent; color: var(--fitnet-indigo); border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 28%, transparent); padding: 0 12px; }
 .fn-cats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
-.fn-cats button { min-height: 44px; padding: 0 14px; border: 1px solid rgba(201,168,76,.28); background: transparent; color: #e8dcc8; cursor: pointer; }
-#fn-guide-related a { display: flex; align-items: center; min-height: 44px; color: #c9a84c; text-decoration: none; }
+.fn-cats button { min-height: 44px; padding: 0 14px; border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 28%, transparent); background: transparent; color: var(--fitnet-indigo); cursor: pointer; }
+#fn-guide-related a { display: flex; align-items: center; min-height: 44px; color: var(--fitnet-indigo); text-decoration: none; }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -400,9 +406,9 @@ html[dir="rtl"] .au-deco-monogram {
 }
 html[dir="rtl"] .mob-drawer nav a[href="#partners"],
 html[dir="rtl"] #hdrAurum nav a[href="#partners"] {
-  color: rgba(232,220,200,.86);
+  color: color-mix(in srgb, var(--fn-ink) 88%, transparent);
 }
 html[dir="rtl"] .mob-drawer nav a[href="#partners"]:hover,
 html[dir="rtl"] #hdrAurum nav a[href="#partners"]:hover {
-  color: #c9a84c;
+  color: var(--fitnet-light-blue);
 }
