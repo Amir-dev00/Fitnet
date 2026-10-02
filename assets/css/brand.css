@@ -523,3 +523,553 @@ summary:focus-visible,
 .fn-on-indigo :focus-visible {
   outline-color: var(--fitnet-white);
 }
+
+/* Composition and motion. One owner per animated property. */
+
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --fn-radius: 0px;
+  --fn-shadow: 0 18px 40px rgba(23, 11, 147, 0.08);
+  --fn-measure: 1440px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+summary,
+[role="button"] {
+  touch-action: manipulation;
+  user-select: none;
+}
+
+a {
+  touch-action: manipulation;
+}
+
+#hdrAurum {
+  min-height: 72px;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+#hdrAurum > .max-w-\[1440px\] {
+  min-height: 72px;
+}
+
+#hdrAurum > .absolute.top-0 {
+  display: none;
+}
+
+#hdrAurum button,
+#hdrAurum a,
+.mob-drawer a,
+.mob-drawer button,
+.au-cta-primary,
+.au-cta-ghost,
+.fn-btn {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: 160ms;
+  transition-timing-function: var(--ease-out);
+}
+
+.fn-brand,
+.fn-logo,
+.fn-logo-frame {
+  transition: none;
+  transform: none;
+  filter: none;
+  opacity: 1;
+}
+
+.mob-drawer button[aria-label="بستن"],
+#fn-menu-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.mob-drawer {
+  height: 100dvh;
+  max-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  overscroll-behavior: contain;
+  transition: translate 260ms var(--ease-drawer);
+}
+
+.mob-drawer nav {
+  overscroll-behavior: contain;
+}
+
+.fn-pop {
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+  transform-origin: top center;
+}
+
+.fn-pop-from {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.fn-pop-to {
+  opacity: 1;
+  transform: none;
+}
+
+.aurum-hero {
+  background: var(--fitnet-indigo);
+  overflow: visible;
+}
+
+.aurum-hero::before,
+.aurum-hero::after,
+.au-cta-primary::before {
+  content: none;
+}
+
+.hero-veil {
+  background: var(--fitnet-indigo);
+}
+
+.hero-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.82fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: end;
+  min-height: 100svh;
+  padding-top: calc(96px + env(safe-area-inset-top, 0px));
+  padding-bottom: clamp(32px, 5vw, 64px);
+}
+
+.hero-copy {
+  max-width: 40rem;
+}
+
+.au-title {
+  font-size: clamp(3.1rem, 5.6vw, 6.1rem);
+  line-height: 1.18;
+  margin-bottom: 1.25rem;
+}
+
+.au-title > span {
+  padding-block: 0.02em;
+}
+
+.hero-visual {
+  margin: 0;
+  position: relative;
+}
+
+.hero-visual img {
+  display: block;
+  width: 100%;
+  height: min(68svh, 680px);
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.hero-visual figcaption {
+  position: absolute;
+  inset-inline-start: 16px;
+  bottom: 16px;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  padding: 8px 12px;
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.fn-path-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.7fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: end;
+  margin-bottom: 40px;
+}
+
+.fn-path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fn-path li {
+  padding-top: 16px;
+  border-top: 2px solid var(--fitnet-indigo);
+}
+
+.fn-path li:first-child {
+  border-top-color: var(--fitnet-orange);
+}
+
+.fn-path span {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--fitnet-orange);
+}
+
+.fn-path h3 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.fn-path p,
+.fn-section-copy {
+  margin: 0;
+  color: color-mix(in srgb, var(--fitnet-indigo) 86%, transparent);
+}
+
+.fn-path-photo {
+  margin: 0;
+}
+
+.fn-path-photo img {
+  display: block;
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+.fn-path-photo figcaption {
+  margin-top: 10px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fitnet-indigo);
+}
+
+#gyms .fn-feature-grid {
+  gap: 12px;
+  border: 0;
+  background: transparent;
+}
+
+#gyms .fn-feature-grid > div {
+  border: 0 !important;
+  background: var(--fitnet-white);
+}
+
+#gyms [class*="space-y"] {
+  display: none;
+}
+
+#gyms .fn-feature-grid > .fn-lead {
+  background: var(--fitnet-indigo);
+  color: var(--fitnet-white);
+}
+
+#gyms .fn-lead h3,
+#gyms .fn-lead p {
+  color: var(--fitnet-white) !important;
+}
+
+#gyms .fn-lead > div:first-child {
+  color: var(--fitnet-orange) !important;
+  border-color: color-mix(in srgb, var(--fitnet-white) 35%, transparent) !important;
+}
+
+#partners .fn-audience-row .swiper-wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100% !important;
+  transform: none !important;
+}
+
+#partners .fn-audience-row .fn-audience-card,
+#partners .fn-audience-row .swiper-slide {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+}
+
+#partners .trainer-slide-card {
+  height: 100%;
+  background: var(--fitnet-white);
+  border-color: color-mix(in srgb, var(--fitnet-indigo) 12%, transparent);
+}
+
+#partners .trainer-slide-card .h-64 {
+  height: 220px;
+}
+
+#partners .swiper-button-next,
+#partners .swiper-button-prev {
+  display: none;
+}
+
+#partners .fn-audience-actions a {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.gs-testimonials .rounded-full {
+  border-radius: 0;
+  width: 64px;
+  height: 48px;
+}
+
+#plans > .max-w-7xl > .grid,
+#events .fn-preview,
+#rewards > .max-w-7xl {
+  gap: 12px;
+  border: 0 !important;
+}
+
+#plans .grid > div,
+#rewards > .max-w-7xl > div {
+  border: 0 !important;
+}
+
+#events .fn-preview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+#events .fn-preview article {
+  background: var(--fitnet-white);
+  min-width: 0;
+}
+
+#events .fn-preview img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+#events .fn-preview div {
+  padding: 20px;
+}
+
+#events .fn-preview .fn-num {
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--fitnet-orange);
+}
+
+#download .max-w-7xl {
+  align-items: end;
+}
+
+#download h2 {
+  max-width: 9em;
+}
+
+.fn-watermark {
+  display: none;
+}
+
+footer form input {
+  color: var(--fitnet-indigo);
+  background: var(--fitnet-white);
+}
+
+footer form button {
+  background: var(--fitnet-white);
+  color: var(--fitnet-indigo);
+  font-weight: 700;
+}
+
+.fn-faq .fn-a {
+  transition: opacity 180ms var(--ease-out);
+}
+
+@starting-style {
+  .fn-faq details[open] .fn-a {
+    opacity: 0;
+  }
+}
+
+.fn-prose {
+  max-width: 42rem;
+}
+
+.fn-page .fn-wrap {
+  padding-top: 56px;
+}
+
+@media (min-width: 1024px) {
+  #gyms .fn-feature-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #gyms .fn-lead {
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 40px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .fn-path-layout,
+  #partners .fn-audience-row .swiper-wrapper,
+  #events .fn-preview {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .fn-path {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero-stage {
+    min-height: 0;
+    align-items: start;
+    padding-top: calc(88px + env(safe-area-inset-top, 0px));
+  }
+
+  .hero-visual {
+    grid-column: 1 / -1;
+  }
+
+  .hero-visual img {
+    height: 320px;
+  }
+}
+
+@media (max-width: 767px) {
+  .fn-path,
+  .fn-path-layout,
+  #partners .fn-audience-row .swiper-wrapper,
+  #events .fn-preview,
+  .hero-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-visual img,
+  .fn-path-photo img,
+  #events .fn-preview img {
+    height: 220px;
+  }
+
+  #download h2 {
+    max-width: none;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-stage {
+    min-height: 0;
+    padding-top: calc(76px + env(safe-area-inset-top, 0px));
+  }
+
+  .hero-visual img {
+    height: 160px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .au-cta-primary:hover {
+    background: var(--fitnet-light-blue);
+    color: var(--fitnet-indigo);
+  }
+
+  .au-cta-ghost:hover {
+    color: var(--fitnet-indigo);
+    background: var(--fitnet-white);
+    border-color: var(--fitnet-white);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gs-hero .au-title > span {
+    animation: fn-rise 520ms var(--ease-out) both;
+  }
+
+  .gs-hero .au-title > span:nth-child(2) {
+    animation-delay: 40ms;
+  }
+
+  .gs-hero .au-title > span:nth-child(3) {
+    animation-delay: 80ms;
+  }
+
+  .au-cta-primary:active,
+  .au-cta-ghost:active,
+  .fn-btn:active,
+  button:active {
+    transform: scale(0.97);
+  }
+
+  .fn-brand:active,
+  .fn-logo:active,
+  a.fn-brand:active {
+    transform: none;
+  }
+}
+
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+@keyframes fn-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fn-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .amenity-card:hover img,
+  .group:hover img,
+  html[dir="rtl"] .group:hover .icon-fwd {
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-hero .au-title > span,
+  .mtrack {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .fn-pop,
+  .mob-drawer {
+    transition: none;
+  }
+
+  .fn-faq .fn-a,
+  .au-cta-primary,
+  .au-cta-ghost,
+  button {
+    transition-property: color, background-color, border-color, opacity;
+    transform: none;
+  }
+}

@@ -4,7 +4,7 @@
 <!-- Fitnet -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="preload" href="assets/fonts/Estedad-Variable.woff2" as="font" type="font/woff2" crossorigin>
     <title>فیت‌نت | باشگاه و رویداد ورزشی با یک اعتبار</title>
     <meta name="description" content="فیت‌نت یک پلتفرم دسترسی به باشگاه‌های همکار و رویدادهای ورزشی است. باشگاه پیدا کن، اعتبار بگیر، رزرو کن و با QR وارد شو.">
@@ -65,7 +65,7 @@
         .s-in { background:color-mix(in srgb, var(--fn-ink) 6%, transparent); border:1px solid color-mix(in srgb, var(--fn-ink) 18%, transparent); color:var(--fn-ink); font-family:'Estedad',sans-serif; font-weight:400; font-size:1rem; line-height:1.85; letter-spacing:0; outline:none; padding:14px 20px; width:100%; }
         .s-in::placeholder { color:color-mix(in srgb, var(--fn-ink) 86%, transparent); }
         .s-in:focus { border-color:var(--gold); }
-        .s-tag { border:1px solid color-mix(in srgb, var(--fn-ink) 18%, transparent); color:color-mix(in srgb, var(--fn-ink) 86%, transparent); font-family:'Estedad',sans-serif; font-weight:500; font-size:0.75rem; line-height:1.7; text-transform:none; letter-spacing:0; padding:6px 12px; cursor:pointer; transition:all .2s; }
+        .s-tag { border:1px solid color-mix(in srgb, var(--fn-ink) 18%, transparent); color:color-mix(in srgb, var(--fn-ink) 86%, transparent); font-family:'Estedad',sans-serif; font-weight:500; font-size:0.75rem; line-height:1.7; text-transform:none; letter-spacing:0; padding:6px 12px; cursor:pointer; transition: color .18s var(--ease-out), background-color .18s var(--ease-out), border-color .18s var(--ease-out); }
         .s-tag:hover,.s-tag.active { background:var(--gold); color:#000; border-color:var(--gold); }
         .s-row { padding:10px 0; border-bottom:1px solid color-mix(in srgb, var(--fn-ink) 6%, transparent); font-size:13px; color:color-mix(in srgb, var(--fn-ink) 86%, transparent); cursor:pointer; transition:color .2s; display:flex; align-items:center; gap:10px; text-decoration:none; }
         .s-row:hover { color:var(--gold); }
@@ -180,8 +180,8 @@
             font-size: 11px;
         }
         .au-cta-primary {
-            background: var(--gold);
-            color: var(--fn-fill);
+            background: var(--fitnet-white);
+            color: var(--fitnet-indigo);
             font-family: 'Estedad', sans-serif;
             font-weight: 600;
             text-transform: none;
@@ -192,20 +192,9 @@
             padding: 12px 28px;
             display: inline-flex; align-items: center; gap: 12px;
             position: relative;
-            overflow: hidden;
-            transition: all .3s ease;
         }
-        .au-cta-primary::before {
-            content: "";
-            position: absolute; inset: 0;
-            background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.5) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform .6s ease;
-        }
-        .au-cta-primary:hover { background: #fff; color: var(--fn-fill); transform: translateY(-2px); box-shadow: 0 20px 50px color-mix(in srgb, var(--fn-ink) 30%, transparent); }
-        .au-cta-primary:hover::before { transform: translateX(100%); }
         .au-cta-ghost {
-            color: color-mix(in srgb, var(--fn-ink) 86%, transparent);
+            color: var(--fitnet-white);
             font-family: 'Estedad', sans-serif;
             font-weight: 600;
             text-transform: none;
@@ -214,11 +203,9 @@
             letter-spacing: 0;
             min-height: 48px;
             padding: 12px 28px;
-            border: 1px solid color-mix(in srgb, var(--fn-ink) 20%, transparent);
+            border: 1px solid color-mix(in srgb, var(--fitnet-white) 55%, transparent);
             display: inline-flex; align-items: center; gap: 12px;
-            transition: all .3s ease;
         }
-        .au-cta-ghost:hover { border-color: var(--gold); color: var(--gold); background: color-mix(in srgb, var(--fn-ink) 5%, transparent); }
         .au-metric {
             position: relative;
             padding-inline-start: 18px;
@@ -377,7 +364,7 @@
             border: 1px solid color-mix(in srgb, var(--fn-ink) 20%, transparent);
             display: flex; align-items: center; justify-content: center;
             color: color-mix(in srgb, var(--fn-ink) 50%, transparent);
-            transition: all .25s ease;
+            transition: border-color .18s, color .18s, background-color .18s;
         }
         .au-side-arrow:hover { border-color: var(--gold); color: var(--gold); background: color-mix(in srgb, var(--fn-ink) 6%, transparent); }
         .au-mini-card {
@@ -498,17 +485,17 @@
     </style>
     <link rel="stylesheet" href="assets/css/brand.css">
 </head>
-<body class="antialiased" x-data="aurumApp()" x-cloak>
+<body class="antialiased" x-data="aurumApp()" x-cloak @keydown.escape.window="dismiss()">
 
 <div class="mob-overlay fixed inset-0 bg-black/80 z-20" :class="{'open': mobOpen || menu!==null}" @click="mobOpen=false;menu=null;searchOpen=false"></div>
 
 <!-- Mobile drawer -->
-<div class="mob-drawer fixed top-0 right-0 h-full w-4/5 max-w-xs z-50 flex flex-col border-l transition-transform duration-300 shadow-2xl brand-border lg:hidden fn-on-indigo"
+<div class="mob-drawer fixed top-0 right-0 w-4/5 max-w-xs z-50 flex flex-col border-l brand-border lg:hidden fn-on-indigo"
      style="background:var(--fn-fill)"
      :class="mobOpen ? 'translate-x-0' : 'translate-x-full'">
     <div class="flex justify-between items-center px-6 py-5 border-b brand-border">
         <a href="index.html" class="fn-brand" aria-label="فیت‌نت، صفحه اصلی"><span class="fn-logo-frame"><img class="fn-logo" src="assets/brand/logo-reverse.png" width="1124" height="1078" alt=""></span><span class="brand-latin fn-brand-name" dir="ltr">FITNET</span></a>
-        <button @click="mobOpen=false" aria-label="بستن" class="w-8 h-8 border brand-border flex items-center justify-center text-[var(--fn-ink)]/40 hover:text-gold transition">
+        <button @click="closeDrawer()" aria-label="بستن" class="w-8 h-8 border brand-border flex items-center justify-center text-[var(--fn-ink)]/40 hover:text-gold transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
     </div>
@@ -525,7 +512,7 @@
 <!-- ══════════════════════════════════════════════════════════
      HEADER
 ══════════════════════════════════════════════════════════════ -->
-<header class="fixed top-0 left-0 right-0 z-30 h-[80px] border-b border-transparent transition-all duration-300 fn-on-indigo" id="hdrAurum"
+<header class="fixed top-0 left-0 right-0 z-30 border-b border-transparent fn-on-indigo" id="hdrAurum"
         @keydown.escape="menu=null;searchOpen=false">
     <!-- Gold top bar -->
     <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(to right, transparent, color-mix(in srgb, var(--fn-ink) 50%, transparent), transparent)"></div>
@@ -577,7 +564,7 @@
             <a href="#download" class="hidden md:inline-flex items-center gap-2 font-oswald font-bold uppercase text-[11px] tracking-widest px-6 py-3 hover:bg-brand transition" style="background:var(--fn-action);color:var(--fn-action-ink)">
                 دسترسی زودهنگام ←
             </a>
-            <button @click="mobOpen=true" aria-label="منو" class="lg:hidden w-9 h-9 border brand-border flex items-center justify-center text-[var(--fn-ink)]/40 hover:text-gold transition">
+            <button id="fn-menu-btn" @click="openDrawer()" aria-label="منو" class="lg:hidden w-9 h-9 border brand-border flex items-center justify-center text-[var(--fn-ink)]/40 hover:text-gold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
         </div>
@@ -585,8 +572,7 @@
 
     <!-- MEGA: MEMBERSHIP -->
     <div x-show="menu==='gyms'"
-         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 -translate-y-2"
+         x-transition:enter="fn-pop" x-transition:enter-start="fn-pop-from" x-transition:enter-end="fn-pop-to" x-transition:leave="fn-pop" x-transition:leave-start="fn-pop-to" x-transition:leave-end="fn-pop-from"
          class="mega-panel absolute top-full left-0 right-0 z-40"
          @mouseenter="openMenu('gyms')" @mouseleave="closeMenu()">
         <div class="max-w-[1440px] mx-auto px-6 py-10 grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_280px] gap-0">
@@ -631,8 +617,7 @@
 
     <!-- MEGA: FACILITIES -->
     <div x-show="menu==='events'"
-         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 -translate-y-2"
+         x-transition:enter="fn-pop" x-transition:enter-start="fn-pop-from" x-transition:enter-end="fn-pop-to" x-transition:leave="fn-pop" x-transition:leave-start="fn-pop-to" x-transition:leave-end="fn-pop-from"
          class="mega-panel absolute top-full left-0 right-0 z-40"
          @mouseenter="openMenu('events')" @mouseleave="closeMenu()">
         <div class="max-w-[1440px] mx-auto px-6 py-8 grid grid-cols-4 gap-5">
@@ -657,8 +642,7 @@
 
     <!-- DROPDOWN: CLASSES -->
     <div x-show="menu==='how'"
-         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 -translate-y-2"
+         x-transition:enter="fn-pop" x-transition:enter-start="fn-pop-from" x-transition:enter-end="fn-pop-to" x-transition:leave="fn-pop" x-transition:leave-start="fn-pop-to" x-transition:leave-end="fn-pop-from"
          class="mega-panel absolute top-full left-0 right-0 z-40"
          @mouseenter="openMenu('how')" @mouseleave="closeMenu()">
         <div class="max-w-[1440px] mx-auto px-6 py-8 grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-0">
@@ -690,8 +674,7 @@
 
     <!-- DROPDOWN: SPA -->
     <div x-show="menu==='plans'"
-         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 -translate-y-2"
+         x-transition:enter="fn-pop" x-transition:enter-start="fn-pop-from" x-transition:enter-end="fn-pop-to" x-transition:leave="fn-pop" x-transition:leave-start="fn-pop-to" x-transition:leave-end="fn-pop-from"
          class="mega-panel absolute top-full left-0 right-0 z-40"
          @mouseenter="openMenu('plans')" @mouseleave="closeMenu()">
         <div class="max-w-[1440px] mx-auto px-6 py-8 grid grid-cols-[1fr_auto_1fr_auto_300px] gap-0">
@@ -718,8 +701,7 @@
 
     <!-- SEARCH PANEL -->
     <div x-show="searchOpen"
-         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 -translate-y-2"
+         x-transition:enter="fn-pop" x-transition:enter-start="fn-pop-from" x-transition:enter-end="fn-pop-to" x-transition:leave="fn-pop" x-transition:leave-start="fn-pop-to" x-transition:leave-end="fn-pop-from"
          class="search-panel absolute top-full left-0 right-0 z-40 py-6 px-6">
         <div class="max-w-3xl mx-auto">
             <div class="flex items-center gap-3 mb-5">
@@ -747,53 +729,42 @@
 <!-- ══════════════════════════════════════════════════════════
      HERO — cinematic dark + amenity SWIPER SIDEBAR
 ══════════════════════════════════════════════════════════════ -->
-<section class="aurum-hero relative min-h-screen flex flex-col overflow-hidden gs-hero fn-on-indigo" style="padding-top:80px">
+<section class="aurum-hero relative flex flex-col gs-hero fn-on-indigo">
 
-    <!-- Background image with refined overlay -->
-    <div class="absolute inset-0">
-        <img src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover" style="filter:brightness(.22) saturate(.5)">
-        <div class="hero-veil absolute inset-0" style="background:linear-gradient(to right, rgba(23, 11, 147, .92) 0%, rgba(23, 11, 147, .85) 45%, rgba(23, 11, 147, .55) 100%)"></div>
+    <div class="absolute inset-0" aria-hidden="true">
+        <div class="hero-veil absolute inset-0"></div>
     </div>
 
-    <!-- Decorative vertical lines -->
-    <div class="au-vline au-vline-1 hidden xl:block" aria-hidden="true"></div>
-    <div class="au-vline au-vline-2 hidden xl:block" aria-hidden="true"></div>
-
-    <!-- Background monogram -->
     <div class="au-deco-monogram" aria-hidden="true">F</div>
 
-    <div class="max-w-[1440px] mx-auto w-full px-6 grid lg:grid-cols-[1fr_420px] gap-0 relative z-10 flex-1 items-center">
+    <div class="hero-stage max-w-[1440px] mx-auto w-full px-6 relative z-10">
 
         <!-- Left editorial -->
         <div class="hero-copy flex flex-col justify-center py-12 lg:py-16">
 
             <!-- Top eyebrow + badge row -->
-            <div class="flex flex-wrap items-center gap-6 mb-10 au-anim-in au-d1">
+            <div class="flex flex-wrap items-center gap-6 mb-8">
                 <span class="au-eyebrow">
                     <span class="ornament"></span>
                     <span>یک حساب. یک کیف پول. انتخاب‌های بیشتر.</span>
                 </span>
-                <span class="au-badge">
-                    <span class="seal" aria-hidden="true"></span>
-                    <span>در مسیر شروع در تهران</span>
-                </span>
             </div>
 
             <!-- Title -->
-            <h1 class="au-title mb-8 au-anim-in au-d2 select-none">
+            <h1 class="au-title mb-8">
                 <span class="l1">شهر،</span>
                 <span class="l2">زمین تمرین</span>
                 <span class="l3">توست.</span>
             </h1>
 
             <!-- Description with ornament -->
-            <div class="flex items-start gap-5 max-w-xl mb-10 au-anim-in au-d3">
+            <div class="flex items-start gap-5 max-w-xl mb-8">
                 <div class="hero-rule flex-shrink-0 mt-2 hidden md:block" style="width:30px;height:1px;background:linear-gradient(to right,var(--gold),transparent)"></div>
                 <p class="text-base md:text-lg" style="color:color-mix(in srgb, var(--fn-ink) 88%, transparent)">باشگاه‌های همکار و رویدادهای ورزشی را کشف کن، زمان مناسب را رزرو کن و با اعتبار فیت‌نت و QR وارد شو.</p>
             </div>
 
             <!-- CTAs -->
-            <div class="flex flex-wrap gap-3 mb-14 au-anim-in au-d4">
+            <div class="flex flex-wrap gap-3">
                 <a href="#download" class="au-cta-primary group">
                     <span>شروع با فیت‌نت</span>
                     <svg class="icon-fwd w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
@@ -804,121 +775,12 @@
                 </a>
             </div>
 
-            <!-- Stats -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 au-anim-in au-d5">
-                <div class="au-metric">
-                    <span class="v">۱</span>
-                    <span class="l">حساب</span>
-                </div>
-                <div class="au-metric">
-                    <span class="v warm">۱</span>
-                    <span class="l">کیف پول</span>
-                </div>
-                <div class="au-metric">
-                    <span class="v warm word">رزرو</span>
-                    <span class="l">زمان ورود</span>
-                </div>
-                <div class="au-metric">
-                    <span class="v warm" dir="ltr">QR</span>
-                    <span class="l">ورود سریع</span>
-                </div>
-            </div>
-
         </div>
 
-        <!-- Right: AMENITY SWIPER SIDEBAR -->
-        <div class="hero-side hidden lg:flex flex-col border-l py-8 pl-8 au-anim-in au-d5 relative" style="border-color:color-mix(in srgb, var(--fn-ink) 12%, transparent)">
-
-            <!-- prostep-card temporarily hidden
-            <div class="prostep-card float-rating hidden xl:block">
-                <div class="prostep-top">
-                    <span class="prostep-mark" aria-hidden="true"></span>
-                    <span class="brand-latin prostep-name" dir="ltr">PRO STEP</span>
-                </div>
-                <p class="prostep-line">تمرین کن.<br>به هدیه نزدیک‌تر شو.</p>
-                <div class="prostep-meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-                <p class="prostep-note">هر رزرو انجام‌شده، یک قدم</p>
-            </div>
-            -->
-
-            <div class="au-side-head">
-                <div>
-                    <div class="h-sub"><span>نزدیک خانه، محل کار یا گوشه‌ای تازه از شهر.</span></div>
-                    <div class="h-title">تمرین بعدی‌ات را پیدا کن.</div>
-                </div>
-                <div class="text-end">
-                    <span class="text-[9px] uppercase tracking-[.3em] font-bold block mb-1" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">کشف</span>
-                    <span class="text-[9px] uppercase tracking-[.3em] font-bold" style="color:var(--gold)">پیش‌نمایش</span>
-                </div>
-            </div>
-
-            <!-- FEATURED AMENITY (static showcase) -->
-            <div class="hero-discover">
-
-                <!-- Main featured amenity -->
-                <div class="amenity-card au-featured au-anim-in au-d5">
-                    <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" alt="فضای تمرین">
-                    <div class="absolute bottom-0 left-0 right-0 p-6" style="z-index:2;">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">۰۱</span>
-                            <span class="h-px flex-1" style="background:color-mix(in srgb, var(--fn-ink) 25%, transparent)"></span>
-                            <span class="text-[9px] uppercase tracking-widest font-bold" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">نزدیک شما</span>
-                        </div>
-                        <h4 class="font-oswald font-bold text-2xl uppercase text-white leading-tight mb-2">نزدیک تو</h4>
-                        <p class="text-white/40 text-xs leading-relaxed">گزینه‌های اطرافت را راحت‌تر پیدا کن.</p>
-                    </div>
-                </div>
-
-                <!-- Other amenities compact list -->
-                <div class="au-mini-list au-anim-in au-d6">
-                    <div class="au-mini-row">
-                        <span class="au-mini-num">۰۲</span>
-                        <div class="flex-1 min-w-0">
-                            <p class="au-mini-title">برای امروز</p>
-                            <p class="au-mini-sub">بازه‌های قابل رزرو امروز را ببین.</p>
-                        </div>
-                        <span class="au-mini-meta">در دسترس</span>
-                    </div>
-                    <div class="au-mini-row">
-                        <span class="au-mini-num">۰۳</span>
-                        <div class="flex-1 min-w-0">
-                            <p class="au-mini-title">فراتر از باشگاه</p>
-                            <p class="au-mini-sub">رویدادهای ورزشی را کشف کن.</p>
-                        </div>
-                        <span class="au-mini-meta">رویداد</span>
-                    </div>
-                    <div class="au-mini-row">
-                        <span class="au-mini-num">۰۴</span>
-                        <div class="flex-1 min-w-0">
-                            <p class="au-mini-title">روی نقشه</p>
-                            <p class="au-mini-sub">موقعیت‌ها را مقایسه کن.</p>
-                        </div>
-                        <span class="au-mini-meta">موقعیت</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mini floating card -->
-            <div class="au-mini-card float-floors hidden xl:block">
-                <div class="lbl">دعوت دوستان</div>
-                <div class="v">لینک</div>
-                <div class="sub">پاداش بعد از اشتراک</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom strip -->
-    <div class="hero-strip relative z-10 px-6">
-        <div class="max-w-[1440px] mx-auto flex items-center justify-between text-[0.8125rem] font-bold" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">
-            <div class="flex items-center gap-3">
-                <span class="w-1.5 h-1.5 rounded-full" style="background:var(--gold)"></span>
-                <span>یک حساب. یک کیف پول.</span>
-            </div>
-            <div class="flex items-center gap-6">
-                <span>↓ ادامه بده</span>
-                <span>© ۲۰۲۶ <span class="brand-latin" dir="ltr">FITNET</span></span>
-            </div>
-        </div>
+        <figure class="hero-visual">
+            <img src="assets/images/photo-1534438327276-14e5300c3a48.jpg" alt="" width="960" height="1200">
+            <figcaption>پیش‌نمایش · کشف باشگاه نزدیک، بدون موجودی واقعی</figcaption>
+        </figure>
     </div>
 </section>
 
@@ -931,43 +793,25 @@
 </div>
 
 <!-- ═══ INTRO / ABOUT ═══════════════════════════════════════ -->
-<section id="how-it-works" class="py-28 px-6 relative overflow-hidden gs-amenities" style="background:var(--fn-fill)">
-    <div class="absolute top-0 right-0 w-px h-full" style="background:linear-gradient(to bottom, transparent, color-mix(in srgb, var(--fn-ink) 15%, transparent), transparent)"></div>
-    <div class="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1fr] gap-24 items-center">
-        <div>
-            <div class="h-px w-16 mb-8" style="background:var(--gold)"></div>
-            <h2 class="font-oswald font-black text-6xl fn-heading mb-8" style="color:var(--fn-ink)">از انتخاب تا ورود،<br><span class="fn-display">چهار قدم.</span></h2>
-            <p style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)" class="text-base leading-relaxed mb-6">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن. بعد باشگاه یا رویداد را ببین، زمان را چک کن و رزرو را تأیید کن.</p>
-            <p style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)" class="text-sm leading-relaxed mb-10">QR یا کد رزرو را نشان بده و تمرینت را شروع کن. با ساخت حساب، ۱ اعتبار شروع دریافت می‌کنی.</p>
-            <div class="grid grid-cols-2 gap-6 pt-8 border-t" style="border-color:color-mix(in srgb, var(--fn-ink) 10%, transparent)">
-                <div><p class="font-oswald font-black text-4xl glow-gold leading-none">۱</p><p class="text-sm mt-2" style="color:var(--fn-ink)">اعتبار بگیر</p><p class="text-xs mt-1 leading-relaxed" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن.</p></div>
-                <div><p class="font-oswald font-black text-4xl leading-none" style="color:var(--fn-ink)">۲</p><p class="text-sm mt-2" style="color:var(--fn-ink)">پیدا کن</p><p class="text-xs mt-1 leading-relaxed" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">باشگاه یا رویداد دلخواهت را ببین.</p></div>
-                <div><p class="font-oswald font-black text-4xl leading-none" style="color:var(--fn-ink)">۳</p><p class="text-sm mt-2" style="color:var(--fn-ink)">رزرو کن</p><p class="text-xs mt-1 leading-relaxed" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">زمان و اعتبار موردنیاز را بررسی و رزروت را تأیید کن.</p></div>
-                <div><p class="font-oswald font-black text-4xl leading-none" style="color:var(--fn-ink)">۴</p><p class="text-sm mt-2" style="color:var(--fn-ink)">وارد شو</p><p class="text-xs mt-1 leading-relaxed" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">QR یا کد رزرو را نشان بده و تمرینت را شروع کن.</p></div>
+<section id="how-it-works" class="py-28 px-6 gs-amenities" style="background:var(--fn-fill)">
+    <div class="max-w-[1440px] mx-auto">
+        <div class="fn-path-layout">
+            <div>
+                <p class="fn-kicker">مسیر تمرین</p>
+                <h2 class="fn-heading">از انتخاب تا ورود،<br><span class="fn-display">چهار قدم.</span></h2>
+                <p class="fn-section-copy">پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن. بعد باشگاه یا رویداد را ببین، زمان را چک کن و رزرو را تأیید کن. با ساخت حساب، ۱ اعتبار شروع دریافت می‌کنی.</p>
             </div>
+            <figure class="fn-path-photo">
+                <img loading="lazy" alt="" src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" width="960" height="720">
+                <figcaption>نزدیک‌ترین انتخاب‌ها، روی نقشه</figcaption>
+            </figure>
         </div>
-        <!-- Image collage -->
-        <div class="grid grid-cols-2 gap-3 h-[520px]">
-            <div class="overflow-hidden facility-card row-span-2 relative">
-                <img loading="lazy" alt="" src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-full h-full object-cover">
-                <div class="absolute bottom-0 left-0 right-0 p-5" style="background:linear-gradient(to top, rgba(23, 11, 147, .9), transparent)">
-                    <p class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">نزدیک‌ترین انتخاب‌ها</p>
-                    <p class="font-oswald font-bold text-sm uppercase text-white">روی نقشه</p>
-                </div>
-            </div>
-            <div class="overflow-hidden facility-card relative">
-                <img loading="lazy" alt="" src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover">
-                <div class="absolute bottom-0 left-0 right-0 p-4" style="background:linear-gradient(to top, rgba(23, 11, 147, .9), transparent)">
-                    <p class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">لیست و نقشه</p>
-                </div>
-            </div>
-            <div class="overflow-hidden facility-card relative">
-                <img loading="lazy" alt="" src="assets/images/photo-1581009146145-b5ef050c2e1e.jpg" class="w-full h-full object-cover">
-                <div class="absolute bottom-0 left-0 right-0 p-4" style="background:linear-gradient(to top, rgba(23, 11, 147, .9), transparent)">
-                    <p class="text-[9px] uppercase tracking-widest font-bold" style="color:var(--gold)">پیش‌نمایش تجربه فیت‌نت</p>
-                </div>
-            </div>
-        </div>
+        <ol class="fn-path">
+            <li><span>۱</span><h3>اعتبار بگیر</h3><p>پلن مناسب خودت را انتخاب کن و کیف پولت را شارژ کن.</p></li>
+            <li><span>۲</span><h3>پیدا کن</h3><p>باشگاه یا رویداد دلخواهت را ببین.</p></li>
+            <li><span>۳</span><h3>رزرو کن</h3><p>زمان و اعتبار موردنیاز را بررسی و رزروت را تأیید کن.</p></li>
+            <li><span>۴</span><h3>وارد شو</h3><p>QR یا کد رزرو را نشان بده و تمرینت را شروع کن.</p></li>
+        </ol>
     </div>
 </section>
 
@@ -981,8 +825,8 @@
             </div>
             <p style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)" class="text-sm leading-relaxed max-w-xs">اعتبارت را یک‌جا ببین، برای باشگاه و رویداد خرج کن و از تاریخچه و زمان انقضای آن خبر داشته باش.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 border" style="border-color:color-mix(in srgb, var(--fn-ink) 10%, transparent)">
-            <div class="p-8 border-r border-b" style="border-color:color-mix(in srgb, var(--fn-ink) 8%, transparent)">
+        <div class="fn-feature-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            <div class="fn-lead p-8">
                 <div class="w-12 h-12 border mb-6 flex items-center justify-center" style="border-color:color-mix(in srgb, var(--fn-ink) 20%, transparent);color:var(--gold)">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
@@ -1074,9 +918,9 @@
             <h2 class="font-oswald font-black text-5xl fn-heading" style="color:var(--fn-ink)">باشگاه تو.<br><span class="fn-display">فرصت‌های تازه.</span></h2>
             <p class="text-sm mt-5 max-w-lg mx-auto leading-relaxed" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">ظرفیت قابل رزرو را به کاربران فیت‌نت معرفی کن و رزروها، ورودها و وضعیت تسویه را یک‌جا مدیریت کن.</p>
         </div>
-        <div class="swiper aurum-trainers overflow-hidden mb-6">
+        <div class="fn-audience-row mb-6">
             <div class="swiper-wrapper">
-                <div class="swiper-slide !w-[300px]">
+                <div class="fn-audience-card">
                     <div class="group border trainer-slide-card" style="border-color:color-mix(in srgb, var(--fn-ink) 10%, transparent)">
                         <div class="h-64 overflow-hidden relative">
                             <img loading="lazy" alt="" src="assets/images/photo-1534438327276-14e5300c3a48.jpg" class="w-full h-full object-cover object-top facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
@@ -1090,7 +934,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="swiper-slide !w-[300px]">
+                <div class="fn-audience-card">
                     <div class="group border trainer-slide-card" style="border-color:color-mix(in srgb, var(--fn-ink) 10%, transparent)">
                         <div class="h-64 overflow-hidden relative">
                             <img loading="lazy" alt="" src="assets/images/photo-1571019614242-c5c5dee9f50b.jpg" class="w-full h-full object-cover facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
@@ -1104,7 +948,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="swiper-slide !w-[300px]">
+                <div class="fn-audience-card">
                     <div class="group border trainer-slide-card" style="border-color:color-mix(in srgb, var(--fn-ink) 10%, transparent)">
                         <div class="h-64 overflow-hidden relative">
                             <img loading="lazy" alt="" src="assets/images/photo-1544367567-0f2fcb009e0b.jpg" class="w-full h-full object-cover facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
@@ -1118,7 +962,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="swiper-slide !w-[300px]">
+                <div class="fn-audience-card">
                     <div class="group border trainer-slide-card" style="border-color:color-mix(in srgb, var(--fn-ink) 10%, transparent)">
                         <div class="h-64 overflow-hidden relative">
                             <img loading="lazy" alt="" src="assets/images/photo-1517836357463-d25dfe09ce18.jpg" class="w-full h-full object-cover object-top facility-card img transition-colors-all duration-500 filter saturate-50 group-hover:saturate-100">
@@ -1136,7 +980,7 @@
             <div class="swiper-button-next" style="color:var(--gold)"></div>
             <div class="swiper-button-prev" style="color:var(--gold)"></div>
         </div>
-        <div class="flex flex-wrap justify-center gap-4 mt-10">
+        <div class="fn-audience-actions flex flex-wrap justify-center gap-4 mt-10">
             <a href="contact.html?path=gym" class="font-oswald font-bold uppercase text-xs tracking-widest px-6 py-4" style="background:var(--fn-action);color:var(--fn-action-ink)">درخواست همکاری باشگاه</a>
             <a href="contact.html?path=organizer" class="border font-oswald font-bold uppercase text-xs tracking-widest px-6 py-4 brand-border" style="color:var(--gold)">همکاری به‌عنوان برگزارکننده</a>
         </div>
@@ -1211,47 +1055,30 @@
 </section>
 
 <!-- ═══ EVENT PREVIEW ════════════════════════════════════════ -->
-<section id="events" class="py-28 px-6 gs-faq" style="background:var(--fn-fill)">
-    <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
+<section id="events" class="py-28 px-6" style="background:var(--fn-fill)">
+    <div class="max-w-[1440px] mx-auto">
+        <div class="fn-path-layout">
             <div>
-                <div class="h-px w-12 mb-6" style="background:var(--gold)"></div>
-                <h2 class="font-oswald font-black text-5xl fn-heading" style="color:var(--fn-ink)">تمرین،<br><span class="fn-display">فقط باشگاه نیست.</span></h2>
-                <p class="text-sm mt-4 max-w-md leading-relaxed" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">از فضای همیشگی فاصله بگیر. رویدادهای ورزشی تأییدشده را پیدا کن و با اعتبار فیت‌نت همراه شو.</p>
+                <p class="fn-kicker">پیش‌نمایش تجربه فیت‌نت</p>
+                <h2 class="fn-heading">تمرین،<br><span class="fn-display">فقط باشگاه نیست.</span></h2>
+                <p class="fn-section-copy">از فضای همیشگی فاصله بگیر. رویدادهای ورزشی تأییدشده را پیدا کن و با اعتبار فیت‌نت همراه شو. رویدادهای تأییدشده، با شروع فیت‌نت اینجا معرفی می‌شوند.</p>
             </div>
-            <a href="contact.html?path=organizer" class="border font-oswald font-bold uppercase text-[10px] tracking-widest px-6 py-3 transition brand-border" style="color:var(--gold)" >همکاری به‌عنوان برگزارکننده</a>
+            <p><a href="contact.html?path=organizer" class="fn-btn ghost">همکاری به‌عنوان برگزارکننده</a></p>
         </div>
-        <p class="text-xs mb-6" style="color:color-mix(in srgb, var(--fn-ink) 70%, transparent)">پیش‌نمایش تجربه فیت‌نت</p>
-        <div class="space-y-0 border" style="border-color:color-mix(in srgb, var(--fn-ink) 10%, transparent)">
-            <div class="flex gap-0 border-b" style="border-color:color-mix(in srgb, var(--fn-ink) 8%, transparent)">
-                <div class="w-28 flex-shrink-0 p-6 border-r flex flex-col items-center justify-center" style="border-color:color-mix(in srgb, var(--fn-ink) 8%, transparent)">
-                    <p class="font-oswald font-black text-3xl leading-none" style="color:var(--gold)">۰۱</p>
-                </div>
-                <div class="flex-1 p-6">
-                    <h4 class="font-oswald font-bold text-lg uppercase" style="color:var(--fn-ink)">تمرین گروهی</h4>
-                    <p class="text-sm mt-1" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">جلسه‌هایی که با دیگران و با یک زمان مشخص برگزار می‌شوند.</p>
-                </div>
-            </div>
-            <div class="flex gap-0 border-b" style="border-color:color-mix(in srgb, var(--fn-ink) 8%, transparent)">
-                <div class="w-28 flex-shrink-0 p-6 border-r flex flex-col items-center justify-center" style="border-color:color-mix(in srgb, var(--fn-ink) 8%, transparent)">
-                    <p class="font-oswald font-black text-3xl leading-none" style="color:var(--gold)">۰۲</p>
-                </div>
-                <div class="flex-1 p-6">
-                    <h4 class="font-oswald font-bold text-lg uppercase" style="color:var(--fn-ink)">تجربه در فضای باز</h4>
-                    <p class="text-sm mt-1" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">تمرین بیرون از سالن، وقتی رویداد تأیید شده باشد.</p>
-                </div>
-            </div>
-            <div class="flex gap-0" style="border-color:color-mix(in srgb, var(--fn-ink) 8%, transparent)">
-                <div class="w-28 flex-shrink-0 p-6 border-r flex flex-col items-center justify-center" style="border-color:color-mix(in srgb, var(--fn-ink) 8%, transparent)">
-                    <p class="font-oswald font-black text-3xl leading-none" style="color:var(--gold)">۰۳</p>
-                </div>
-                <div class="flex-1 p-6">
-                    <h4 class="font-oswald font-bold text-lg uppercase" style="color:var(--fn-ink)">رویدادهای ویژه</h4>
-                    <p class="text-sm mt-1" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">برنامه‌هایی که بعد از بررسی، برای ثبت‌نام باز می‌شوند.</p>
-                </div>
-            </div>
+        <div class="fn-preview">
+            <article>
+                <img loading="lazy" alt="" src="assets/images/photo-1571019614242-c5c5dee9f50b.jpg" width="800" height="520">
+                <div><p class="fn-num">۰۱</p><h3>تمرین گروهی</h3><p>جلسه‌هایی که با دیگران و با یک زمان مشخص برگزار می‌شوند.</p></div>
+            </article>
+            <article>
+                <img loading="lazy" alt="" src="assets/images/photo-1517836357463-d25dfe09ce18.jpg" width="800" height="520">
+                <div><p class="fn-num">۰۲</p><h3>تجربه در فضای باز</h3><p>تمرین بیرون از سالن، وقتی رویداد تأیید شده باشد.</p></div>
+            </article>
+            <article>
+                <img loading="lazy" alt="" src="assets/images/photo-1581009146145-b5ef050c2e1e.jpg" width="800" height="520">
+                <div><p class="fn-num">۰۳</p><h3>رویدادهای ویژه</h3><p>برنامه‌هایی که بعد از بررسی، برای ثبت‌نام باز می‌شوند.</p></div>
+            </article>
         </div>
-        <p class="text-sm mt-6" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">رویدادهای تأییدشده، با شروع فیت‌نت اینجا معرفی می‌شوند.</p>
     </div>
 </section>
 
@@ -1331,9 +1158,9 @@
             <p class="text-sm mb-4" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">این فرم در نسخه نمایشی ارسال نمی‌شود.</p>
             <form class="mb-5" data-fitnet-form="early" novalidate>
                 <label class="block text-xs mb-1" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)" for="ea-name">نام</label>
-                <input id="ea-name" type="text" name="name" required autocomplete="name" class="bg-transparent text-sm p-3 w-full border mb-3 focus:outline-none" style="color:var(--fn-ink);border-color:color-mix(in srgb, var(--fn-ink) 18%, transparent)">
+                <input id="ea-name" type="text" name="name" required autocomplete="name" class="bg-transparent text-sm p-3 w-full border mb-3 focus:outline-none" style="border-color:transparent">
                 <label class="block text-xs mb-1" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)" for="ea-mobile">شماره موبایل</label>
-                <div class="flex border overflow-hidden" style="border-color:color-mix(in srgb, var(--fn-ink) 18%, transparent)"><input id="ea-mobile" type="tel" name="mobile" required inputmode="numeric" dir="ltr" autocomplete="tel" class="bg-transparent text-sm p-3 w-full focus:outline-none" style="color:var(--fn-ink)"><button class="font-bold uppercase text-xs px-4 font-oswald transition shrink-0 hover:bg-brand" style="background:var(--gold);color:var(--fn-fill);min-height:44px">ثبت</button></div>
+                <div class="flex border overflow-hidden" style="border-color:color-mix(in srgb, var(--fn-ink) 18%, transparent)"><input id="ea-mobile" type="tel" name="mobile" required inputmode="numeric" dir="ltr" autocomplete="tel" class="bg-transparent text-sm p-3 w-full focus:outline-none" ><button class="font-bold uppercase text-xs px-4 font-oswald transition shrink-0 hover:bg-brand" style="background:var(--gold);color:var(--fn-fill);min-height:44px">ثبت</button></div>
                 <p class="fn-form-msg text-xs mt-3" role="status"></p>
             </form>
             <div class="text-xs" style="color:color-mix(in srgb, var(--fn-ink) 86%, transparent)">
@@ -1370,6 +1197,21 @@ function aurumApp() {
     return {
         menu: null, menuTimer: null,
         searchOpen: false, mobOpen: false,
+        openDrawer() {
+            this.mobOpen = true;
+            this.$nextTick(() => document.querySelector('.mob-drawer button')?.focus());
+        },
+        closeDrawer() {
+            this.mobOpen = false;
+            document.getElementById('fn-menu-btn')?.focus();
+        },
+        dismiss() {
+            const drawer = this.mobOpen;
+            this.menu = null;
+            this.searchOpen = false;
+            this.mobOpen = false;
+            if (drawer) document.getElementById('fn-menu-btn')?.focus();
+        },
         sq: '', sf: 'all',
         openMenu(n) { clearTimeout(this.menuTimer); this.menu = n; this.searchOpen = false; },
         closeMenu()  { this.menuTimer = setTimeout(() => { this.menu = null; }, 120); }
@@ -1410,7 +1252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- Global GSAP Animations: skipped when the page owns motion through .gs-hero -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            if (document.querySelector('.gs-hero')) return;
+            return;
             if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                 gsap.registerPlugin(ScrollTrigger);
 
@@ -1538,118 +1380,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     </script>
 
-    <!-- Global GSAP Animations (gs-* classes) -->
+    <!-- Motion is owned by CSS: hero intro, menus, drawer. ScrollTrigger reveals stay off. -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-                gsap.registerPlugin(ScrollTrigger);
-
-                // === 1. HERO — Cinematic luxury reveal ===
-                const rtl = document.documentElement.dir === 'rtl';
-                const heroTl = gsap.timeline({ delay: 0.3 });
-                heroTl.from('.gs-hero .au-eyebrow, .gs-hero .au-badge', { y: 20, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' })
-                      .from('.gs-hero .au-title > span', { y: 80, opacity: 0, duration: 1, stagger: 0.12, ease: 'power4.out' }, '-=0.4')
-                      .from('.gs-hero .au-d3', { y: 25, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.5')
-                      .from('.gs-hero .au-cta-primary, .gs-hero .au-cta-ghost', { y: 20, opacity: 0, duration: 0.5, stagger: 0.1, ease: 'power3.out' }, '-=0.5')
-                      .from('.gs-hero .au-metric', { y: 30, opacity: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out' }, '-=0.4')
-                      .from('.float-rating', { x: rtl ? -30 : 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
-                      .from('.float-floors', { x: rtl ? 30 : -30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.8')
-                      .from('.gs-hero .au-side-head', { y: 25, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.6');
-
-                // Hero background image parallax
-                gsap.to('.gs-hero .absolute.inset-0 img', {
-                    yPercent: 12, scale: 1.08, ease: 'none',
-                    scrollTrigger: { trigger: '.gs-hero', start: 'top top', end: 'bottom top', scrub: true }
-                });
-                // Monogram rotates on scroll
-                gsap.to('.gs-hero .au-deco-monogram', {
-                    rotate: 8, ease: 'none',
-                    scrollTrigger: { trigger: '.gs-hero', start: 'top top', end: 'bottom top', scrub: true }
-                });
-
-                // === 2. AMENITIES — Head + content rows staggered ===
-                gsap.from('.gs-amenities .grid > div', {
-                    y: 50, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-amenities', start: 'top 80%', toggleActions: 'play none none reverse' }
-                });
-
-                // === 3. FACILITIES — Head + grid cards staggered ===
-                gsap.from('.gs-facilities .flex.flex-col.md\\:flex-row.justify-between > *', {
-                    y: 40, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-facilities', start: 'top 80%', toggleActions: 'play none none reverse' }
-                });
-                gsap.from('.gs-facilities .grid > div', {
-                    y: 60, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-facilities .grid', start: 'top 85%', toggleActions: 'play none none reverse' }
-                });
-
-                // === 4. TRAINERS — Head + swiper cards ===
-                gsap.from('.gs-trainers .text-center.mb-16 > *', {
-                    y: 30, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-trainers', start: 'top 80%', toggleActions: 'play none none reverse' }
-                });
-                gsap.from('.gs-trainers .grid > div, .gs-trainers .swiper-slide', {
-                    y: 60, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-trainers .grid, .gs-trainers .swiper', start: 'top 85%', toggleActions: 'play none none reverse' }
-                });
-
-                // === 5. MEMBERSHIP — Head + 3-tier cards (center highlighted pops) ===
-                gsap.fromTo('.gs-membership .flex.flex-col.md\\:flex-row.justify-between > *',
-                    { y: 30, opacity: 0 },
-                    {
-                        y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                        scrollTrigger: { trigger: '.gs-membership', start: 'top 80%', toggleActions: 'play none none none' }
-                    }
-                );
-                gsap.fromTo('.gs-membership .grid > div',
-                    { y: 70, opacity: 0 },
-                    {
-                        y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: 'power3.out',
-                        scrollTrigger: { trigger: '.gs-membership .grid', start: 'top 80%', toggleActions: 'play none none none' }
-                    }
-                );
-                gsap.fromTo('.gs-membership .grid > div:nth-child(2)',
-                    { scale: 0.85, opacity: 0 },
-                    {
-                        scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.2)',
-                        scrollTrigger: { trigger: '.gs-membership .grid', start: 'top 75%', toggleActions: 'play none none none' }
-                    }
-                );
-                // Safety net
-                setTimeout(() => {
-                    gsap.set('.gs-membership .flex.flex-col.md\\:flex-row.justify-between > *, .gs-membership .grid > div', { clearProps: 'opacity,transform' });
-                }, 1000);
-
-                // === 6. TESTIMONIALS — Head + quote slides reveal ===
-                gsap.from('.gs-testimonials .text-center.mb-14 > *', {
-                    y: 30, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-testimonials', start: 'top 80%', toggleActions: 'play none none reverse' }
-                });
-                gsap.from('.gs-testimonials .swiper-slide', {
-                    y: 50, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-testimonials .swiper', start: 'top 85%', toggleActions: 'play none none reverse' }
-                });
-
-                // === 7. FAQ — Head + accordion items staggered ===
-                gsap.from('.gs-faq .flex.flex-col.md\\:flex-row.justify-between > *', {
-                    y: 30, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-faq', start: 'top 80%', toggleActions: 'play none none reverse' }
-                });
-                gsap.from('.gs-faq .border-t', {
-                    y: 25, opacity: 0, duration: 0.5, stagger: 0.06, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-faq .border-t', start: 'top 85%', toggleActions: 'play none none reverse' }
-                });
-
-                // === 8. CTA — Content rise + bg gold-line accent ===
-                gsap.from('.gs-cta .max-w-7xl > div', {
-                    y: 50, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.gs-cta', start: 'top 75%', toggleActions: 'play none none reverse' }
-                });
-
-                ScrollTrigger.refresh();
-            }
-        });
+        document.addEventListener('DOMContentLoaded', function () {});
     </script>
 </body>
 

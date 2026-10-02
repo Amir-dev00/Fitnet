@@ -282,14 +282,15 @@ body.fn-lock { overflow: hidden; }
 .fn-top {
     position: sticky; top: 0; z-index: 30;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    padding: 16px 24px;
-    background: rgba(15,12,9,.92);
-    border-bottom: 1px solid color-mix(in srgb, var(--fitnet-indigo) 12%, transparent);
-    backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    background: var(--fitnet-indigo);
+    border-bottom: 1px solid color-mix(in srgb, var(--fitnet-white) 18%, transparent);
+    backdrop-filter: none;
 }
 .fn-top nav { display: flex; flex-wrap: wrap; gap: 8px 16px; }
-.fn-top a { color: color-mix(in srgb, var(--fitnet-indigo) 75%, transparent); text-decoration: none; font-size: .85rem; min-height: 44px; display: inline-flex; align-items: center; }
-.fn-top a:hover { color: var(--fitnet-indigo); }
+.fn-top a { color: var(--fitnet-white); text-decoration: none; font-size: .85rem; min-height: 44px; display: inline-flex; align-items: center; }
+.fn-top a:hover { color: var(--fitnet-light-blue); }
 .fn-foot { border-top: 1px solid color-mix(in srgb, var(--fitnet-indigo) 12%, transparent); padding: 28px 24px 40px; color: color-mix(in srgb, var(--fitnet-indigo) 72%, transparent); font-size: .875rem; font-weight: 400; line-height: 1.75; }
 .fn-foot .fn-wrap { padding: 0; display: flex; flex-wrap: wrap; gap: 12px 22px; justify-content: space-between; }
 .fn-crumbs { font-size: .8125rem; font-weight: 400; line-height: 1.75; color: color-mix(in srgb, var(--fitnet-indigo) 72%, transparent); margin-bottom: 18px; }
