@@ -1067,38 +1067,8 @@ html.fn-reveal .gs-hero [data-fn-enter="cta"] {
   }
 }
 
-#fn-pre {
-  display: none;
-  background: transparent;
-}
-
 html.fn-preloading {
   overflow: hidden;
-}
-
-html.fn-preloading #fn-pre {
-  display: block;
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  min-height: 100dvh;
-  background: transparent;
-  pointer-events: auto;
-}
-
-#fn-pre video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  background: transparent;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-html.fn-preloading.fn-pre-frame #fn-pre video {
-  visibility: visible;
 }
 
 /* Alpine owns these panels. Keep them out of sight until it initialises. */
@@ -1111,9 +1081,8 @@ html[dir="rtl"]:not(.fn-alpine-ready) .mob-drawer:not(.translate-x-0) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #fn-pre {
+  #fitnet-preloader {
     display: none !important;
-    animation: none !important;
   }
 }
 
