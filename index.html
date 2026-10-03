@@ -5,19 +5,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="preload" href="assets/fonts/Estedad-Variable.woff2" as="font" type="font/woff2" crossorigin>
     <script>
+        // Homepage brand intro. One owner: preparing -> playing -> finished.
+        // Playback source is the alpha WebM only. The H.264 export has no alpha.
         (function () {
-            var reduce = false;
-            try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-            if (reduce) return;
-            var seen = false;
-            try { seen = sessionStorage.getItem('fn-preload') === '1'; } catch (e) {}
-            if (seen) return;
-            try { sessionStorage.setItem('fn-preload', '1'); } catch (e) {}
-            document.documentElement.classList.add('fn-preloading');
+            var root = document.documentElement;
+            var pre = {
+                state: 'preparing',
+                started: 0,
+                revealed: false,
+                src: 'assets/video/fitnet-preloader.webm',
+                startupFor: 1200,
+                blockFor: 5000,
+                timer: 0,
+                startup: 0,
+                stall: 0,
+                frame: 0,
+                drop: function () {},
+                replay: function () {
+                    try { sessionStorage.removeItem('fn-preload'); } catch (e) {}
+                    location.reload();
+                },
+                reveal: function () {
+                    if (pre.revealed) return;
+                    pre.revealed = true;
+                    root.classList.add('fn-reveal');
+                },
+                finish: function () {
+                    if (pre.state === 'finished') return;
+                    pre.state = 'finished';
+                    clearTimeout(pre.timer);
+                    clearTimeout(pre.startup);
+                    clearTimeout(pre.stall);
+                    try { pre.drop(); } catch (e) {}
+                    pre.reveal();
+                    root.classList.remove('fn-preloading');
+                    root.classList.remove('fn-pre-frame');
+                    var page = document.getElementById('fn-page');
+                    if (page) page.inert = false;
+                    var node = document.getElementById('fn-pre');
+                    var video = node && node.querySelector('video');
+                    if (video) {
+                        try { video.pause(); } catch (e) {}
+                        video.removeAttribute('src');
+                        try { video.load(); } catch (e) {}
+                    }
+                    if (node && node.parentNode) node.parentNode.removeChild(node);
+                    if (document.body) document.body.removeAttribute('x-cloak');
+                }
+            };
+            window.__fnPre = pre;
+            document.addEventListener('alpine:initialized', function () {
+                root.classList.add('fn-alpine-ready');
+            });
+            // Alpine owns the body cloak. If it never arrives, the page still shows.
+            setTimeout(function () {
+                if (!window.Alpine && document.body) document.body.removeAttribute('x-cloak');
+            }, 5000);
+            var q = location.search;
+            if (q.indexOf('fn-pre=1') < 0) {
+                if (q.indexOf('fn-pre=0') > -1) { pre.state = 'skipped'; return; }
+                if (document.visibilityState === 'hidden') { pre.state = 'skipped'; return; }
+                try {
+                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { pre.state = 'skipped'; return; }
+                } catch (e) {}
+                try {
+                    if (sessionStorage.getItem('fn-preload') === '1') { pre.state = 'skipped'; return; }
+                } catch (e) {}
+            }
+            try {
+                var probe = document.createElement('video');
+                if (!probe.canPlayType('video/webm; codecs="vp9"') && !probe.canPlayType('video/webm')) {
+                    pre.state = 'skipped';
+                    return;
+                }
+            } catch (e) {
+                pre.state = 'skipped';
+                return;
+            }
+            pre.started = Date.now();
+            root.classList.add('fn-preloading');
+            var link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'video';
+            link.href = pre.src;
+            document.head.appendChild(link);
+            // Armed where blocking begins. The 5s cap is a failure escape, not the edit.
+            pre.startup = setTimeout(function () {
+                if (pre.state === 'preparing') pre.finish();
+            }, pre.startupFor);
+            pre.timer = setTimeout(pre.finish, pre.blockFor);
         })();
     </script>
-    <link rel="preload" href="assets/fonts/Estedad-Variable.woff2" as="font" type="font/woff2" crossorigin>
     <title>فیت‌نت | باشگاه و رویداد ورزشی با یک اعتبار</title>
     <meta name="description" content="فیت‌نت یک پلتفرم دسترسی به باشگاه‌های همکار و رویدادهای ورزشی است. باشگاه پیدا کن، اعتبار بگیر، رزرو کن و با QR وارد شو.">
     <link rel="canonical" href="https://fitnet.ir/">
@@ -38,7 +118,7 @@
     <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
     <meta name="theme-color" content="#170B93">
     <meta property="og:image" content="https://fitnet.ir/assets/images/photo-1534438327276-14e5300c3a48.jpg">
-    <script defer src="assets/js/alpine.min.js"></script>
+    <script defer src="assets/js/alpine.min.js" onerror="document.body &amp;&amp; document.body.removeAttribute('x-cloak')"></script>
     <style>
         :root {
             --fitnet-indigo: #170B93;
@@ -498,44 +578,137 @@
     <link rel="stylesheet" href="assets/css/brand.css">
 </head>
 <body class="antialiased" x-data="aurumApp()" x-cloak @keydown.escape.window="dismiss()">
-<script>
-    if (document.documentElement.classList.contains('fn-preloading')) {
-        document.body.removeAttribute('x-cloak');
-    }
-</script>
 <div id="fn-pre" aria-hidden="true">
-    <div class="fn-pre-mark">
-        <img class="fn-pre-ring" alt="" width="1124" height="1078" src="assets/brand/preloader-ring.png">
-        <img class="fn-pre-dot" alt="" width="1124" height="1078" src="assets/brand/preloader-dot.png">
-    </div>
+    <video id="fn-pre-video" muted playsinline preload="none" disablepictureinpicture disableremoteplayback width="1920" height="1080"></video>
 </div>
 <div id="fn-page">
 <script>
     (function () {
         var root = document.documentElement;
-        if (!root.classList.contains('fn-preloading')) return;
-        var pre = document.getElementById('fn-pre');
+        var pre = window.__fnPre;
+        var node = document.getElementById('fn-pre');
         var page = document.getElementById('fn-page');
+        if (!pre || pre.state !== 'preparing' || !node) {
+            root.classList.add('fn-reveal');
+            if (pre) pre.revealed = true;
+            if (node && node.parentNode) node.parentNode.removeChild(node);
+            return;
+        }
+        // The page stays mounted and laid out underneath, just out of reach.
         if (page) page.inert = true;
-        var done = false;
-        function finish() {
-            if (done) return;
-            done = true;
-            root.classList.remove('fn-preloading');
-            if (page) page.inert = false;
-            if (pre && pre.parentNode) pre.parentNode.removeChild(pre);
+        document.body.removeAttribute('x-cloak');
+
+        var video = node.querySelector('video');
+        if (!video) { pre.finish(); return; }
+
+        var alphaChecked = false;
+
+        function onPageShow(event) {
+            if (event.persisted) pre.finish();
         }
-        var timer = setTimeout(finish, 1500);
-        if (pre) {
-            pre.addEventListener('animationend', function (event) {
-                if (event.animationName !== 'fn-pre-out') return;
-                clearTimeout(timer);
-                finish();
-            });
+        function onHidden() {
+            if (document.hidden) pre.finish();
         }
-        window.addEventListener('pageshow', function (event) {
-            if (event.persisted) finish();
-        });
+        function onPlaying() {
+            if (pre.state !== 'preparing') return;
+            pre.state = 'playing';
+            try { sessionStorage.setItem('fn-preload', '1'); } catch (e) {}
+            clearTimeout(pre.startup);
+            video.playbackRate = 1;
+            if (typeof video.requestVideoFrameCallback === 'function') {
+                pre.frame = video.requestVideoFrameCallback(onFrame);
+            }
+        }
+        function onEnded() {
+            pre.finish();
+        }
+        function onError() {
+            pre.finish();
+        }
+        function onStalled() {
+            if (pre.state === 'finished') return;
+            clearTimeout(pre.stall);
+            var mark = video.currentTime;
+            pre.stall = setTimeout(function () {
+                if (pre.state === 'finished' || video.ended) return;
+                if (video.currentTime <= mark + 0.05) pre.finish();
+            }, 1000);
+        }
+        function onTime() {
+            if (pre.state === 'finished') return;
+            clearTimeout(pre.stall);
+            sync(video.currentTime);
+        }
+        function onFrame() {
+            if (pre.state === 'finished') return;
+            sync(video.currentTime);
+            if (pre.state === 'playing' && typeof video.requestVideoFrameCallback === 'function') {
+                pre.frame = video.requestVideoFrameCallback(onFrame);
+            }
+        }
+        function sync(t) {
+            if (t >= 2.45) pre.reveal();
+            if (t >= 2.8) sampleAlpha();
+        }
+        function sampleAlpha() {
+            if (alphaChecked || pre.state === 'finished') return;
+            alphaChecked = true;
+            try {
+                var canvas = document.createElement('canvas');
+                canvas.width = 4;
+                canvas.height = 4;
+                var ctx = canvas.getContext('2d', { willReadFrequently: true });
+                ctx.drawImage(video, 0, 0, 4, 4, 0, 0, 4, 4);
+                var px = ctx.getImageData(0, 0, 1, 1).data;
+                var opaque = px[3] >= 250;
+                var orange = px[0] > 180 && px[1] > 60 && px[1] < 180 && px[2] < 120;
+                var black = px[0] < 8 && px[1] < 8 && px[2] < 8;
+                if (opaque && (orange || black)) pre.finish();
+            } catch (e) {
+                pre.finish();
+            }
+        }
+
+        var playbackRequested = false;
+        function onReady() {
+            if (playbackRequested || pre.state !== 'preparing') return;
+            playbackRequested = true;
+            root.classList.add('fn-pre-frame');
+            var played = video.play();
+            if (played && played.catch) played.catch(function () { pre.finish(); });
+        }
+
+        window.addEventListener('pageshow', onPageShow);
+        document.addEventListener('visibilitychange', onHidden);
+        video.addEventListener('loadeddata', onReady);
+        video.addEventListener('playing', onPlaying);
+        video.addEventListener('ended', onEnded);
+        video.addEventListener('error', onError);
+        video.addEventListener('stalled', onStalled);
+        video.addEventListener('timeupdate', onTime);
+        pre.drop = function () {
+            window.removeEventListener('pageshow', onPageShow);
+            document.removeEventListener('visibilitychange', onHidden);
+            video.removeEventListener('loadeddata', onReady);
+            video.removeEventListener('playing', onPlaying);
+            video.removeEventListener('ended', onEnded);
+            video.removeEventListener('error', onError);
+            video.removeEventListener('stalled', onStalled);
+            video.removeEventListener('timeupdate', onTime);
+            if (pre.frame && video.cancelVideoFrameCallback) {
+                try { video.cancelVideoFrameCallback(pre.frame); } catch (e) {}
+            }
+        };
+
+        video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
+        video.loop = false;
+        video.controls = false;
+        video.playbackRate = 1;
+        video.preload = 'auto';
+        video.src = pre.src;
+        if (video.readyState >= 2) onReady();
     })();
 </script>
 
@@ -795,7 +968,7 @@
         <div class="hero-copy flex flex-col justify-center py-12 lg:py-16">
 
             <!-- Top eyebrow + badge row -->
-            <div class="flex flex-wrap items-center gap-6 mb-8">
+            <div class="flex flex-wrap items-center gap-6 mb-8" data-fn-enter="eyebrow">
                 <span class="au-eyebrow">
                     <span class="ornament"></span>
                     <span>یک حساب. یک کیف پول. انتخاب‌های بیشتر.</span>
@@ -810,13 +983,13 @@
             </h1>
 
             <!-- Description with ornament -->
-            <div class="flex items-start gap-5 max-w-xl mb-8">
+            <div class="flex items-start gap-5 max-w-xl mb-8" data-fn-enter="copy">
                 <div class="hero-rule flex-shrink-0 mt-2 hidden md:block" style="width:30px;height:1px;background:linear-gradient(to right,var(--gold),transparent)"></div>
                 <p class="text-base md:text-lg" style="color:color-mix(in srgb, var(--fn-ink) 88%, transparent)">باشگاه‌های همکار و رویدادهای ورزشی را کشف کن، زمان مناسب را رزرو کن و با اعتبار فیت‌نت و QR وارد شو.</p>
             </div>
 
             <!-- CTAs -->
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-wrap gap-3" data-fn-enter="cta">
                 <a href="#download" class="au-cta-primary group">
                     <span>شروع با فیت‌نت</span>
                     <svg class="icon-fwd w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
