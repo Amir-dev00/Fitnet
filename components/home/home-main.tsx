@@ -1,7 +1,6 @@
 import Link from "next/link"
 
 import { DemoForm } from "@/components/forms/demo-form"
-import { FitnetMarquee } from "@/components/home/fitnet-marquee"
 import { HeroDownloadActions } from "@/components/home/hero-download-actions"
 import { faqs } from "@/lib/content"
 import { HeroAurora } from "@/components/motion/hero-aurora"
@@ -26,8 +25,6 @@ export function HomeMain() {
           </div>
         </div>
       </section>
-
-      <FitnetMarquee />
 
       <section id="how-it-works" className="py-28 px-6 gs-amenities" style={{ background: "var(--fn-fill)" }}>
         <div className="max-w-[1440px] mx-auto">
