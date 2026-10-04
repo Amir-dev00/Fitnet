@@ -269,3 +269,28 @@
   :global(html[dir="rtl"]) .section .copy h3 { font-size: 23px; margin-block: 9px 8px; }
   :global(html[dir="rtl"]) .section .copy p { font-size: 14px; max-inline-size: none; line-height: 2.1; }
 }
+
+/* Fill the final marker's white border using the shared stage clock. */
+.section .marker .entryProgress {
+  position: absolute;
+  inset: -5px;
+  inline-size: 48px;
+  block-size: 48px;
+  pointer-events: none;
+  transform: rotate(-90deg);
+}
+.entryProgress circle {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--entry-progress, 0));
+  stroke-linecap: butt;
+}
+.navigation[data-phase="restarting"] .entryProgress {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .entryProgress { display: none !important; }
+}
