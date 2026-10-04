@@ -171,6 +171,7 @@ export default function FitnetJourney() {
   const strip = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const segmentRefs = useRef<Array<HTMLElement | null>>([null, null, null]);
+  const entryMarkerRef = useRef<HTMLSpanElement>(null);
   const activeRef = useRef(0);
   const phaseRef = useRef<Phase>("playing");
   const completedMaskRef = useRef(0);
@@ -190,6 +191,16 @@ export default function FitnetJourney() {
 
   const paintSegments = useCallback((stageIndex: number, progress: number, allComplete = false) => {
     applySegmentFills(segmentRefs.current, stageIndex, progress, allComplete);
+    // The final marker uses the same pause/resume clock as the connector lines.
+    const entryProgress = allComplete ? 1 : stageIndex === LAST_STAGE ? Math.min(1, Math.max(0, progress)) : 0;
+    const entry = entryMarkerRef.current;
+    if (!entry) return;
+    entry.style.setProperty("--entry-progress", String(entryProgress));
+    // Hide at exactly 0 so a 12-o'clock stroke artifact cannot show before fill starts.
+    entry.style.setProperty("--entry-ring-visibility", entryProgress > 0 ? "visible" : "hidden");
+    // At exactly 1, switch to a continuous stroke so the 12-o'clock dash seam cannot remain.
+    if (entryProgress === 1) entry.setAttribute("data-ring-complete", "true");
+    else entry.removeAttribute("data-ring-complete");
   }, []);
 
   const beginPhase = useCallback((nextPhase: Phase, remaining = phaseDuration(nextPhase)) => {
@@ -215,7 +226,7 @@ export default function FitnetJourney() {
     pb.startedAt = null;
     phaseRef.current = "playing";
 
-    applySegmentFills(segmentRefs.current, next, 0);
+    paintSegments(next, 0);
     activeRef.current = next;
     completedMaskRef.current = marksBefore(next);
     setPlayNonce(value => value + 1);
@@ -240,7 +251,7 @@ export default function FitnetJourney() {
     });
 
     if (focusTab) tabs.current[next]?.focus({ preventScroll: true });
-  }, []);
+  }, [paintSegments]);
 
   useEffect(() => {
     activeRef.current = active;
@@ -365,36 +376,32 @@ export default function FitnetJourney() {
       const progress = Math.min(1, Math.max(0, consumed / duration));
       const mobile = isMobileRef.current;
 
-      if (activePhase === "playing" && stageAtStart < SEGMENT_COUNT) {
+      if (activePhase === "playing") {
+        // Final step ring uses the same progress clock; do not force allComplete while playing.
         paintSegments(stageAtStart, progress);
-      } else if (activePhase === "playing") {
-        paintSegments(stageAtStart, 1, true);
       } else if (activePhase === "completed") {
         paintSegments(LAST_STAGE, 1, true);
       }
 
-      // Circle completion shares the same timeline as the connector fill.
-      // Mobile: mark when the line visually reaches its end (no early offset, no CSS lag).
-      // Desktop: keep the existing D − 150ms early check.
-      const shouldMarkComplete =
-        activePhase === "playing" &&
-        (mobile
-          ? stageAtStart < SEGMENT_COUNT
-            ? progress >= LINE_COMPLETE_PROGRESS
-            : elapsed >= budget
-          : consumed >= duration - EARLY_CHECK_MS);
+      // Steps 1–3: mark complete on the existing early / line-complete thresholds.
+      // Final step: never early-complete — keep number + active orange until elapsed >= budget.
+      if (activePhase === "playing" && stageAtStart !== LAST_STAGE) {
+        const shouldMarkComplete = mobile
+          ? progress >= LINE_COMPLETE_PROGRESS
+          : consumed >= duration - EARLY_CHECK_MS;
 
-      if (shouldMarkComplete) {
-        const bit = 1 << stageAtStart;
-        if ((completedMaskRef.current & bit) === 0) {
-          flushSync(() => {
-            completedMaskRef.current |= bit;
-            setState(current => (
-              current.completedMask === completedMaskRef.current
-                ? current
-                : { ...current, completedMask: completedMaskRef.current }
-            ));
-          });
+        if (shouldMarkComplete) {
+          const bit = 1 << stageAtStart;
+          if ((completedMaskRef.current & bit) === 0) {
+            flushSync(() => {
+              completedMaskRef.current |= bit;
+              setState(current => (
+                current.completedMask === completedMaskRef.current
+                  ? current
+                  : { ...current, completedMask: completedMaskRef.current }
+              ));
+            });
+          }
         }
       }
 
@@ -404,14 +411,14 @@ export default function FitnetJourney() {
 
         if (activePhase === "playing") {
           const current = activeRef.current;
-          completedMaskRef.current |= (1 << current);
 
           if (current < LAST_STAGE) {
+            completedMaskRef.current |= (1 << current);
             pb.remaining = STAGE_MS;
             paintSegments(current, 1);
             const next = current + 1;
             flushSync(() => {
-              applySegmentFills(segmentRefs.current, next, 0);
+              paintSegments(next, 0);
               activeRef.current = next;
               phaseRef.current = "playing";
               pb.phase = "playing";
@@ -430,10 +437,10 @@ export default function FitnetJourney() {
             return;
           }
 
-          // Stage 4 finished: all markers complete, then hold.
-          paintSegments(LAST_STAGE, 1, true);
-          completedMaskRef.current = ALL_MARKS;
+          // Final stage: ring at 100%, completed bit, and completed phase in one paint.
           flushSync(() => {
+            paintSegments(LAST_STAGE, 1, true);
+            completedMaskRef.current = ALL_MARKS;
             beginPhase("completed");
             activeRef.current = LAST_STAGE;
             setState(state => ({
@@ -612,9 +619,17 @@ export default function FitnetJourney() {
                 >
                   <span
                     className={`${s.marker}${settlePulse && index === 0 && phase === "playing" ? ` ${s.markerPulse}` : ""}`}
+                    ref={index === LAST_STAGE ? entryMarkerRef : undefined}
                     aria-hidden="true"
                   >
-                    {showCheck(index) ? <Icon kind="check" /> : numbers[index]}
+                    {index === LAST_STAGE && (
+                      <svg className={s.entryProgress} viewBox="0 0 52 52" aria-hidden="true">
+                        <circle cx="26" cy="26" r="21.5" pathLength="1" />
+                      </svg>
+                    )}
+                    <span className={s.markerFace}>
+                      {showCheck(index) ? <Icon kind="check" /> : numbers[index]}
+                    </span>
                   </span>
                   <span className={s.tabLabel}>{stage.label}</span>
                 </button>
