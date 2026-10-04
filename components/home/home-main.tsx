@@ -1,5 +1,6 @@
 import { EventsIntro } from "@/components/home/events-intro"
 import { FinalCta } from "@/components/home/final-cta"
+import FitnetDiscovery from "@/components/home/discovery/FitnetDiscovery"
 import FitnetJourney from "@/components/home/FitnetJourney"
 import { HeroDownloadActions } from "@/components/home/hero-download-actions"
 import { HomeFaq } from "@/components/home/home-faq"
@@ -34,6 +35,7 @@ export function HomeMain() {
       </section>
 
       <FitnetJourney />
+      <FitnetDiscovery />
       <ProductPanels />
       <EventsIntro />
       <PartnershipBlock />

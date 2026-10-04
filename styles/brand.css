@@ -2000,8 +2000,7 @@ html[dir="rtl"]:not(.fn-alpine-ready) .fn-nav-drawer[data-starting-style] {
 
 @media (min-width: 768px) {
   .fn-panels {
-    grid-template-columns: 1.35fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
   }
 
   .fn-panel-lead {
