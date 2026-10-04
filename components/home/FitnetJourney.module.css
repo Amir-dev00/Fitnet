@@ -25,17 +25,63 @@
   place-items: center;
   inline-size: 36px;
   block-size: 36px;
-  border: 1px solid #dce5f4;
+  border: 1px solid var(--blue);
   border-radius: 999px;
-  background: #fff;
+  background: var(--blue);
   color: var(--indigo);
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
-  transition: background 180ms, border-color 180ms;
+  transition: background 180ms, border-color 180ms, filter 180ms;
 }
 .playbackToggle svg { inline-size: 16px; block-size: 16px; }
 .playbackToggle:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
+.controls {
+  direction: rtl;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-block-start: 18px;
+  padding-inline: 4px;
+}
+.controlsCenter {
+  display: grid;
+  place-items: center;
+  min-inline-size: 36px;
+  min-block-size: 36px;
+}
+.stepButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 40px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background 180ms, border-color 180ms, opacity 180ms, filter 180ms;
+}
+.stepPrev {
+  background: var(--indigo);
+  border-color: var(--indigo);
+}
+.stepNext {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+/* RTL grid: first column is right → قبلی راست، بعدی چپ؛ هر دو نزدیک Stop */
+.controls > .stepButton:first-child { justify-self: end; }
+.controls > .stepButton:last-child { justify-self: start; }
+.stepButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.stepButton:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
 .strip { max-inline-size: 100%; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; padding-block: 8px 18px; }
 .navigation { position: relative; min-inline-size: 280px; direction: rtl; }
 .tabs { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); direction: rtl; }
@@ -68,44 +114,8 @@
   opacity: 1;
 }
 .tab { border: 0; border-radius: 12px; padding: 0 4px 10px; background: transparent; color: var(--muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 12px; min-block-size: 88px; min-inline-size: 0; }
-.marker { position: relative; z-index: 1; display: grid; place-items: center; inline-size: 48px; block-size: 48px; border: 5px solid white; border-radius: 50%; background: #edf3fc; color: #596078; font-size: 15px; font-weight: 750; transition: background 220ms, box-shadow 220ms; }
-.markerFace { position: relative; z-index: 1; display: grid; place-items: center; }
-.markerFace svg { inline-size: 19px; block-size: 19px; opacity: 1; transition: none; }
-/* Fill the final marker's white border using the shared stage clock (STAGE_MS). */
-.marker {
-  overflow: visible;
-}
-.marker .entryProgress {
-  position: absolute;
-  /* 52 viewBox / box, centered on the 48px marker: 2u padding so the stroke is not clipped. */
-  inset: -2px;
-  width: 52px;
-  height: 52px;
-  inline-size: 52px;
-  block-size: 52px;
-  pointer-events: none;
-  z-index: 2;
-  overflow: visible;
-  transform: rotate(-90deg);
-  /* Default hidden so SSR / pre-step-4 never shows a 12-o'clock stroke speck. */
-  visibility: var(--entry-ring-visibility, hidden);
-}
-.marker .entryProgress circle {
-  fill: none;
-  stroke: #e36f2e;
-  stroke-width: 5;
-  stroke-dasharray: 1;
-  stroke-dashoffset: calc(1 - var(--entry-progress, 0));
-  stroke-linecap: butt;
-}
-.marker[data-ring-complete="true"] .entryProgress {
-  /* Full circle: drop the dash start-angle transform that can leave a raster seam. */
-  transform: none;
-}
-.marker[data-ring-complete="true"] .entryProgress circle {
-  stroke-dasharray: none;
-  stroke-dashoffset: 0;
-}
+.marker { position: relative; z-index: 1; display: grid; place-items: center; inline-size: 48px; block-size: 48px; border: 5px solid white; border-radius: 50%; background: #edf3fc; color: #596078; font-size: 15px; font-weight: 750; transition: background 220ms, box-shadow 220ms; overflow: visible; }
+.marker > svg:not(.entryProgress) { inline-size: 19px; block-size: 19px; opacity: 1; transition: none; }
 /* Mobile: blue checked state must appear in the same paint as line completion. */
 @media (max-width: 700px) {
   .navigation:not([data-phase="restarting"]) .marker {
@@ -119,10 +129,6 @@
 .tab[data-status="active"] .tabLabel { font-weight: 800; }
 .tab[data-status="complete"] { color: var(--indigo); }
 .tab[data-status="complete"] .marker { background: var(--indigo); color: #fff; }
-/* Final step: blue + check must land in the same paint as ring = 100% (no 220ms lag). */
-.tab[data-status="complete"] .marker:has(.entryProgress) {
-  transition: none;
-}
 .navigation[data-phase="restarting"] .trackSegment > i {
   opacity: 0;
   transition: opacity 400ms ease;
@@ -137,18 +143,14 @@
   box-shadow: none;
   transition: background 400ms ease, box-shadow 400ms ease, color 400ms ease;
 }
-.navigation[data-phase="restarting"] .tab .markerFace svg {
+.navigation[data-phase="restarting"] .tab .marker > svg:not(.entryProgress) {
   opacity: 0;
   transition: opacity 320ms ease;
-}
-.navigation[data-phase="restarting"] .entryProgress {
-  opacity: 0;
-  transition: opacity 400ms ease;
 }
 .navigation[data-phase="completed"] .trackSegment > i {
   opacity: 1;
 }
-.tab:focus-visible, .playbackToggle:focus-visible, .panel:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
+.tab:focus-visible, .playbackToggle:focus-visible, .stepButton:focus-visible, .panel:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
 .panelShell { margin-block-start: 12px; border: 1px solid #dce5f4; border-radius: 28px; background: #fff; box-shadow: 0 14px 42px rgb(23 11 147 / 4%); overflow: hidden; }
 .panel { border-radius: 24px; outline-offset: -4px !important; }
 .panel[hidden] { display: none; }
@@ -217,7 +219,9 @@
 .entrySuccess { margin-block-start: 6px; padding: 5px; animation-delay: 850ms; }
 @media (hover: hover) {
   .tab:hover .tabLabel { color: var(--indigo); }
-  .playbackToggle:hover { background: #edf3fe; border-color: #aabfe5; }
+  .playbackToggle:hover { filter: brightness(0.96); }
+  .stepPrev:hover:not(:disabled) { filter: brightness(1.08); }
+  .stepNext:hover:not(:disabled) { filter: brightness(1.06); }
 }
 @keyframes enter { from { opacity: 0; transform: translateX(var(--enter-x)); } to { opacity: 1; transform: translateX(0); } }
 @keyframes enterSoft { from { opacity: 0; transform: translateX(var(--enter-x)); } to { opacity: 1; transform: translateX(0); } }
@@ -248,11 +252,12 @@
   .copy h3 { font-size: 23px; margin-block: 9px 8px; }
   .copy p { font-size: 14px; max-inline-size: none; }
   .preview { inline-size: 100%; max-inline-size: 400px; justify-self: center; padding: 10px; }
+  .controls { gap: 8px; margin-block-start: 14px; }
+  .stepButton { min-block-size: 38px; padding: 8px 12px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .section *, .section *::before, .section *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .outgoing, .scan { display: none; }
-  .entryProgress { display: none !important; }
 }
 
 /* Shield against high-specificity legacy RTL typography without changing other sections. */
@@ -288,7 +293,8 @@
   letter-spacing: 0;
 }
 :global(html[dir="rtl"]) .section .tab,
-:global(html[dir="rtl"]) .section .playbackToggle {
+:global(html[dir="rtl"]) .section .playbackToggle,
+:global(html[dir="rtl"]) .section .stepButton {
   font-family: inherit;
   font-weight: inherit;
   letter-spacing: 0;
@@ -314,3 +320,45 @@
   :global(html[dir="rtl"]) .section .copy h3 { font-size: 23px; margin-block: 9px 8px; }
   :global(html[dir="rtl"]) .section .copy p { font-size: 14px; max-inline-size: none; line-height: 2.1; }
 }
+
+/* Mobile connectors cover the visible edge-to-edge gap, not hidden marker halves.
+   Each original grid cell spans two marker centres; each marker has radius 24px. */
+@media (max-width: 700px) {
+  .trackSegment { margin-inline: 24px; }
+  .navigation:not([data-phase="restarting"]) .tab .marker,
+  .navigation:not([data-phase="restarting"]) .tab .marker > svg:not(.entryProgress) {
+    transition: none;
+  }
+}
+
+/* A 1px padded viewport prevents clipping without moving the actual 48px ring. */
+.section .marker .entryProgress {
+  position: absolute;
+  inset: -6px;
+  inline-size: 50px;
+  block-size: 50px;
+  pointer-events: none;
+  transform: rotate(-90deg);
+  visibility: var(--entry-ring-visibility, hidden);
+}
+.entryProgress circle {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--entry-progress, 0));
+  stroke-linecap: butt;
+  transition: none;
+}
+.marker[data-ring-complete] .entryProgress circle {
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+}
+.navigation[data-phase="restarting"] .tab .marker .entryProgress {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .section .marker .entryProgress { display: none; }
+}
+

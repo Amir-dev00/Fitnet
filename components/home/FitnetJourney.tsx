@@ -12,7 +12,7 @@ const stages = [
   { label: "وارد شو", title: "آماده شروعی", description: "QR یا کد رزرو را هنگام ورود نشان بده و تمرینت را شروع کن." },
 ] as const;
 const numbers = ["۱", "۲", "۳", "۴"];
-const STAGE_MS = 4500;
+const STAGE_MS = 3600;
 const EARLY_CHECK_MS = 150;
 const COMPLETED_HOLD_MS = 600;
 const RESTART_MS = 400;
@@ -21,8 +21,6 @@ const LAST_STAGE = stages.length - 1;
 const ALL_MARKS = (1 << stages.length) - 1;
 /** Matches FitnetJourney mobile layout breakpoint in the module CSS. */
 const JOURNEY_MOBILE_MQ = "(max-width: 700px)";
-/** Progress threshold so float noise cannot block line/circle completion. */
-const LINE_COMPLETE_PROGRESS = 1 - 1e-4;
 
 type Phase = "playing" | "completed" | "restarting";
 
@@ -191,16 +189,13 @@ export default function FitnetJourney() {
 
   const paintSegments = useCallback((stageIndex: number, progress: number, allComplete = false) => {
     applySegmentFills(segmentRefs.current, stageIndex, progress, allComplete);
-    // The final marker uses the same pause/resume clock as the connector lines.
-    const entryProgress = allComplete ? 1 : stageIndex === LAST_STAGE ? Math.min(1, Math.max(0, progress)) : 0;
-    const entry = entryMarkerRef.current;
-    if (!entry) return;
-    entry.style.setProperty("--entry-progress", String(entryProgress));
-    // Hide at exactly 0 so a 12-o'clock stroke artifact cannot show before fill starts.
-    entry.style.setProperty("--entry-ring-visibility", entryProgress > 0 ? "visible" : "hidden");
-    // At exactly 1, switch to a continuous stroke so the 12-o'clock dash seam cannot remain.
-    if (entryProgress === 1) entry.setAttribute("data-ring-complete", "true");
-    else entry.removeAttribute("data-ring-complete");
+    const marker = entryMarkerRef.current;
+    if (!marker) return;
+    const ratio = allComplete ? 1 : stageIndex === LAST_STAGE ? Math.min(1, Math.max(0, progress)) : 0;
+    marker.style.setProperty("--entry-progress", String(ratio));
+    marker.style.setProperty("--entry-ring-visibility", ratio > 0 ? "visible" : "hidden");
+    // A full circle must be undashed: never leave a dash seam at 100%.
+    marker.toggleAttribute("data-ring-complete", ratio === 1);
   }, []);
 
   const beginPhase = useCallback((nextPhase: Phase, remaining = phaseDuration(nextPhase)) => {
@@ -217,6 +212,12 @@ export default function FitnetJourney() {
   const select = useCallback((next: number, options: { focusTab?: boolean } = {}) => {
     if (next < 0 || next >= stages.length) return;
     const { focusTab = false } = options;
+
+    // Any step control except Stop resumes autoplay so the bar fills again.
+    userPausedRef.current = false;
+    setUserPaused(false);
+    focusInsideRef.current = false;
+    setFocusInside(false);
 
     const pb = playback.current;
     pb.generation += 1;
@@ -376,32 +377,36 @@ export default function FitnetJourney() {
       const progress = Math.min(1, Math.max(0, consumed / duration));
       const mobile = isMobileRef.current;
 
-      if (activePhase === "playing") {
-        // Final step ring uses the same progress clock; do not force allComplete while playing.
+      if (activePhase === "playing" && stageAtStart < SEGMENT_COUNT) {
+        paintSegments(stageAtStart, progress);
+      } else if (activePhase === "playing") {
         paintSegments(stageAtStart, progress);
       } else if (activePhase === "completed") {
         paintSegments(LAST_STAGE, 1, true);
       }
 
-      // Steps 1–3: mark complete on the existing early / line-complete thresholds.
-      // Final step: never early-complete — keep number + active orange until elapsed >= budget.
-      if (activePhase === "playing" && stageAtStart !== LAST_STAGE) {
-        const shouldMarkComplete = mobile
-          ? progress >= LINE_COMPLETE_PROGRESS
-          : consumed >= duration - EARLY_CHECK_MS;
+      // Mobile connectors now span only the visible gap between marker edges.
+      // Complete in the same frame as that gap fills; the last ring never completes early.
+      // Parentheses keep desktop early-check for steps 1–3 only.
+      const shouldMarkComplete =
+        activePhase === "playing" &&
+        ((stageAtStart === LAST_STAGE || mobile)
+          ? elapsed >= budget
+          : consumed >= duration - EARLY_CHECK_MS);
 
-        if (shouldMarkComplete) {
-          const bit = 1 << stageAtStart;
-          if ((completedMaskRef.current & bit) === 0) {
-            flushSync(() => {
-              completedMaskRef.current |= bit;
-              setState(current => (
-                current.completedMask === completedMaskRef.current
-                  ? current
-                  : { ...current, completedMask: completedMaskRef.current }
-              ));
-            });
-          }
+      // Steps 1–3 only: final stage is marked inside the completion flush below,
+      // after progress is forced to exactly 1.
+      if (shouldMarkComplete && stageAtStart !== LAST_STAGE) {
+        const bit = 1 << stageAtStart;
+        if ((completedMaskRef.current & bit) === 0) {
+          flushSync(() => {
+            completedMaskRef.current |= bit;
+            setState(current => (
+              current.completedMask === completedMaskRef.current
+                ? current
+                : { ...current, completedMask: completedMaskRef.current }
+            ));
+          });
         }
       }
 
@@ -437,7 +442,7 @@ export default function FitnetJourney() {
             return;
           }
 
-          // Final stage: ring at 100%, completed bit, and completed phase in one paint.
+          // Stage 4 finished: paint ring = 1 / undashed, then completed marker state.
           flushSync(() => {
             paintSegments(LAST_STAGE, 1, true);
             completedMaskRef.current = ALL_MARKS;
@@ -541,7 +546,14 @@ export default function FitnetJourney() {
       aria-labelledby={`${id}-title`}
       onFocusCapture={event => {
         const target = event.target as HTMLElement | null;
-        if (target?.closest(`.${s.playbackToggle}`)) return;
+        // Tabs / prev-next / Stop must not freeze the fill clock.
+        if (
+          target?.closest(`.${s.playbackToggle}`)
+          || target?.closest(`.${s.tab}`)
+          || target?.closest(`.${s.stepButton}`)
+        ) {
+          return;
+        }
         focusInsideRef.current = true;
         setFocusInside(true);
       }}
@@ -552,7 +564,12 @@ export default function FitnetJourney() {
           setFocusInside(false);
           return;
         }
-        if ((next as HTMLElement | null)?.closest?.(`.${s.playbackToggle}`)) {
+        const nextEl = next as HTMLElement | null;
+        if (
+          nextEl?.closest?.(`.${s.playbackToggle}`)
+          || nextEl?.closest?.(`.${s.tab}`)
+          || nextEl?.closest?.(`.${s.stepButton}`)
+        ) {
           focusInsideRef.current = false;
           setFocusInside(false);
         }
@@ -562,27 +579,6 @@ export default function FitnetJourney() {
         <header className={s.header}>
           <div className={s.headerTop}>
             <span className={s.kicker}>مسیر تو در فیت‌نت</span>
-            {!reduceMotion && (
-              <button
-                type="button"
-                className={s.playbackToggle}
-                aria-pressed={userPaused}
-                aria-label={userPaused ? "ادامه پخش خودکار" : "توقف پخش خودکار"}
-                onClick={() => {
-                  setUserPaused(current => {
-                    const next = !current;
-                    userPausedRef.current = next;
-                    if (current) {
-                      const pb = playback.current;
-                      if (pb.remaining <= 0) pb.remaining = phaseDuration(pb.phase);
-                    }
-                    return next;
-                  });
-                }}
-              >
-                <Icon kind={userPaused ? "play" : "pause"} />
-              </button>
-            )}
           </div>
           <h2 id={`${id}-title`}>از انتخاب تا ورود</h2>
           <p>چهار قدم تا تجربه بعدی تو</p>
@@ -623,13 +619,11 @@ export default function FitnetJourney() {
                     aria-hidden="true"
                   >
                     {index === LAST_STAGE && (
-                      <svg className={s.entryProgress} viewBox="0 0 52 52" aria-hidden="true">
-                        <circle cx="26" cy="26" r="21.5" pathLength="1" />
+                      <svg className={s.entryProgress} viewBox="-1 -1 50 50" aria-hidden="true">
+                        <circle cx="24" cy="24" r="21.5" pathLength="1" />
                       </svg>
                     )}
-                    <span className={s.markerFace}>
-                      {showCheck(index) ? <Icon kind="check" /> : numbers[index]}
-                    </span>
+                    {showCheck(index) ? <Icon kind="check" /> : numbers[index]}
                   </span>
                   <span className={s.tabLabel}>{stage.label}</span>
                 </button>
@@ -660,7 +654,54 @@ export default function FitnetJourney() {
             </div>
           ))}
         </div>
+
+        <div className={s.controls} role="group" aria-label="کنترل مراحل">
+          <button
+            type="button"
+            className={`${s.stepButton} ${s.stepPrev}`}
+            aria-label="مرحله قبل"
+            disabled={active <= 0}
+            onClick={() => select(active - 1, { focusTab: true })}
+          >
+            مرحله قبل
+          </button>
+
+          <div className={s.controlsCenter}>
+            {!reduceMotion && (
+              <button
+                type="button"
+                className={s.playbackToggle}
+                aria-pressed={userPaused}
+                aria-label={userPaused ? "ادامه پخش خودکار" : "توقف پخش خودکار"}
+                onClick={() => {
+                  setUserPaused(current => {
+                    const next = !current;
+                    userPausedRef.current = next;
+                    if (current) {
+                      const pb = playback.current;
+                      if (pb.remaining <= 0) pb.remaining = phaseDuration(pb.phase);
+                    }
+                    return next;
+                  });
+                }}
+              >
+                <Icon kind={userPaused ? "play" : "pause"} />
+              </button>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className={`${s.stepButton} ${s.stepNext}`}
+            aria-label="مرحله بعد"
+            disabled={active >= LAST_STAGE}
+            onClick={() => select(active + 1, { focusTab: true })}
+          >
+            مرحله بعد
+          </button>
+        </div>
       </div>
     </section>
   );
 }
+
