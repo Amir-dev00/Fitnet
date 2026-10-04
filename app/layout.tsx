@@ -42,6 +42,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning className={`fn-alpine-ready antialiased ${estedad.variable} ${oswald.variable}`}>
       <body>
+        <noscript>
+          <style>{`#fitnet-intro{display:none!important;pointer-events:none!important}html.fn-hold body{visibility:visible!important}html.fn-preloading{overflow:visible!important}`}</style>
+        </noscript>
         <Script id="fitnet-intro-boot" strategy="beforeInteractive">
           {introBoot}
         </Script>

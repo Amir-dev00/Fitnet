@@ -19,6 +19,10 @@ const RESTART_MS = 400;
 const SEGMENT_COUNT = stages.length - 1;
 const LAST_STAGE = stages.length - 1;
 const ALL_MARKS = (1 << stages.length) - 1;
+/** Matches FitnetJourney mobile layout breakpoint in the module CSS. */
+const JOURNEY_MOBILE_MQ = "(max-width: 700px)";
+/** Progress threshold so float noise cannot block line/circle completion. */
+const LINE_COMPLETE_PROGRESS = 1 - 1e-4;
 
 type Phase = "playing" | "completed" | "restarting";
 
@@ -157,6 +161,7 @@ export default function FitnetJourney() {
   });
   const [playNonce, setPlayNonce] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
   const [inView, setInView] = useState(false);
   const [docVisible, setDocVisible] = useState(true);
@@ -171,6 +176,7 @@ export default function FitnetJourney() {
   const completedMaskRef = useRef(0);
   const focusInsideRef = useRef(false);
   const userPausedRef = useRef(false);
+  const isMobileRef = useRef(false);
   const playback = useRef<Playback>({
     generation: 0,
     phase: "playing",
@@ -255,10 +261,20 @@ export default function FitnetJourney() {
 
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduceMotion(motionQuery.matches);
-    sync();
-    motionQuery.addEventListener("change", sync);
-    return () => motionQuery.removeEventListener("change", sync);
+    const mobileQuery = window.matchMedia(JOURNEY_MOBILE_MQ);
+    const syncMotion = () => setReduceMotion(motionQuery.matches);
+    const syncMobile = () => {
+      isMobileRef.current = mobileQuery.matches;
+      setIsMobile(mobileQuery.matches);
+    };
+    syncMotion();
+    syncMobile();
+    motionQuery.addEventListener("change", syncMotion);
+    mobileQuery.addEventListener("change", syncMobile);
+    return () => {
+      motionQuery.removeEventListener("change", syncMotion);
+      mobileQuery.removeEventListener("change", syncMobile);
+    };
   }, []);
 
   useEffect(() => {
@@ -346,17 +362,29 @@ export default function FitnetJourney() {
 
       const elapsed = now - startedAt;
       const consumed = duration - budget + elapsed;
+      const progress = Math.min(1, Math.max(0, consumed / duration));
+      const mobile = isMobileRef.current;
 
       if (activePhase === "playing" && stageAtStart < SEGMENT_COUNT) {
-        paintSegments(stageAtStart, Math.min(1, consumed / duration));
+        paintSegments(stageAtStart, progress);
       } else if (activePhase === "playing") {
         paintSegments(stageAtStart, 1, true);
       } else if (activePhase === "completed") {
         paintSegments(LAST_STAGE, 1, true);
       }
 
-      // Early checkmark: D − 150ms, while the stage (and remaining connector fill) stay active.
-      if (activePhase === "playing" && consumed >= duration - EARLY_CHECK_MS) {
+      // Circle completion shares the same timeline as the connector fill.
+      // Mobile: mark when the line visually reaches its end (no early offset, no CSS lag).
+      // Desktop: keep the existing D − 150ms early check.
+      const shouldMarkComplete =
+        activePhase === "playing" &&
+        (mobile
+          ? stageAtStart < SEGMENT_COUNT
+            ? progress >= LINE_COMPLETE_PROGRESS
+            : elapsed >= budget
+          : consumed >= duration - EARLY_CHECK_MS);
+
+      if (shouldMarkComplete) {
         const bit = 1 << stageAtStart;
         if ((completedMaskRef.current & bit) === 0) {
           flushSync(() => {
@@ -484,6 +512,9 @@ export default function FitnetJourney() {
 
   function tabStatus(index: number) {
     if (journeyComplete) return "complete";
+    // Mobile: completed state must win in the same frame the connector ends,
+    // even if this stage is still the active autoplay index for that tick.
+    if (isMobile && hasMark(completedMask, index)) return "complete";
     if (index === active) return "active";
     if (hasMark(completedMask, index)) return "complete";
     return "upcoming";

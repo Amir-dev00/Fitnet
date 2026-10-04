@@ -70,6 +70,12 @@
 .tab { border: 0; border-radius: 12px; padding: 0 4px 10px; background: transparent; color: var(--muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 12px; min-block-size: 88px; min-inline-size: 0; }
 .marker { position: relative; z-index: 1; display: grid; place-items: center; inline-size: 48px; block-size: 48px; border: 5px solid white; border-radius: 50%; background: #edf3fc; color: #596078; font-size: 15px; font-weight: 750; transition: background 220ms, box-shadow 220ms; }
 .marker svg { inline-size: 19px; block-size: 19px; opacity: 1; transition: none; }
+/* Mobile: blue checked state must appear in the same paint as line completion. */
+@media (max-width: 700px) {
+  .navigation:not([data-phase="restarting"]) .marker {
+    transition: none;
+  }
+}
 .markerPulse { animation: markerPulse 420ms cubic-bezier(.22, 1, .36, 1) both; }
 .tabLabel { font-size: 14px; font-weight: 600; line-height: 1.8; white-space: nowrap; }
 .tab[data-status="active"] { color: var(--indigo); }

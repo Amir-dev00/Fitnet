@@ -307,7 +307,7 @@ body.fn-lock { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .au-anim-in { animation: none !important; opacity: 1 !important; transform: none !important; }
-    .mob-drawer { transition: none !important; }
+    .fn-nav-drawer, .fn-nav-backdrop { transition: none !important; }
 }
 
 /* Roles that must beat the homepage stylesheet. Latin wordmarks stay Oswald. */

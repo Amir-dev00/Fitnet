@@ -158,24 +158,11 @@ html[dir="rtl"] input[type="url"] {
   text-align: left;
 }
 
-/* Menu button sits on the inline-end, so the drawer opens from that side. */
-html[dir="rtl"] .mob-drawer {
-  right: auto;
-  left: 0;
-  border-left-width: 0;
-  border-right-width: 1px;
-  border-right-style: solid;
-}
-html[dir="rtl"] .mob-drawer.translate-x-full {
-  --tw-translate-x: -100%;
-  translate: -100% 0 !important;
-  transform: none !important;
-}
-/* Desktop uses the top navbar. The drawer is mobile only. */
-@media (min-width: 1024px) {
-  .mob-drawer {
-    display: none !important;
-  }
+/* The mobile drawer is physically anchored to the right edge. */
+html[dir="rtl"] .fn-nav-drawer {
+  right: 0;
+  left: auto;
+  text-align: right;
 }
 
 html[dir="rtl"] .tier-card,

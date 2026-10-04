@@ -6,22 +6,29 @@ import { HomeFaq } from "@/components/home/home-faq"
 import { HomeFooter } from "@/components/home/home-footer"
 import { PartnershipBlock } from "@/components/home/partnership-block"
 import { ProductPanels } from "@/components/home/product-panels"
-import { HeroAurora } from "@/components/motion/hero-aurora"
 
 export function HomeMain() {
   return (
     <>
-      <section className="aurum-hero relative flex flex-col gs-hero fn-on-indigo">
-        <div className="absolute inset-0" aria-hidden="true">
-          <HeroAurora />
-          <div className="hero-scrim absolute inset-0" />
-        </div>
-        <div className="hero-stage fn-home-shell relative z-10">
+      <section className="aurum-hero gs-hero fn-on-indigo">
+        <picture className="hero-photo">
+          <source media="(min-width: 1024px)" srcSet="/images/hero/desktop.webp" type="image/webp" />
+          <img
+            src="/images/hero/mobile.webp"
+            alt=""
+            width={1086}
+            height={1448}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
+        <div className="hero-stage fn-home-shell">
           <div className="hero-copy">
-            <h1 className="au-title" data-fn-enter="title">
+            <h1 className="au-title">
               یک حساب، برای تجربه‌های ورزشی بیشتر
             </h1>
-            <HeroDownloadActions />
+            <HeroDownloadActions enter={false} />
           </div>
         </div>
       </section>

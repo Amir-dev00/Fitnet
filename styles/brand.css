@@ -528,8 +528,109 @@ a {
 }
 
 #hdrAurum {
-  min-height: 72px;
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 40;
+  min-height: calc(64px + env(safe-area-inset-top, 0px));
   padding-top: env(safe-area-inset-top, 0px);
+  background: #170b93;
+}
+
+.fn-header-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  height: 64px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  direction: ltr;
+}
+
+.fn-header-logo {
+  margin-right: auto;
+  min-width: 0;
+}
+
+.fn-header-logo .fn-brand {
+  min-height: 48px;
+  max-width: 100%;
+}
+
+#hdrAurum {
+  --fn-logo-size: 34px;
+}
+
+.fn-header-nav {
+  display: none;
+}
+
+.fn-header-menu {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--fitnet-white);
+  cursor: pointer;
+}
+
+.fn-header-menu svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fn-header-menu:focus-visible,
+.fn-nav-drawer-close:focus-visible,
+.fn-nav-link-mobile:focus-visible,
+.fn-nav-link:focus-visible {
+  outline: 2px solid var(--fitnet-orange);
+  outline-offset: 3px;
+}
+
+.fn-header-menu:hover,
+.fn-header-menu:active {
+  background: color-mix(in srgb, var(--fitnet-white) 10%, transparent);
+}
+
+@media (min-width: 1024px) {
+  #hdrAurum {
+    min-height: calc(72px + env(safe-area-inset-top, 0px));
+    --fn-logo-size: 40px;
+  }
+
+  .fn-header-bar {
+    direction: rtl;
+    height: 72px;
+    padding-left: max(24px, env(safe-area-inset-left, 0px));
+    padding-right: max(24px, env(safe-area-inset-right, 0px));
+    gap: 8px;
+  }
+
+  .fn-header-logo {
+    margin-right: 0;
+  }
+
+  .fn-header-nav {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .fn-header-menu,
+  .fn-nav-backdrop,
+  .fn-nav-drawer {
+    display: none !important;
+  }
 }
 
 #hdrAurum > .max-w-\[1440px\] {
@@ -561,24 +662,107 @@ a {
   opacity: 1;
 }
 
-.mob-drawer button[aria-label="بستن"],
-#fn-menu-btn {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
+.fn-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(8, 6, 40, 0.46);
+  opacity: 1;
+  transition: opacity 220ms ease;
 }
 
-.mob-drawer {
+.fn-nav-drawer {
+  position: fixed;
+  z-index: 70;
+  top: 0;
+  right: 0;
+  left: auto;
+  display: flex;
+  flex-direction: column;
+  width: min(88vw, 360px);
+  height: 100vh;
   height: 100dvh;
   max-height: 100dvh;
+  margin: 0;
+  padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  overscroll-behavior: contain;
-  transition: translate 260ms var(--ease-drawer);
+  padding-right: max(8px, env(safe-area-inset-right, 0px));
+  border: 0;
+  background: #170b93;
+  color: var(--fitnet-white);
+  direction: rtl;
+  box-shadow: -16px 0 40px rgba(8, 6, 40, 0.28);
+  overflow: hidden;
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 220ms ease, opacity 220ms ease;
 }
 
-.mob-drawer nav {
+.fn-nav-backdrop[data-starting-style],
+.fn-nav-backdrop[data-ending-style],
+.fn-nav-drawer[data-starting-style],
+.fn-nav-drawer[data-ending-style] {
+  opacity: 0;
+}
+
+.fn-nav-drawer[data-starting-style],
+.fn-nav-drawer[data-ending-style] {
+  transform: translateX(100%);
+}
+
+.fn-nav-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+  padding: 8px 8px 8px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--fitnet-white) 16%, transparent);
+}
+
+.fn-nav-drawer-title {
+  margin: 0;
+  font-family: var(--fn-font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.fn-nav-drawer-close {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--fitnet-white);
+  cursor: pointer;
+}
+
+.fn-nav-drawer-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.fn-nav-drawer-close:hover,
+.fn-nav-drawer-close:active {
+  background: color-mix(in srgb, var(--fitnet-white) 10%, transparent);
+}
+
+.fn-nav-drawer-nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   overscroll-behavior: contain;
+  padding: 8px 12px 20px;
+}
+
+.fn-nav-drawer .fn-brand {
+  --fn-logo-size: 32px;
 }
 
 .fn-pop {
@@ -597,8 +781,29 @@ a {
 }
 
 .aurum-hero {
-  background: var(--fitnet-indigo);
-  overflow: visible;
+  position: relative;
+  background: #170b93;
+  overflow: clip;
+}
+
+.hero-photo {
+  position: absolute;
+  z-index: 0;
+  inset-inline: 0;
+  bottom: 0;
+  margin: 0;
+  pointer-events: none;
+  line-height: 0;
+}
+
+.hero-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  aspect-ratio: 1086 / 1448;
+  object-fit: contain;
+  object-position: center bottom;
 }
 
 .aurum-hero::before,
@@ -612,49 +817,72 @@ a {
 }
 
 .hero-stage {
-  display: grid;
-  place-items: center;
-  padding-top: calc(96px + env(safe-area-inset-top, 0px));
-  padding-bottom: clamp(48px, 8vw, 96px);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  min-height: calc(100vw * 1448 / 1086);
+  padding-top: calc(84px + env(safe-area-inset-top, 0px));
+  /* Lower half of the 3:4 photo is the pool; keep copy above it. */
+  padding-bottom: calc(100vw * 1448 / 1086 * 0.5 + 28px);
 }
 
 .hero-copy {
   width: 100%;
-  max-width: 52rem;
+  max-width: 22rem;
   margin-inline: auto;
-  margin-top: clamp(56px, 7vw, 96px);
+  margin-top: clamp(48px, 10vw, 88px);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding-block: clamp(28px, 5vw, 48px);
+  padding-block: 8px 0;
 }
 
 .au-title {
-  font-size: clamp(1.875rem, 4.2vw, 3.5rem);
-  line-height: 1.35;
-  margin: 0 0 clamp(28px, 3.5vw, 36px);
+  font-size: clamp(1.65rem, 6.4vw, 2.15rem);
+  line-height: 1.65;
+  margin: 0 0 16px;
   font-weight: 900;
+  text-wrap: balance;
 }
 
 @media (min-width: 1024px) {
+  .hero-photo img {
+    aspect-ratio: 1944 / 809;
+  }
+
+  .hero-stage {
+    min-height: calc(100vw * 809 / 1944);
+    padding-top: calc(96px + env(safe-area-inset-top, 0px));
+    /* Wall ends near 60% of the wide photo. */
+    padding-bottom: calc(100vw * 809 / 1944 * 0.4 + 20px);
+  }
+
   .hero-copy {
-    max-width: min(100%, 72rem);
+    max-width: min(40rem, 46vw);
+    margin-top: clamp(56px, 8vh, 112px);
+    padding-block-start: clamp(8px, 2vh, 28px);
   }
 
   .au-title {
     white-space: normal;
-    font-size: clamp(2rem, 3.2vw, 3.25rem);
+    font-size: clamp(2rem, 3.1vw, 3.35rem);
+    line-height: 1.55;
+    margin-bottom: 22px;
   }
 }
 
 .fn-hero-actions {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  width: auto;
+  gap: 10px;
+  width: 100%;
   max-width: 100%;
 }
 
@@ -664,7 +892,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 40px;
+  min-height: 44px;
   min-width: 0;
   flex: 0 1 auto;
   padding: 8px 14px;
@@ -684,9 +912,10 @@ a {
 }
 
 .fn-hero-btn-primary {
-  background: var(--fitnet-orange);
+  /* Darkened from #E36F2E so white label text clears 4.5:1. */
+  background: #c8512a;
   color: var(--fitnet-white);
-  border-color: var(--fitnet-orange);
+  border-color: #c8512a;
 }
 
 .fn-hero-btn-main {
@@ -1197,20 +1426,20 @@ footer form button {
   }
 
   .fn-hero-actions {
-    width: auto;
+    width: 100%;
     max-width: 100%;
     margin-inline: auto;
-    gap: 5px;
+    gap: 8px;
     justify-content: center;
   }
 
   .fn-hero-btn {
-    flex: 0 1 auto;
-    min-height: 32px;
-    padding: 5px 8px;
-    font-size: 0.6875rem;
-    border-radius: 8px;
-    gap: 4px;
+    flex: 1 1 9.5rem;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    border-radius: 10px;
+    gap: 6px;
     white-space: nowrap;
   }
 
@@ -1252,8 +1481,8 @@ footer form button {
   }
 
   .fn-hero-btn-primary:hover:not(:disabled):not(.is-unavailable) {
-    background: color-mix(in srgb, var(--fitnet-orange) 88%, var(--fitnet-white));
-    border-color: color-mix(in srgb, var(--fitnet-orange) 88%, var(--fitnet-white));
+    background: #b34722;
+    border-color: #b34722;
     color: var(--fitnet-white);
   }
 
@@ -1339,6 +1568,13 @@ html.fn-reveal .gs-hero [data-fn-enter="actions"] {
 
 html.fn-preloading {
   overflow: hidden;
+  animation: fn-intro-unlock-scroll 0.01s linear 6.5s forwards;
+}
+
+@keyframes fn-intro-unlock-scroll {
+  to {
+    overflow: visible;
+  }
 }
 
 /* Alpine owns these panels. Keep them out of sight until it initialises. */
@@ -1346,13 +1582,22 @@ html:not(.fn-alpine-ready) [x-show] {
   display: none !important;
 }
 
-html[dir="rtl"]:not(.fn-alpine-ready) .mob-drawer:not(.translate-x-0) {
-  translate: -100% 0;
+html[dir="rtl"]:not(.fn-alpine-ready) .fn-nav-drawer[data-starting-style] {
+  transform: translateX(100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #fitnet-preloader {
+  #fitnet-intro {
     display: none !important;
+    pointer-events: none !important;
+  }
+
+  html.fn-hold body {
+    visibility: visible !important;
+  }
+
+  html.fn-preloading {
+    overflow: visible !important;
   }
 }
 
@@ -1364,7 +1609,8 @@ html[dir="rtl"]:not(.fn-alpine-ready) .mob-drawer:not(.translate-x-0) {
   }
 
   .fn-pop,
-  .mob-drawer {
+  .fn-nav-drawer,
+  .fn-nav-backdrop {
     transition: none;
   }
 
@@ -1449,16 +1695,31 @@ html[dir="rtl"]:not(.fn-alpine-ready) .mob-drawer:not(.translate-x-0) {
 .fn-nav-link-mobile {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   min-height: 48px;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--fn-ink) 14%, transparent);
+  margin-bottom: 4px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border-bottom: 0;
   font-family: var(--fn-font);
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.05rem;
+  font-weight: 650;
   letter-spacing: 0;
   text-transform: none;
-  color: var(--fn-ink);
+  text-align: right;
+  color: var(--fitnet-white);
   text-decoration: none;
+}
+
+.fn-nav-link-mobile:hover,
+.fn-nav-link-mobile:active,
+.fn-nav-link-mobile[aria-current="page"] {
+  background: color-mix(in srgb, var(--fitnet-white) 8%, transparent);
+  color: var(--fitnet-white);
+}
+
+.fn-nav-link-mobile[aria-current="page"] {
+  box-shadow: inset -3px 0 0 var(--fitnet-orange);
 }
 
 .fn-nav-cta {

@@ -148,12 +148,15 @@ html.fn-hold {
   background: #fff;
 }
 
-html.fn-intro-skip #fitnet-intro {
-  display: none;
+html.fn-intro-skip #fitnet-intro,
+html[data-fn-intro-released="1"] #fitnet-intro {
+  display: none !important;
+  pointer-events: none !important;
 }
 
 html.fn-hold body {
   visibility: hidden;
+  animation: fn-intro-reveal-body 0.01s linear 6.5s forwards;
 }
 
 html.fn-hold #fitnet-intro {
@@ -166,14 +169,25 @@ html.fn-hold #fitnet-intro {
   z-index: 80;
   background: #fff;
   pointer-events: none;
+  animation: fn-intro-dismiss 0.01s linear 6.5s forwards;
+}
+
+@keyframes fn-intro-dismiss {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@keyframes fn-intro-reveal-body {
+  to {
+    visibility: visible;
+  }
 }
 
 #fitnet-intro.is-live {
   background: transparent;
-}
-
-.hero-scrim {
-  background: linear-gradient(180deg, rgba(23, 11, 147, 0.42), rgba(23, 11, 147, 0.62));
 }
 
 #fitnet-intro video {

@@ -1,6 +1,8 @@
 "use client"
 
+import { Dialog } from "@base-ui/react/dialog"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useId, useRef, useState } from "react"
 
 import { Logo } from "@/components/site/logo"
@@ -12,17 +14,16 @@ const navLinks = [
   { href: "/guides/", label: "راهنما", external: true },
 ] as const
 
-export function HomeHeader() {
-  const [drawer, setDrawer] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const menuButton = useRef<HTMLButtonElement>(null)
-  const closeButton = useRef<HTMLButtonElement>(null)
-  const drawerId = useId()
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+}
 
-  function closeDrawer() {
-    setDrawer(false)
-    menuButton.current?.focus()
-  }
+export function HomeHeader() {
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const closeButton = useRef<HTMLButtonElement>(null)
+  const titleId = useId()
+  const pathname = usePathname()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -32,114 +33,37 @@ export function HomeHeader() {
   }, [])
 
   useEffect(() => {
-    document.body.classList.toggle("fn-lock", drawer)
-    if (drawer) closeButton.current?.focus()
-    return () => document.body.classList.remove("fn-lock")
-  }, [drawer])
-
-  useEffect(() => {
-    if (!drawer) return
-
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault()
-        closeDrawer()
-        return
-      }
-
-      if (event.key !== "Tab") return
-
-      const panel = document.getElementById(drawerId)
-      if (!panel) return
-      const focusable = panel.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      )
-      if (focusable.length === 0) return
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
+    const desktop = window.matchMedia("(min-width: 1024px)")
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false)
     }
+    desktop.addEventListener("change", closeOnDesktop)
+    return () => desktop.removeEventListener("change", closeOnDesktop)
+  }, [])
 
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [drawer, drawerId])
+  function followHash(href: string) {
+    const target = document.getElementById(href.slice(1))
+    if (!target) return
+    const behavior = prefersReducedMotion() ? "auto" : "smooth"
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior, block: "start" })
+        history.pushState(null, "", href)
+      })
+    })
+  }
 
   return (
-    <>
-      <div
-        className={`mob-overlay fixed inset-0 bg-black/50 z-20${drawer ? " open" : ""}`}
-        onClick={closeDrawer}
-        hidden={!drawer}
-      />
-
-      <div
-        id={drawerId}
-        className={`mob-drawer fixed top-0 right-0 w-4/5 max-w-xs z-50 flex flex-col border-l brand-border lg:hidden fn-on-indigo ${drawer ? "translate-x-0" : "translate-x-full"}`}
-        style={{ background: "var(--fn-fill)" }}
-        role="dialog"
-        aria-modal="true"
-        aria-label="منوی اصلی"
-        inert={!drawer}
-        aria-hidden={!drawer}
-      >
-        <div className="flex justify-between items-center px-6 py-5 border-b brand-border">
-          <Logo />
-          <button
-            ref={closeButton}
-            type="button"
-            onClick={closeDrawer}
-            aria-label="بستن منو"
-            className="w-11 h-11 border brand-border flex items-center justify-center text-[var(--fn-ink)]"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <nav className="flex-1 px-6 py-6 overflow-y-auto" aria-label="ناوبری موبایل">
-          {navLinks.map((item) =>
-            "external" in item && item.external ? (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setDrawer(false)}
-                className="fn-nav-link-mobile"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setDrawer(false)}
-                className="fn-nav-link-mobile"
-              >
-                {item.label}
-              </a>
-            ),
-          )}
-        </nav>
-        <div className="px-6 pb-8">
-          <a href="#download" onClick={() => setDrawer(false)} className="fn-nav-cta">
-            دانلود اپلیکیشن
-          </a>
-        </div>
-      </div>
-
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <header
         id="hdrAurum"
-        className={`fixed top-0 left-0 right-0 z-30 border-b border-transparent fn-on-indigo${scrolled ? " hdr-scrolled" : ""}`}
+        className={`fn-on-indigo${scrolled ? " hdr-scrolled" : ""}`}
       >
-        <div className="fn-home-shell flex items-center h-full px-6 gap-6">
-          <Logo lockup />
-          <nav className="hidden lg:flex items-center gap-1 flex-1" aria-label="ناوبری اصلی">
+        <div className="fn-header-bar">
+          <div className="fn-header-logo">
+            <Logo lockup />
+          </div>
+          <nav className="fn-header-nav" aria-label="ناوبری اصلی">
             {navLinks.map((item) =>
               "external" in item && item.external ? (
                 <Link key={item.href} href={item.href} className="fn-nav-link">
@@ -152,27 +76,71 @@ export function HomeHeader() {
               ),
             )}
           </nav>
-          <div className="flex items-center gap-2 ms-auto">
-            <a href="#download" className="hidden md:inline-flex fn-nav-cta">
-              دانلود اپلیکیشن
-            </a>
-            <button
-              ref={menuButton}
-              id="fn-menu-btn"
-              type="button"
-              aria-label="باز کردن منو"
-              aria-expanded={drawer}
-              aria-controls={drawerId}
-              onClick={() => setDrawer(true)}
-              className="lg:hidden w-11 h-11 border brand-border flex items-center justify-center text-[var(--fn-ink)]"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
+          <Dialog.Trigger
+            id="fn-menu-btn"
+            className="fn-header-menu"
+            aria-label={open ? "بستن منو" : "باز کردن منو"}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeWidth="2" d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </Dialog.Trigger>
         </div>
       </header>
-    </>
+
+      <Dialog.Portal>
+        <Dialog.Backdrop className="fn-nav-backdrop" />
+        <Dialog.Popup
+          className="fn-nav-drawer"
+          initialFocus={closeButton}
+          aria-labelledby={titleId}
+        >
+          <div className="fn-nav-drawer-head">
+            <Dialog.Close
+              ref={closeButton}
+              className="fn-nav-drawer-close"
+              aria-label="بستن منو"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeWidth="2" d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </Dialog.Close>
+            <p id={titleId} className="fn-nav-drawer-title">منو</p>
+          </div>
+          <nav className="fn-nav-drawer-nav" aria-label="ناوبری موبایل">
+            {navLinks.map((item) => {
+              const current = "external" in item && item.external && pathname.startsWith("/guides")
+              if ("external" in item && item.external) {
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="fn-nav-link-mobile"
+                    aria-current={current ? "page" : undefined}
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              }
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="fn-nav-link-mobile"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    setOpen(false)
+                    followHash(item.href)
+                  }}
+                >
+                  {item.label}
+                </a>
+              )
+            })}
+          </nav>
+        </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }
