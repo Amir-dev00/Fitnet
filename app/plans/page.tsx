@@ -13,7 +13,7 @@ export default function PlansPage() {
   return (
     <PageShell
       nav={[
-        { href: "/#plans", label: "پلن‌ها در صفحه اصلی" },
+        { href: "/#download", label: "دانلود اپلیکیشن" },
         { href: "/guides/", label: "راهنما" },
         { href: "/contact/?path=early", label: "دسترسی زودهنگام", className: "fn-btn" },
       ]}

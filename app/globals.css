@@ -184,51 +184,6 @@ html.fn-hold #fitnet-intro {
   background: transparent;
 }
 
-.mwrap {
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
-  white-space: nowrap;
-}
-
-.mtrack {
-  --fn-marquee-shift: 0px;
-  --fn-marquee-duration: 32s;
-  display: flex;
-  flex-flow: row nowrap;
-  width: max-content;
-  max-width: none;
-  align-items: center;
-  gap: 0;
-  direction: ltr;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-}
-
-.mtrack.is-ready {
-  animation: fn-marquee-ltr var(--fn-marquee-duration) linear infinite;
-}
-
-.mtrack.is-static {
-  animation: none;
-  transform: none;
-  will-change: auto;
-}
-
-@keyframes fn-marquee-ltr {
-  from { transform: translate3d(calc(-1 * var(--fn-marquee-shift)), 0, 0); }
-  to { transform: translate3d(0, 0, 0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mtrack,
-  .mtrack.is-ready {
-    animation: none !important;
-    transform: none !important;
-    will-change: auto;
-  }
-}
-
 button,
 a,
 summary {

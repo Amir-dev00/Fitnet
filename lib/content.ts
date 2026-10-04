@@ -12,6 +12,16 @@ export const faqs: [string, string][] = [
   ["چطور باشگاهم را به فیت‌نت اضافه کنم؟", "از مسیر همکاری باشگاه درخواست بده. بعد از بررسی، ظرفیت قابل رزرو معرفی می‌شود. تغییر نمایه عمومی و انتشار رویداد هم به تأیید نیاز دارد."],
 ]
 
+/** Essential homepage FAQ subset — answers unchanged from `faqs`. */
+export const essentialFaqs: [string, string][] = [
+  faqs[0],
+  faqs[1],
+  faqs[2],
+  faqs[4],
+  faqs[5],
+  faqs[8],
+]
+
 export type Guide = {
   title: string
   category: string

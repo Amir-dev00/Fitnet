@@ -26,8 +26,7 @@ html[dir="rtl"] .au-side-head .h-sub,
 html[dir="rtl"] .au-mini-card,
 html[dir="rtl"] .ml-t,
 html[dir="rtl"] .col-head,
-html[dir="rtl"] .s-tag,
-html[dir="rtl"] .mtrack {
+html[dir="rtl"] .s-tag {
   font-family: "Estedad", sans-serif;
   letter-spacing: 0;
   text-transform: none;

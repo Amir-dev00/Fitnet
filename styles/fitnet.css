@@ -306,7 +306,7 @@ body.fn-lock { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .au-anim-in, .mtrack { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .au-anim-in { animation: none !important; opacity: 1 !important; transform: none !important; }
     .mob-drawer { transition: none !important; }
 }
 
@@ -316,8 +316,7 @@ html[dir="rtl"] .au-badge,
 html[dir="rtl"] .au-mini-meta,
 html[dir="rtl"] .s-tag,
 html[dir="rtl"] .col-head,
-html[dir="rtl"] .fn-kicker,
-html[dir="rtl"] .mtrack {
+html[dir="rtl"] .fn-kicker {
   font-family: var(--fn-font);
   font-weight: 500;
   line-height: 1.7;

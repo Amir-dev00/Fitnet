@@ -55,23 +55,43 @@ function DownloadOption({ option }: { option: NativeOption }) {
   )
 }
 
-export function HeroDownloadActions() {
+function WebAppAction({ className }: { className?: string }) {
+  const href = downloads.webApp
+
+  if (href) {
+    return (
+      <a className={className} href={href} target="_blank" rel="noopener noreferrer">
+        <Globe className="fn-hero-btn-icon" aria-hidden="true" size={22} strokeWidth={2} />
+        <span>ورود به نسخه وب</span>
+      </a>
+    )
+  }
+
+  return (
+    <button type="button" className={className}>
+      <Globe className="fn-hero-btn-icon" aria-hidden="true" size={22} strokeWidth={2} />
+      <span>ورود به نسخه وب</span>
+    </button>
+  )
+}
+
+export function HeroDownloadActions({
+  className,
+  enter = true,
+}: {
+  className?: string
+  enter?: boolean
+}) {
   return (
     <Dialog.Root>
-      <div className="fn-hero-actions" data-fn-enter="actions">
-        <button
-          type="button"
-          className="fn-hero-btn fn-hero-btn-primary"
-          onClick={(event) => {
-            event.preventDefault()
-          }}
-        >
-          <Globe className="fn-hero-btn-icon" aria-hidden="true" strokeWidth={2} />
-          <span>ورود به نسخه وب</span>
-        </button>
+      <div
+        className={["fn-hero-actions", className].filter(Boolean).join(" ")}
+        data-fn-enter={enter ? "actions" : undefined}
+      >
+        <WebAppAction className="fn-hero-btn fn-hero-btn-primary" />
 
         <Dialog.Trigger className="fn-hero-btn fn-hero-btn-secondary">
-          <Download className="fn-hero-btn-icon" aria-hidden="true" strokeWidth={2} />
+          <Download className="fn-hero-btn-icon" aria-hidden="true" size={22} strokeWidth={2} />
           <span>دانلود اپلیکیشن</span>
         </Dialog.Trigger>
       </div>
