@@ -171,6 +171,7 @@ export default function FitnetJourney() {
   const strip = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const segmentRefs = useRef<Array<HTMLElement | null>>([null, null, null]);
+  const entryMarkerRef = useRef<HTMLSpanElement>(null);
   const activeRef = useRef(0);
   const phaseRef = useRef<Phase>("playing");
   const completedMaskRef = useRef(0);
@@ -190,6 +191,9 @@ export default function FitnetJourney() {
 
   const paintSegments = useCallback((stageIndex: number, progress: number, allComplete = false) => {
     applySegmentFills(segmentRefs.current, stageIndex, progress, allComplete);
+    // The final marker uses the same pause/resume clock as the connector lines.
+    const entryProgress = allComplete ? 1 : stageIndex === LAST_STAGE ? Math.min(1, Math.max(0, progress)) : 0;
+    entryMarkerRef.current?.style.setProperty("--entry-progress", String(entryProgress));
   }, []);
 
   const beginPhase = useCallback((nextPhase: Phase, remaining = phaseDuration(nextPhase)) => {
@@ -215,7 +219,7 @@ export default function FitnetJourney() {
     pb.startedAt = null;
     phaseRef.current = "playing";
 
-    applySegmentFills(segmentRefs.current, next, 0);
+    paintSegments(next, 0);
     activeRef.current = next;
     completedMaskRef.current = marksBefore(next);
     setPlayNonce(value => value + 1);
@@ -240,7 +244,7 @@ export default function FitnetJourney() {
     });
 
     if (focusTab) tabs.current[next]?.focus({ preventScroll: true });
-  }, []);
+  }, [paintSegments]);
 
   useEffect(() => {
     activeRef.current = active;
@@ -368,7 +372,7 @@ export default function FitnetJourney() {
       if (activePhase === "playing" && stageAtStart < SEGMENT_COUNT) {
         paintSegments(stageAtStart, progress);
       } else if (activePhase === "playing") {
-        paintSegments(stageAtStart, 1, true);
+        paintSegments(stageAtStart, progress);
       } else if (activePhase === "completed") {
         paintSegments(LAST_STAGE, 1, true);
       }
@@ -612,8 +616,14 @@ export default function FitnetJourney() {
                 >
                   <span
                     className={`${s.marker}${settlePulse && index === 0 && phase === "playing" ? ` ${s.markerPulse}` : ""}`}
+                    ref={index === LAST_STAGE ? entryMarkerRef : undefined}
                     aria-hidden="true"
                   >
+                    {index === LAST_STAGE && (
+                      <svg className={s.entryProgress} viewBox="0 0 48 48" aria-hidden="true">
+                        <circle cx="24" cy="24" r="21.5" pathLength="1" />
+                      </svg>
+                    )}
                     {showCheck(index) ? <Icon kind="check" /> : numbers[index]}
                   </span>
                   <span className={s.tabLabel}>{stage.label}</span>
