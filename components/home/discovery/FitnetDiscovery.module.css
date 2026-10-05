@@ -14,27 +14,34 @@
 }
 .section *, .section *::before, .section *::after { box-sizing: border-box; }
 .section button, .section a { -webkit-tap-highlight-color: transparent; }
-.section button { font: inherit; cursor: pointer; }
+/* Shield against high-specificity global/RTL button and SVG rules. */
+.section button {
+  font: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  letter-spacing: 0;
+  text-transform: none;
+  height: auto;
+  white-space: normal;
+}
 .section button:focus-visible, .section a:focus-visible {
   outline: 3px solid var(--indigo);
   outline-offset: 5px;
 }
+.section svg { display: block; max-width: none; flex-shrink: 0; }
 .container { max-width: 1160px; margin-inline: auto; }
 .header { display: grid; gap: 18px; margin-bottom: 28px; }
 .eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 16px; color: var(--indigo); font-size: 12px; font-weight: 600; }
 .eyebrow > span { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex: none; }
 .header h2 { margin: 0; font-size: clamp(28px, 4vw, 46px); line-height: 1.65; font-weight: 800; letter-spacing: 0; color: var(--indigo); }
-:global(html[dir="rtl"]) .section .header h2 { letter-spacing: 0; line-height: 1.65; font-weight: 800; }
-:global(html[dir="rtl"]) .section .card h3 { font-weight: 800; line-height: 1.7; letter-spacing: 0; }
-:global(html[dir="rtl"]) .section .intro > p { line-height: 2.15; letter-spacing: 0; }
-:global(html[dir="rtl"]) .section .eligibility { line-height: 1.8; letter-spacing: 0; }
 .desktopBreak { display: none; }
 .intro > p { margin: 0; color: var(--muted); font-size: 14px; line-height: 2.15; max-width: 46ch; }
 .cta { display: inline-flex; align-items: center; gap: 16px; min-height: 44px; margin-top: 16px; color: var(--indigo); text-decoration: none; font-size: 14px; font-weight: 700; border-bottom: 1px solid var(--orange); }
 .cta svg { transition: transform 200ms ease; }
 .demo { border: 1px solid var(--line); border-radius: 22px; background: #fff; box-shadow: 0 16px 48px -32px #170b9340; }
 .toolbar { padding: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; border-bottom: 1px solid var(--line); }
-.demoCaption { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.demoCaption { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; line-height: 1.8; }
 .demoDot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex: none; }
 .switch { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 12px; background: #f0f3fa; width: 100%; gap: 4px; }
 .switch button { display: flex; justify-content: center; align-items: center; gap: 9px; min-height: 44px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; transition: color 200ms ease, background-color 200ms ease, box-shadow 200ms ease; }
@@ -56,10 +63,10 @@
 .marker { position: absolute; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 60px; min-height: 70px; border: 0; padding: 4px; background: transparent; color: var(--indigo); transform: translate(-50%, -50%); border-radius: 10px; }
 .markerBubble { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 56px; height: 40px; border-radius: 13px 13px 13px 4px; background: white; border: 1px solid #c6c9e1; box-shadow: 0 3px 8px #211b4510; transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, transform 220ms ease; }
 .markerBubble > span { font-weight: 800; font-size: 15px; }
-.markerCost { background: #ffffffed; padding: 2px 7px; border-radius: 5px; white-space: nowrap; color: var(--ink); font-size: 12px; line-height: 1.6; }
+.markerCost { background: #ffffffed; padding: 2px 7px; border-radius: 5px; white-space: nowrap; color: var(--ink); font-size: 10px; line-height: 1.6; }
 .marker[aria-pressed="true"] { z-index: 2; }
 .marker[aria-pressed="true"] .markerBubble { background: var(--indigo); border-color: var(--indigo); color: #fff; box-shadow: 0 0 0 4px #ffffff, 0 0 0 6px #e36f2e; transform: translateY(-3px); }
-.mapNote { position: absolute; bottom: 10px; left: 10px; right: 10px; text-align: center; font-size: 12px; color: #60677d; pointer-events: none; }
+.mapNote { position: absolute; bottom: 10px; left: 10px; right: 10px; text-align: center; font-size: 9px; color: #60677d; pointer-events: none; }
 .listView { padding: 10px; background: #f4f7fc; }
 .venueList { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
 .listItem { width: 100%; min-height: 70px; display: flex; align-items: center; gap: 9px; padding: 12px 9px; text-align: start; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: #fff; transition: border-color 200ms ease, background-color 200ms ease; }
@@ -69,9 +76,9 @@
 .listInfo, .listMeta { display: grid; gap: 5px; min-width: 0; }
 .listInfo strong { font-size: 12px; font-weight: 700; }
 .listInfo > span { font-size: 9px; color: var(--muted); }
-.listMeta { margin-inline-start: auto; flex: none; text-align: end; font-size: 12px; }
-.listMeta strong { color: var(--indigo); font-size: 13px; }
-.listNote { margin: 13px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; text-align: center; }
+.listMeta { margin-inline-start: auto; flex: none; text-align: end; font-size: 10px; }
+.listMeta strong { color: var(--indigo); font-size: 11px; }
+.listNote { margin: 13px 0 0; color: var(--muted); font-size: 10px; line-height: 1.9; text-align: center; }
 .preview { display: grid; padding: 0 12px 12px; min-width: 0; }
 .card { grid-area: 1 / 1; min-width: 0; border: 1px solid var(--line); border-radius: 14px; background: #fff; visibility: hidden; pointer-events: none; }
 .card[data-selected="true"] { visibility: visible; pointer-events: auto; animation: cardEnter 220ms ease-out both; }
@@ -79,8 +86,8 @@
 .visual img, .equipment { width: 100%; height: 100%; display: block; object-fit: cover; }
 .visualLabel { position: absolute; bottom: 9px; right: 12px; font-size: 9px; color: var(--indigo); background: #ffffffeb; padding: 4px 8px; border-radius: 5px; }
 .cardBody { padding: 16px; }
-.cardTop { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
-.status { padding: 3px 8px; border-radius: 5px; font-size: 12px; line-height: 1.7; }
+.cardTop { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 10px; color: var(--muted); }
+.status { padding: 3px 8px; border-radius: 5px; font-size: 10px; line-height: 1.7; }
 .available { color: #27604b; }
 .limited { color: #955019; }
 .full { color: #706777; }
@@ -94,13 +101,13 @@
 .facilities li { padding: 4px 9px; background: #f4f6fb; border-radius: 6px; color: #5b5873; font-size: 10px; line-height: 1.8; }
 .details { margin: 0; padding: 14px 0; display: grid; grid-template-columns: 1.25fr 1fr; gap: 10px; border-block: 1px solid var(--line); }
 .details > div + div { border-inline-start: 1px solid var(--line); padding-inline-start: 16px; }
-.details dt { font-size: 12px; color: var(--muted); margin-bottom: 7px; }
-.details dd { font-size: 13px; margin: 0; color: var(--indigo); line-height: 1.8; }
+.details dt { font-size: 10px; color: var(--muted); margin-bottom: 7px; }
+.details dd { font-size: 12px; margin: 0; color: var(--indigo); line-height: 1.8; }
 .details dd strong { font-size: 19px; font-weight: 800; line-height: 1; }
-.eligibility { display: flex; gap: 8px; align-items: center; margin: 14px 0 0; color: var(--indigo); font-size: 13px; line-height: 1.8; }
+.eligibility { display: flex; gap: 8px; align-items: center; margin: 14px 0 0; color: var(--indigo); font-size: 11px; line-height: 1.8; }
 .eligibility > svg { flex: none; width: 26px; height: 26px; padding: 5px; background: #eef3fc; border-radius: 50%; }
-.eligibility > span > span { display: block; color: var(--muted); font-size: 12px; }
-.demoFooter { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.9; text-align: center; }
+.eligibility > span > span { display: block; color: var(--muted); font-size: 9px; }
+.demoFooter { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.9; text-align: center; }
 .footerLine { height: 2px; width: 16px; flex: none; background: var(--orange); }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 @keyframes cardEnter { from { opacity: .35; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -118,8 +125,7 @@
   .map, .listView { min-height: 340px; }
   .listItem { min-height: 86px; padding: 14px; }
   .listInfo strong { font-size: 14px; }
-  .listInfo > span { font-size: 12px; }
-  .listMeta { font-size: 12px; }
+  .listInfo > span, .listMeta { font-size: 11px; }
   .listNumber { width: 40px; height: 40px; }
   .visual { height: 160px; }
   .mapLabel { font-size: 11px; }
@@ -144,9 +150,19 @@
   .preview { padding: 0; }
   .visual { height: 148px; }
   .cardBody { padding: 19px; }
-  .demoFooter { font-size: 12px; padding: 16px; }
-  .mapNote { bottom: 15px; font-size: 12px; }
+  .demoFooter { font-size: 11px; padding: 16px; }
+  .mapNote { bottom: 15px; font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .section *, .section *::before, .section *::after { animation: none !important; transition: none !important; }
 }
+
+/* Geographic map integration; retain original card design. */
+.map { background:transparent; min-width:0; }
+.header h2{font-size:clamp(27px,3.6vw,42px);line-height:1.5}
+.demoCaption,.listNote,.demoFooter{font-size:12px}
+.listInfo>span,.listMeta,.facilities li,.details dt,.eligibility,.neighborhood,.cardTop{font-size:12px}
+.listInfo strong,.listMeta strong,.details dd{font-size:13px}
+.eligibility>span>span{font-size:11px}
+.venueList .listItem{flex-wrap:wrap}
+@media(min-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 310px;gap:18px}.container{max-width:1240px}}
