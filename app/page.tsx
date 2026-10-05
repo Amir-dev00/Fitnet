@@ -1,6 +1,6 @@
-import { HomeMain } from "@/components/home/home-main"
-import { VideoIntro } from "@/components/motion/video-intro"
-import { HomeHeader } from "@/components/site/home-header"
+import { HomeHeader } from "@/app/components/home/home-header"
+import { HomeMain } from "@/app/components/home/home-main"
+import { VideoIntro } from "@/app/components/home/video-intro"
 import { pageMeta } from "@/lib/seo"
 
 export const metadata = pageMeta({

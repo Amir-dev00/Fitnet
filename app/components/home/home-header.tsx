@@ -8,7 +8,6 @@ import { useEffect, useId, useRef, useState } from "react"
 import { Logo } from "@/components/site/logo"
 
 const navLinks = [
-  { href: "#features", label: "امکانات" },
   { href: "#how-it-works", label: "نحوه کار" },
   { href: "#partners", label: "همکاری" },
   { href: "/guides/", label: "راهنما", external: true },

@@ -17,9 +17,6 @@ export function HomeFooter() {
             <h4>محصول</h4>
             <ul>
               <li>
-                <a href="#features">امکانات</a>
-              </li>
-              <li>
                 <a href="#how-it-works">نحوه کار</a>
               </li>
               <li>

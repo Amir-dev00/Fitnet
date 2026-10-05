@@ -1,4 +1,4 @@
-import { HeroDownloadActions } from "@/components/home/hero-download-actions"
+import { HeroDownloadActions } from "@/app/components/home/hero-download-actions"
 
 export function FinalCta() {
   return (
