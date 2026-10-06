@@ -16,7 +16,6 @@ type DemoPhase = 'pending' | 'playing' | 'completed' | 'restarting';
 
 const STEPS = ['ارسال دعوت', 'اولین خرید اشتراک دوست', 'دریافت اعتبار هدیه'] as const;
 const SEGMENT_COUNT = 2;
-const REFERRAL_MOBILE_MQ = '(max-width: 480px)';
 
 /** Single synchronized timeline (ms). */
 const TIMELINE = {
@@ -158,25 +157,20 @@ function snapshotAt(elapsedMs: number): DemoSnapshot {
   };
 }
 
-function applySegmentFills(
-  nodes: Array<HTMLElement | null>,
-  snapshot: DemoSnapshot,
-  vertical: boolean,
-) {
+function applySegmentFills(nodes: Array<HTMLElement | null>, snapshot: DemoSnapshot) {
   const ratio = Math.min(1, Math.max(0, snapshot.segmentProgress));
   for (let i = 0; i < SEGMENT_COUNT; i++) {
     const node = nodes[i];
     if (!node) continue;
     let fill = 0;
     if (snapshot.allConnectorsFull || snapshot.phase === 'restarting') {
-      fill = snapshot.phase === 'restarting' ? 1 : 1;
+      fill = 1;
     } else if (i < snapshot.fillingSegment) {
       fill = 1;
     } else if (i === snapshot.fillingSegment) {
       fill = ratio;
     }
     node.style.setProperty('--segment-progress', String(fill));
-    node.dataset.vertical = vertical ? 'true' : 'false';
   }
 }
 
@@ -228,23 +222,19 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
   const operation = useRef(0);
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const playback = useRef<Playback>({ generation: 0, offsetMs: 0, startedAt: null, raf: null });
-  const isMobileRef = useRef(false);
 
   const [observed, setObserved] = useState(false);
   const [visible, setVisible] = useState(false);
   const [documentVisible, setDocumentVisible] = useState(true);
   const [reduced, setReduced] = useState(false);
-  const [paused, setPaused] = useState(false);
   const [copyState, setCopyState] = useState<CopyState>('idle');
   const [demo, setDemo] = useState<DemoSnapshot>(() => snapshotAt(0));
-  const [tick, setTick] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
   const playingRef = useRef(false);
 
   const invite = validUrl(referralUrl, false);
   const account = validUrl(accountUrl, true);
   const enabled = observed && !reduced;
-  const playing = enabled && visible && documentVisible && !paused;
+  const playing = enabled && visible && documentVisible;
 
   useEffect(() => {
     playingRef.current = playing;
@@ -253,18 +243,11 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
   useEffect(() => {
     mounted.current = true;
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const mobile = window.matchMedia(REFERRAL_MOBILE_MQ);
     const syncMotion = () => setReduced(media.matches);
-    const syncMobile = () => {
-      isMobileRef.current = mobile.matches;
-      setIsMobile(mobile.matches);
-    };
     const syncVisibility = () => setDocumentVisible(document.visibilityState === 'visible');
     syncMotion();
-    syncMobile();
     syncVisibility();
     media.addEventListener('change', syncMotion);
-    mobile.addEventListener('change', syncMobile);
     document.addEventListener('visibilitychange', syncVisibility);
     let observer: IntersectionObserver | undefined;
     const node = visualRef.current;
@@ -284,7 +267,6 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
       stopClock(playback.current);
       observer?.disconnect();
       media.removeEventListener('change', syncMotion);
-      mobile.removeEventListener('change', syncMobile);
       document.removeEventListener('visibilitychange', syncVisibility);
     };
   }, []);
@@ -301,9 +283,9 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
     if (!playing || reduced) {
       stopClock(clock);
       if (reduced) {
-        applySegmentFills(segmentRefs.current, snapshotAt(0), isMobileRef.current);
+        applySegmentFills(segmentRefs.current, snapshotAt(0));
       } else {
-        applySegmentFills(segmentRefs.current, snapshotAt(clock.offsetMs), isMobileRef.current);
+        applySegmentFills(segmentRefs.current, snapshotAt(clock.offsetMs));
         // eslint-disable-next-line react-hooks/set-state-in-effect -- sync paused frame to React for step chrome
         setDemo(snapshotAt(clock.offsetMs));
       }
@@ -320,7 +302,7 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
 
       const elapsed = clock.startedAt === null ? clock.offsetMs : clock.offsetMs + (now - clock.startedAt);
       const snapshot = snapshotAt(elapsed);
-      applySegmentFills(segmentRefs.current, snapshot, isMobileRef.current);
+      applySegmentFills(segmentRefs.current, snapshot);
       setDemo(snapshot);
       clock.raf = requestAnimationFrame(frame);
     };
@@ -330,7 +312,7 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
       clock.generation += 1;
       stopClock(clock);
     };
-  }, [playing, reduced, tick]);
+  }, [playing, reduced]);
 
   useEffect(() => {
     if (reduced) stopClock(playback.current);
@@ -385,7 +367,7 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
             دعوت از دوستان
           </p>
           <h2 id={`${id}-heading`} className={styles.headline}>
-            فیتنت را معرفی کن، اعتبار بگیر
+            فیت‌نت را معرفی کن، اعتبار بگیر
           </h2>
           <p className={styles.description}>
             لینک دعوتت را با دوستت به اشتراک بگذار؛ بعد از اولین خرید اشتراک او، اعتبار هدیه به کیف پول تو اضافه
@@ -444,31 +426,17 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
                 {copyState === 'success' || copyState === 'error' ? FEEDBACK[copyState] : ''}
               </p>
             </>
-          ) : (
-            <>
-              <div className={styles.linkPreview}>
-                <Icon kind="link" />
-                <span className={styles.abstractLink} aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                <span className={styles.previewLabel}>پیش‌نمایش</span>
-              </div>
-              {account ? (
-                <a className={styles.accountLink} href={account}>
-                  دریافت لینک دعوت در حساب کاربری <span aria-hidden="true">←</span>
-                </a>
-              ) : null}
-            </>
-          )}
+          ) : account ? (
+            <a className={styles.accountLink} href={account}>
+              دریافت لینک دعوت در حساب کاربری <span aria-hidden="true">←</span>
+            </a>
+          ) : null}
         </div>
         <div ref={visualRef} className={styles.visual} data-enabled={enabled}>
           <p className={styles.visualLabel}>نمایش مراحل دریافت اعتبار</p>
           <div
             className={styles.stepsNav}
             data-phase={reduced ? 'static' : demo.phase}
-            data-layout={isMobile ? 'vertical' : 'horizontal'}
           >
             <div className={styles.track} aria-hidden="true">
               {Array.from({ length: SEGMENT_COUNT }, (_, index) => (
@@ -518,21 +486,6 @@ export default function FitnetReferral({ referralUrl, accountUrl, className }: F
               ))}
             </ol>
           ) : null}
-          <p className={styles.visualNote}>این نمایش فقط مراحل را توضیح می‌دهد؛ وضعیت واقعی حساب تو نیست.</p>
-          <div className={styles.toggleSlot}>
-            {enabled ? (
-              <button
-                type="button"
-                className={styles.motionToggle}
-                onClick={() => {
-                  setPaused((value) => !value);
-                  setTick((value) => value + 1);
-                }}
-              >
-                {paused ? 'پخش نمایش' : 'توقف نمایش'}
-              </button>
-            ) : null}
-          </div>
         </div>
       </div>
     </section>

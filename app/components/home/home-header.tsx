@@ -3,42 +3,146 @@
 import { Dialog } from "@base-ui/react/dialog"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useId, useRef, useState } from "react"
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react"
 
-import { Logo } from "@/components/site/logo"
-
-const navLinks = [
-  { href: "#how-it-works", label: "نحوه کار" },
-  { href: "#partners", label: "همکاری" },
-  { href: "/guides/", label: "راهنما", external: true },
+const sectionLinks = [
+  { key: "how", id: "how-it-works", label: "نحوه کار" },
+  { key: "events", id: "events", label: "رویدادها" },
+  { key: "partners", id: "partners", label: "همکاری" },
 ] as const
+
+type SectionKey = (typeof sectionLinks)[number]["key"]
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches
 }
 
+function sectionFromHash(hash: string): SectionKey | null {
+  const id = hash.replace(/^#/, "")
+  return sectionLinks.find((item) => item.id === id)?.key ?? null
+}
+
 export function HomeHeader() {
   const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [sectionActive, setSectionActive] = useState<SectionKey | null>(null)
+  const [tick, setTick] = useState(0)
   const closeButton = useRef<HTMLButtonElement>(null)
+  const pillRef = useRef<HTMLDivElement>(null)
+  const prevActive = useRef<SectionKey | null>(null)
+  const placed = useRef(false)
+  const lockUntil = useRef(0)
   const titleId = useId()
   const pathname = usePathname()
+  const onHome = pathname === "/"
+  const active: SectionKey | null = onHome ? sectionActive : null
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
-  useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)")
-    const closeOnDesktop = () => {
-      if (desktop.matches) setOpen(false)
+    const wide = window.matchMedia("(min-width: 840px)")
+    const closeOnWide = () => {
+      if (wide.matches) setOpen(false)
     }
-    desktop.addEventListener("change", closeOnDesktop)
-    return () => desktop.removeEventListener("change", closeOnDesktop)
+    wide.addEventListener("change", closeOnWide)
+    return () => wide.removeEventListener("change", closeOnWide)
   }, [])
+
+  useEffect(() => {
+    if (!onHome) return
+    const nodes = sectionLinks
+      .map((item) => document.getElementById(item.id))
+      .filter((node): node is HTMLElement => Boolean(node))
+    if (nodes.length === 0) return
+
+    const observer = new IntersectionObserver(
+      () => {
+        if (performance.now() < lockUntil.current) return
+        const bandTop = window.innerHeight * 0.16
+        const bandBottom = window.innerHeight * 0.62
+        const scored = nodes
+          .map((node) => {
+            const rect = node.getBoundingClientRect()
+            const overlap = Math.min(rect.bottom, bandBottom) - Math.max(rect.top, bandTop)
+            return { node, overlap }
+          })
+          .filter((item) => item.overlap > 24)
+          .sort((a, b) => b.overlap - a.overlap)[0]
+        const match = scored
+          ? sectionLinks.find((item) => item.id === scored.node.id)
+          : undefined
+        setSectionActive(match ? match.key : null)
+      },
+      { rootMargin: "-16% 0px -38% 0px", threshold: [0, 0.15, 0.4] },
+    )
+
+    nodes.forEach((node) => observer.observe(node))
+    return () => observer.disconnect()
+  }, [onHome])
+
+  useEffect(() => {
+    const pill = pillRef.current
+    if (!pill || typeof ResizeObserver === "undefined") return
+    const observer = new ResizeObserver(() => setTick((value) => value + 1))
+    observer.observe(pill)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    let cancel = false
+    void document.fonts?.ready.then(() => {
+      if (!cancel) setTick((value) => value + 1)
+    })
+    return () => {
+      cancel = true
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    const pill = pillRef.current
+    if (!pill) return
+
+    let key = active
+    if (onHome && key == null) {
+      const hashed = sectionFromHash(window.location.hash)
+      if (hashed) {
+        lockUntil.current = performance.now() + 900
+        setSectionActive(hashed)
+        return
+      }
+    }
+
+    const from = prevActive.current
+    const appear = !placed.current || from == null || key == null
+    prevActive.current = key
+
+    if (!key) {
+      pill.style.setProperty("--fn-ind-opacity", "0")
+      pill.dataset.snap = "true"
+      placed.current = true
+      return
+    }
+
+    const target = pill.querySelector<HTMLElement>(`[data-nav="${key}"]`)
+    if (!target) return
+    const pillBox = pill.getBoundingClientRect()
+    const itemBox = target.getBoundingClientRect()
+    if (itemBox.width < 1) {
+      pill.style.setProperty("--fn-ind-opacity", "0")
+      prevActive.current = null
+      return
+    }
+    pill.style.setProperty("--fn-ind-x", `${itemBox.left - pillBox.left - pill.clientLeft}px`)
+    pill.style.setProperty("--fn-ind-y", `${itemBox.top - pillBox.top - pill.clientTop}px`)
+    pill.style.setProperty("--fn-ind-w", `${itemBox.width}px`)
+    pill.style.setProperty("--fn-ind-h", `${itemBox.height}px`)
+    pill.style.setProperty("--fn-ind-opacity", "1")
+    pill.dataset.snap = appear || prefersReducedMotion() ? "true" : "false"
+    placed.current = true
+
+    if (pill.dataset.snap === "true" && !prefersReducedMotion()) {
+      window.requestAnimationFrame(() => {
+        if (pillRef.current) pillRef.current.dataset.snap = "false"
+      })
+    }
+  }, [active, onHome, tick])
 
   function followHash(href: string) {
     const target = document.getElementById(href.slice(1))
@@ -52,28 +156,53 @@ export function HomeHeader() {
     })
   }
 
+  function activateSection(key: SectionKey) {
+    lockUntil.current = performance.now() + 800
+    setSectionActive(key)
+  }
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <header
-        id="hdrAurum"
-        className={`fn-on-indigo${scrolled ? " hdr-scrolled" : ""}`}
-      >
-        <div className="fn-header-bar">
-          <div className="fn-header-logo">
-            <Logo lockup />
-          </div>
-          <nav className="fn-header-nav" aria-label="ناوبری اصلی">
-            {navLinks.map((item) =>
-              "external" in item && item.external ? (
-                <Link key={item.href} href={item.href} className="fn-nav-link">
+      <header id="hdrAurum">
+        <div ref={pillRef} className="fn-float-pill">
+          <span className="fn-float-capsule" aria-hidden="true" />
+          <Link href="/" className="fn-float-logo" aria-label="فیت‌نت، صفحه اصلی">
+            <img
+              src="/brand/fitnet-indigo-orange-logo.png"
+              alt=""
+              width={2172}
+              height={724}
+            />
+          </Link>
+          <nav className="fn-float-nav" aria-label="ناوبری اصلی">
+            {sectionLinks.map((item) => {
+              const current = active === item.key
+              if (onHome) {
+                return (
+                  <a
+                    key={item.key}
+                    href={`#${item.id}`}
+                    data-nav={item.key}
+                    data-active={current ? "true" : undefined}
+                    aria-current={current ? "location" : undefined}
+                    className="fn-float-link"
+                    onClick={() => activateSection(item.key)}
+                  >
+                    {item.label}
+                  </a>
+                )
+              }
+              return (
+                <Link
+                  key={item.key}
+                  href={`/#${item.id}`}
+                  data-nav={item.key}
+                  className="fn-float-link"
+                >
                   {item.label}
                 </Link>
-              ) : (
-                <a key={item.href} href={item.href} className="fn-nav-link">
-                  {item.label}
-                </a>
-              ),
-            )}
+              )
+            })}
           </nav>
           <Dialog.Trigger
             id="fn-menu-btn"
@@ -107,36 +236,32 @@ export function HomeHeader() {
             <p id={titleId} className="fn-nav-drawer-title">منو</p>
           </div>
           <nav className="fn-nav-drawer-nav" aria-label="ناوبری موبایل">
-            {navLinks.map((item) => {
-              const current = "external" in item && item.external && pathname.startsWith("/guides")
-              if ("external" in item && item.external) {
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="fn-nav-link-mobile"
-                    aria-current={current ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                )
-              }
-              return (
+            {sectionLinks.map((item) =>
+              onHome ? (
                 <a
-                  key={item.href}
-                  href={item.href}
+                  key={item.id}
+                  href={`#${item.id}`}
                   className="fn-nav-link-mobile"
                   onClick={(event) => {
                     event.preventDefault()
                     setOpen(false)
-                    followHash(item.href)
+                    activateSection(item.key)
+                    followHash(`#${item.id}`)
                   }}
                 >
                   {item.label}
                 </a>
-              )
-            })}
+              ) : (
+                <Link
+                  key={item.id}
+                  href={`/#${item.id}`}
+                  className="fn-nav-link-mobile"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
           </nav>
         </Dialog.Popup>
       </Dialog.Portal>

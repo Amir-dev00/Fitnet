@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { PageShell } from "@/components/site/page-shell"
 import { pageMeta } from "@/lib/seo"
 
@@ -11,14 +9,7 @@ export const metadata = pageMeta({
 
 export default function AboutPage() {
   return (
-    <PageShell
-      nav={[
-        { href: "/#how-it-works", label: "نحوه کار" },
-        { href: "/plans/", label: "پلن‌ها" },
-        { href: "/guides/", label: "راهنما" },
-        { href: "/contact/", label: "دسترسی زودهنگام", className: "fn-btn" },
-      ]}
-    >
+    <PageShell>
       <p className="fn-kicker">درباره فیت‌نت</p>
       <h1>شهر، زمین تمرین توست.</h1>
       <p className="fn-lead">فیت‌نت باشگاه‌های همکار و رویدادهای ورزشی تأییدشده را در یک حساب جمع می‌کند. اعتبار را در کیف پول می‌بینی، زمان مناسب را رزرو می‌کنی و با QR وارد می‌شوی.</p>
@@ -37,7 +28,6 @@ export default function AboutPage() {
         <h2>مسیر کوتاه</h2>
         <p>اعتبار بگیر، پیدا کن، رزرو کن، وارد شو. با ساخت حساب، ۱ اعتبار شروع دریافت می‌کنی؛ این یک جلسه رایگان تضمینی نیست.</p>
       </div>
-      <p style={{ marginTop: 28 }}><Link className="fn-btn" href="/contact/?path=early">دسترسی زودهنگام</Link></p>
     </PageShell>
   )
 }

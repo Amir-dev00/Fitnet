@@ -112,8 +112,13 @@
   background: #f7f8fc;
   border-top: 1px solid rgba(23, 11, 147, .08);
   overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
 }
+.stage:active { cursor: grabbing; }
 .cardStack {
+  --drag-x: 0px;
   position: relative;
   width: min(72vw, 300px);
   aspect-ratio: 4 / 5;
@@ -131,32 +136,30 @@
   box-shadow: 0 16px 40px rgba(23, 11, 147, .14);
   transform-origin: center center;
   transition: transform 760ms cubic-bezier(.22, 1.02, .36, 1), opacity 760ms ease, filter 760ms ease;
-  cursor: default;
+  cursor: grab;
 }
 .card[data-animate='false'] { transition: none; }
+.cardStack[data-dragging] .card { transition: none; }
 .card[data-status='active'] {
-  transform: translateX(0) scale(1) rotate(0deg);
+  transform: translateX(var(--drag-x)) scale(1) rotate(0deg);
   opacity: 1;
   z-index: 20;
   pointer-events: auto;
   filter: none;
-  cursor: grab;
 }
 .card[data-status='prev'] {
-  transform: translateX(-100px) scale(.85) rotate(-3deg);
+  transform: translateX(calc(-100px + var(--drag-x))) scale(.85) rotate(-3deg);
   opacity: 1;
   z-index: 10;
-  pointer-events: auto;
+  pointer-events: none;
   filter: none;
-  cursor: pointer;
 }
 .card[data-status='next'] {
-  transform: translateX(100px) scale(.85) rotate(3deg);
+  transform: translateX(calc(100px + var(--drag-x))) scale(.85) rotate(3deg);
   opacity: 1;
   z-index: 10;
-  pointer-events: auto;
+  pointer-events: none;
   filter: none;
-  cursor: pointer;
 }
 .card[data-status='prev'] .coverArt,
 .card[data-status='prev'] .coverPhoto,
@@ -238,8 +241,23 @@
     padding: 24px clamp(32px, 5vw, 56px);
   }
   .cardStack { width: min(100%, 320px); }
+  .card[data-status='prev'],
+  .card[data-status='next'] { pointer-events: auto; cursor: pointer; }
 }
 
+@media (max-width: 899px) {
+  .shell { min-height: 0; }
+  .stage {
+    order: -1;
+    border-top: 0;
+    border-bottom: 1px solid rgba(23, 11, 147, .08);
+    padding: 20px 16px 18px;
+  }
+  .rail { min-height: 0; padding: 16px 14px 18px; }
+  .cardStack { width: min(62vw, 250px); }
+  .card[data-status='prev'] { transform: translateX(calc(-58px + var(--drag-x))) scale(.88) rotate(-2.5deg); }
+  .card[data-status='next'] { transform: translateX(calc(58px + var(--drag-x))) scale(.88) rotate(2.5deg); }
+}
 @media (max-width: 700px) {
   .section { padding-inline: 20px; }
   .header { grid-template-columns: 1fr; gap: 13px; }

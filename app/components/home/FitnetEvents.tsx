@@ -4,10 +4,12 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type FocusEvent,
   type KeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
 } from 'react';
 import styles from './FitnetEvents.module.css';
 
@@ -54,8 +56,9 @@ const availabilityLabels = {
   Full: 'تکمیل ظرفیت',
 } as const;
 
-const INTERVAL = 6000;
+const INTERVAL = 3200;
 const ITEM_HEIGHT = 62;
+const SWIPE_THRESHOLD = 48;
 
 const digits = (value: number) => String(value).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
 
@@ -161,6 +164,9 @@ export default function FitnetEvents({ events, demoCovers, className }: FitnetEv
   const sectionId = useId();
   const sectionRef = useRef<HTMLElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
+  const gestureRef = useRef<{ id: number; x: number; y: number; locked: boolean } | null>(null);
+  const draggedRef = useRef(false);
   const enteredRef = useRef(false);
   const reducedRef = useRef(false);
 
@@ -171,6 +177,7 @@ export default function FitnetEvents({ events, demoCovers, className }: FitnetEv
   const [reduced, setReduced] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
   const [focusBlocked, setFocusBlocked] = useState(false);
+  const [gesturing, setGesturing] = useState(false);
   const [step, setStep] = useState(0);
 
   const seen = new Set<string>();
@@ -237,7 +244,14 @@ export default function FitnetEvents({ events, demoCovers, className }: FitnetEv
     setStep((prev) => prev + 1);
   }, []);
 
-  const running = ready && visible && documentVisible && carousel && !userPaused && !focusBlocked;
+  const running = ready && visible && documentVisible && carousel && !userPaused && !focusBlocked && !gesturing;
+
+  useLayoutEffect(() => {
+    const stack = stackRef.current;
+    if (!stack) return;
+    stack.style.setProperty('--drag-x', '0px');
+    stack.removeAttribute('data-dragging');
+  }, [step]);
 
   useEffect(() => {
     if (!running) return;
@@ -264,6 +278,56 @@ export default function FitnetEvents({ events, demoCovers, className }: FitnetEv
       event.preventDefault();
       setStep((value) => value - 1);
     }
+  }
+
+  function clearDrag() {
+    const stack = stackRef.current;
+    if (!stack) return;
+    stack.style.setProperty('--drag-x', '0px');
+    stack.removeAttribute('data-dragging');
+  }
+
+  function onStagePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!carousel || event.button !== 0) return;
+    if (event.target instanceof Element && event.target.closest('a')) return;
+    draggedRef.current = false;
+    gestureRef.current = { id: event.pointerId, x: event.clientX, y: event.clientY, locked: false };
+  }
+
+  function onStagePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const gesture = gestureRef.current;
+    if (!gesture || gesture.id !== event.pointerId) return;
+    const dx = event.clientX - gesture.x;
+    const dy = event.clientY - gesture.y;
+    if (!gesture.locked) {
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      if (Math.abs(dy) > Math.abs(dx)) {
+        gestureRef.current = null;
+        return;
+      }
+      gesture.locked = true;
+      draggedRef.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      stackRef.current?.setAttribute('data-dragging', 'true');
+      setGesturing(true);
+    }
+    stackRef.current?.style.setProperty('--drag-x', `${dx}px`);
+  }
+
+  function onStagePointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+    const gesture = gestureRef.current;
+    if (!gesture || gesture.id !== event.pointerId) return;
+    const dx = event.clientX - gesture.x;
+    const locked = gesture.locked;
+    gestureRef.current = null;
+    stackRef.current?.removeAttribute('data-dragging');
+    setGesturing(false);
+    setFocusBlocked(false);
+    window.setTimeout(() => setFocusBlocked(false), 0);
+    if (!locked) return;
+    if (dx <= -SWIPE_THRESHOLD) nextStep();
+    else if (dx >= SWIPE_THRESHOLD) setStep((value) => value - 1);
+    else clearDrag();
   }
 
   function onFocusOut(event: FocusEvent<HTMLElement>) {
@@ -322,9 +386,10 @@ export default function FitnetEvents({ events, demoCovers, className }: FitnetEv
           aria-label={carousel ? (demo ? 'پیش‌نمایش رویدادها' : 'رویدادهای تأییدشده') : undefined}
           onKeyDown={onShellKeyDown}
           onFocusCapture={(event) => {
-            if (!carousel) return;
-            // Pause only when the carousel region itself receives keyboard focus, not chip/card clicks.
-            if (event.target === event.currentTarget) setFocusBlocked(true);
+            if (!carousel || event.target !== event.currentTarget) return;
+            const region = event.currentTarget;
+            if (!(region instanceof HTMLElement) || !region.matches(':focus-visible')) return;
+            setFocusBlocked(true);
           }}
           onBlurCapture={onFocusOut}
         >
@@ -362,8 +427,14 @@ export default function FitnetEvents({ events, demoCovers, className }: FitnetEv
             </div>
           </div>
 
-          <div className={styles.stage}>
-            <div className={styles.cardStack}>
+          <div
+            className={styles.stage}
+            onPointerDown={onStagePointerDown}
+            onPointerMove={onStagePointerMove}
+            onPointerUp={onStagePointerEnd}
+            onPointerCancel={onStagePointerEnd}
+          >
+            <div ref={stackRef} className={styles.cardStack}>
               {items.map((event, index) => {
                 const status = carousel ? getCardStatus(index, currentIndex, len) : 'active';
                 const destination = demo || status !== 'active' ? undefined : safeUrl(event.destinationUrl);
@@ -377,8 +448,11 @@ export default function FitnetEvents({ events, demoCovers, className }: FitnetEv
                     data-animate={!reduced ? 'true' : 'false'}
                     aria-hidden={status === 'hidden' ? true : undefined}
                     inert={status === 'hidden' ? true : undefined}
-                    onClick={() => {
-                      if (status === 'prev' || status === 'next') handleChipClick(index);
+                    onClick={(clickEvent) => {
+                      if (draggedRef.current) return;
+                      if (!window.matchMedia('(min-width: 900px)').matches) return;
+                      const cardStatus = clickEvent.currentTarget.getAttribute('data-status');
+                      if (cardStatus === 'prev' || cardStatus === 'next') handleChipClick(index);
                     }}
                   >
                     <CoverMedia cover={event.cover} variant={index} />

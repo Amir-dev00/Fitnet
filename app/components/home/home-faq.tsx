@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { essentialFaqs } from "@/lib/content"
 
 export function HomeFaq() {
@@ -9,13 +7,7 @@ export function HomeFaq() {
         <header className="fn-section-head">
           <p className="fn-kicker">راهنما</p>
           <h2 className="fn-home-title">پرسش‌های رایج</h2>
-          <p className="fn-home-lead">
-            پاسخ‌های کوتاه برای شروع. جزئیات بیشتر در{" "}
-            <Link href="/guides/" className="fn-text-link">
-              راهنمای فیت‌نت
-            </Link>
-            .
-          </p>
+          <p className="fn-home-lead">پاسخ‌های کوتاه برای شروع.</p>
         </header>
 
         <div className="fn-faq fn-home-faq">

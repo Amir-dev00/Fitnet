@@ -3,7 +3,7 @@ import { pageMeta } from "@/lib/seo"
 
 export const metadata = pageMeta({
   title: "ارتباط و همکاری | فیت‌نت",
-  description: "درخواست دسترسی زودهنگام، همکاری باشگاه یا برگزاری رویداد در فیت‌نت.",
+  description: "درخواست همکاری باشگاه یا برگزاری رویداد در فیت‌نت.",
   path: "/contact/",
 })
 

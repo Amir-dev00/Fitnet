@@ -53,8 +53,10 @@ body {
 
 #hdrAurum,
 #hdrAurum.hdr-scrolled {
-  background: var(--fitnet-indigo) !important;
-  border-bottom: 1px solid color-mix(in srgb, var(--fitnet-white) 18%, transparent) !important;
+  background: transparent !important;
+  color: var(--fitnet-indigo);
+  border-bottom: 0 !important;
+  box-shadow: none !important;
   backdrop-filter: none;
 }
 
@@ -529,56 +531,160 @@ a {
 
 #hdrAurum {
   position: fixed;
-  inset-block-start: 0;
+  inset-block-start: max(16px, env(safe-area-inset-top, 0px));
   inset-inline: 0;
   z-index: 40;
-  min-height: calc(64px + env(safe-area-inset-top, 0px));
-  padding-top: env(safe-area-inset-top, 0px);
-  background: #170b93;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--fitnet-indigo);
+  pointer-events: none;
 }
 
-.fn-header-bar {
+.fn-float-pill {
+  --fn-ind-x: 0px;
+  --fn-ind-y: 0px;
+  --fn-ind-w: 0px;
+  --fn-ind-h: 0px;
+  --fn-ind-opacity: 0;
+  position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  height: 64px;
-  margin-inline: auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  gap: 2px;
+  width: calc(100% - 24px);
+  max-width: calc(100% - 24px);
+  padding: 6px;
+  border: 1px solid color-mix(in srgb, var(--fitnet-indigo) 12%, #e7e7ef);
+  border-radius: 999px;
+  background: var(--fitnet-white);
+  box-shadow:
+    0 1px 1px rgba(23, 11, 147, 0.04),
+    0 10px 24px rgba(23, 11, 147, 0.07),
+    0 28px 48px rgba(23, 11, 147, 0.06);
   direction: ltr;
+  justify-content: space-between;
+  pointer-events: auto;
 }
 
-.fn-header-logo {
-  margin-right: auto;
+.fn-float-logo {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: 10px 6px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.fn-float-logo img {
+  display: block;
+  width: auto;
+  height: 40px;
+}
+
+.fn-float-logo:hover img,
+.fn-float-logo:focus-visible img {
+  opacity: 0.86;
+}
+
+.fn-float-logo:active {
+  transform: scale(0.985);
+}
+
+.fn-float-nav {
+  display: none;
+  flex: 1 1 auto;
+  align-items: center;
   min-width: 0;
 }
 
-.fn-header-logo .fn-brand {
-  min-height: 48px;
-  max-width: 100%;
+.fn-float-capsule {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--fn-ind-opacity);
 }
 
-#hdrAurum {
-  --fn-logo-size: 34px;
+.fn-float-capsule {
+  width: var(--fn-ind-w);
+  height: var(--fn-ind-h);
+  border-radius: 999px;
+  background: rgba(23, 11, 147, 0.06);
+  transform: translate3d(var(--fn-ind-x), var(--fn-ind-y), 0);
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 200ms ease;
 }
 
-.fn-header-nav {
-  display: none;
+.fn-float-pill[data-snap="true"] .fn-float-capsule {
+  transition: opacity 160ms ease;
+}
+
+html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #3f3c56;
+  font-family: var(--fn-font);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  white-space: nowrap;
+  transition:
+    color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 120ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link:hover {
+  color: var(--fitnet-indigo);
+  background: rgba(23, 11, 147, 0.045);
+}
+
+html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link[data-active="true"],
+html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link[data-active="true"]:hover {
+  color: var(--fitnet-indigo);
+  background: transparent;
+}
+
+html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link:active {
+  transform: scale(0.985);
 }
 
 .fn-header-menu {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 12px;
+  border-radius: 999px;
   background: transparent;
-  color: var(--fitnet-white);
+  color: var(--fitnet-indigo);
   cursor: pointer;
 }
 
@@ -588,6 +694,8 @@ a {
 }
 
 .fn-header-menu:focus-visible,
+.fn-float-logo:focus-visible,
+.fn-float-link:focus-visible,
 .fn-nav-drawer-close:focus-visible,
 .fn-nav-link-mobile:focus-visible,
 .fn-nav-link:focus-visible {
@@ -597,39 +705,57 @@ a {
 
 .fn-header-menu:hover,
 .fn-header-menu:active {
-  background: color-mix(in srgb, var(--fitnet-white) 10%, transparent);
+  background: color-mix(in srgb, var(--fitnet-indigo) 8%, transparent);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 840px) {
   #hdrAurum {
-    min-height: calc(72px + env(safe-area-inset-top, 0px));
-    --fn-logo-size: 40px;
+    inset-block-start: max(22px, env(safe-area-inset-top, 0px));
   }
 
-  .fn-header-bar {
+  .fn-float-pill {
     direction: rtl;
-    height: 72px;
-    padding-left: max(24px, env(safe-area-inset-left, 0px));
-    padding-right: max(24px, env(safe-area-inset-right, 0px));
-    gap: 8px;
-  }
-
-  .fn-header-logo {
-    margin-right: 0;
-  }
-
-  .fn-header-nav {
-    display: flex;
-    flex: 1;
-    align-items: center;
+    justify-content: flex-start;
     gap: 4px;
-    min-width: 0;
+    width: max-content;
+    max-width: calc(100% - 48px);
+    padding: 8px;
   }
 
-  .fn-header-menu,
-  .fn-nav-backdrop,
-  .fn-nav-drawer {
-    display: none !important;
+  .fn-float-nav {
+    display: flex;
+    flex: 0 0 auto;
+  }
+
+  .fn-header-menu {
+    display: none;
+  }
+
+  .fn-float-logo img {
+    height: 46px;
+  }
+
+  html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link {
+    flex: 0 0 auto;
+    min-height: 48px;
+    height: 48px;
+    padding: 0 22px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fn-float-capsule,
+  html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link,
+  .fn-float-logo,
+  .fn-float-logo:active,
+  html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link:active {
+    transition: none;
+    transform: none;
+  }
+
+  .fn-float-capsule {
+    transform: translate3d(var(--fn-ind-x), var(--fn-ind-y), 0);
   }
 }
 
@@ -789,9 +915,9 @@ a {
 .hero-photo {
   position: absolute;
   z-index: 0;
-  inset-inline: 0;
-  bottom: 0;
+  inset: 0;
   margin: 0;
+  overflow: hidden;
   pointer-events: none;
   line-height: 0;
 }
@@ -799,10 +925,9 @@ a {
 .hero-photo img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   max-width: none;
-  aspect-ratio: 1086 / 1448;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center bottom;
 }
 
@@ -851,10 +976,6 @@ a {
 }
 
 @media (min-width: 1024px) {
-  .hero-photo img {
-    aspect-ratio: 1944 / 809;
-  }
-
   .hero-stage {
     min-height: calc(100vw * 809 / 1944);
     padding-top: calc(96px + env(safe-area-inset-top, 0px));
@@ -876,20 +997,6 @@ a {
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .hero-photo {
-    top: 0;
-    bottom: 0;
-    height: 100%;
-  }
-
-  .hero-photo img {
-    height: 100%;
-    aspect-ratio: auto;
-    object-fit: cover;
-    object-position: center bottom;
-  }
-}
 
 .fn-hero-actions {
   display: flex;
@@ -1391,7 +1498,13 @@ footer form button {
 }
 
 .fn-page .fn-wrap {
-  padding-top: 56px;
+  padding-top: calc(88px + env(safe-area-inset-top, 0px));
+}
+
+@media (min-width: 1024px) {
+  .fn-page .fn-wrap {
+    padding-top: calc(112px + env(safe-area-inset-top, 0px));
+  }
 }
 
 @media (min-width: 1024px) {
@@ -2086,7 +2199,7 @@ html[dir="rtl"]:not(.fn-alpine-ready) .fn-nav-drawer[data-starting-style] {
   }
 
   .fn-home-footer-grid {
-    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    grid-template-columns: 1.4fr 1fr 1fr;
   }
 
   .fn-home-footer-bottom {

@@ -217,6 +217,7 @@
 .scan { position: absolute; inset-inline: 6px; inset-block-start: 0; block-size: 2px; background: var(--orange); opacity: 0; animation: scanOnce 850ms 100ms both; }
 .qrNote { display: block; color: var(--muted); font-size: 9px; line-height: 1.8; margin-block-start: 5px; }
 .entrySuccess { margin-block-start: 6px; padding: 5px; animation-delay: 850ms; }
+.entrySuccess::after { content: ""; inline-size: 17px; block-size: 17px; flex-shrink: 0; }
 @media (hover: hover) {
   .tab:hover .tabLabel { color: var(--indigo); }
   .playbackToggle:hover { filter: brightness(0.96); }
@@ -243,17 +244,24 @@
   .preview { padding: 10px; }
 }
 @media (max-width: 700px) {
-  .header { margin-block-end: 26px; }
-  .tabLabel { font-size: 12px; }
-  .tab { gap: 9px; }
-  .panelShell { border-radius: 20px; }
-  .content { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 22px 16px; min-block-size: 536px; align-content: start; }
-  .copy { min-block-size: 160px; }
-  .copy h3 { font-size: 23px; margin-block: 9px 8px; }
-  .copy p { font-size: 14px; max-inline-size: none; }
-  .preview { inline-size: 100%; max-inline-size: 400px; justify-self: center; padding: 10px; }
-  .controls { gap: 8px; margin-block-start: 14px; }
-  .stepButton { min-block-size: 38px; padding: 8px 12px; font-size: 12px; }
+  .section { padding-block: 36px; }
+  .header { margin-block-end: 16px; }
+  .strip { padding-block: 2px 8px; }
+  .tab { gap: 4px; padding: 0 2px 2px; min-block-size: 0; }
+  .marker { inline-size: 36px; block-size: 36px; border-width: 3px; font-size: 13px; }
+  .marker > svg:not(.entryProgress) { inline-size: 15px; block-size: 15px; }
+  .tabLabel { font-size: 11px; line-height: 1.35; }
+  .track { inset-block-start: 17px; }
+  .panelShell { border-radius: 20px; margin-block-start: 8px; }
+  .content { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 16px 14px; min-block-size: 0; align-content: start; }
+  .copy { min-block-size: 0; }
+  .copy h3 { font-size: 22px; margin-block: 6px 6px; }
+  .copy p { font-size: 13px; line-height: 1.8; max-inline-size: none; }
+  .preview { inline-size: 100%; max-inline-size: 400px; justify-self: center; padding: 8px; }
+  .wallet, .reservation, .pass, .discovery { block-size: auto; }
+  .map { block-size: 112px; }
+  .controls { gap: 8px; margin-block-start: 10px; }
+  .stepButton { min-block-size: 36px; padding: 6px 12px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .section *, .section *::before, .section *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
@@ -317,14 +325,15 @@
   flex-shrink: 0;
 }
 @media (max-width: 700px) {
-  :global(html[dir="rtl"]) .section .copy h3 { font-size: 23px; margin-block: 9px 8px; }
-  :global(html[dir="rtl"]) .section .copy p { font-size: 14px; max-inline-size: none; line-height: 2.1; }
+  :global(html[dir="rtl"]) .section .copy h3 { font-size: 22px; margin-block: 6px 6px; }
+  :global(html[dir="rtl"]) .section .copy p { font-size: 13px; max-inline-size: none; line-height: 1.8; }
+  :global(html[dir="rtl"]) .section .tab { min-height: 0; min-block-size: 0; gap: 4px; }
 }
 
 /* Mobile connectors cover the visible edge-to-edge gap, not hidden marker halves.
    Each original grid cell spans two marker centres; each marker has radius 24px. */
 @media (max-width: 700px) {
-  .trackSegment { margin-inline: 24px; }
+  .trackSegment { margin-inline: 18px; }
   .navigation:not([data-phase="restarting"]) .tab .marker,
   .navigation:not([data-phase="restarting"]) .tab .marker > svg:not(.entryProgress) {
     transition: none;
@@ -340,6 +349,13 @@
   pointer-events: none;
   transform: rotate(-90deg);
   visibility: var(--entry-ring-visibility, hidden);
+}
+@media (max-width: 700px) {
+  .section .marker .entryProgress {
+    inset: -4px;
+    inline-size: 38px;
+    block-size: 38px;
+  }
 }
 .entryProgress circle {
   fill: none;

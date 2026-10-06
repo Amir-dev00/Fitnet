@@ -9,13 +9,7 @@ export const metadata = pageMeta({
 
 export default function TermsPage() {
   return (
-    <PageShell
-      footer="legal"
-      nav={[
-        { href: "/privacy/", label: "حریم خصوصی" },
-        { href: "/guides/", label: "راهنما" },
-      ]}
-    >
+    <PageShell>
       <div className="fn-prose">
         <p className="fn-kicker">پیش‌نویس</p>
         <h1>قوانین استفاده</h1>

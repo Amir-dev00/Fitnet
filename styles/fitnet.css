@@ -407,11 +407,9 @@ html[dir="rtl"] .au-deco-monogram {
   letter-spacing: 0;
   text-transform: none;
 }
-html[dir="rtl"] .mob-drawer nav a[href="#partners"],
-html[dir="rtl"] #hdrAurum nav a[href="#partners"] {
+html[dir="rtl"] .mob-drawer nav a[href="#partners"] {
   color: color-mix(in srgb, var(--fn-ink) 88%, transparent);
 }
-html[dir="rtl"] .mob-drawer nav a[href="#partners"]:hover,
-html[dir="rtl"] #hdrAurum nav a[href="#partners"]:hover {
+html[dir="rtl"] .mob-drawer nav a[href="#partners"]:hover {
   color: var(--fitnet-light-blue);
 }

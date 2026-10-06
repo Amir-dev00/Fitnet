@@ -1,6 +1,5 @@
 import Link from "next/link"
 
-import { DemoForm } from "@/components/forms/demo-form"
 import { Logo } from "@/components/site/logo"
 
 export function HomeFooter() {
@@ -17,10 +16,10 @@ export function HomeFooter() {
             <h4>محصول</h4>
             <ul>
               <li>
-                <a href="#how-it-works">نحوه کار</a>
+                <a href="/#how-it-works">نحوه کار</a>
               </li>
               <li>
-                <a href="#events">رویدادها</a>
+                <a href="/#events">رویدادها</a>
               </li>
               <li>
                 <Link href="/plans/">پلن‌ها</Link>
@@ -41,36 +40,16 @@ export function HomeFooter() {
                 <Link href="/contact/">ارتباط با ما</Link>
               </li>
               <li>
-                <Link href="/guides/">راهنما</Link>
+                <a href="/#faq">پرسش‌های رایج</a>
               </li>
             </ul>
-          </div>
-
-          <div>
-            <h4 id="contact">دسترسی زودهنگام</h4>
-            <p className="fn-home-footer-copy">این فرم در نسخه نمایشی ارسال نمی‌شود.</p>
-            <DemoForm
-              compact
-              submitLabel="ثبت"
-              fields={[
-                { id: "ea-name", name: "name", label: "نام", required: true, autoComplete: "name" },
-                {
-                  id: "ea-mobile",
-                  name: "mobile",
-                  label: "شماره موبایل",
-                  required: true,
-                  type: "tel",
-                  autoComplete: "tel",
-                },
-              ]}
-            />
           </div>
         </div>
 
         <div className="fn-home-footer-bottom">
           <p>© 2026 Fitnet. تمامی حقوق محفوظ است.</p>
           <div>
-            <Link href="/guides/">راهنما</Link>
+            <a href="/#faq">پرسش‌های رایج</a>
             <Link href="/terms/">قوانین استفاده</Link>
             <Link href="/privacy/">حریم خصوصی</Link>
           </div>

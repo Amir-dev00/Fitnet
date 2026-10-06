@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
 import styles from './FitnetPartners.module.css';
 
-const INTERVAL = 5500;
+const INTERVAL = 3200;
 const EXIT = 180;
 const ENTER = 260;
 const TABS = ['رزروهای امروز', 'ورودها', 'تسویه‌ها'] as const;
@@ -49,9 +49,8 @@ export type FitnetPartnersProps = { className?: string };
 
 export default function FitnetPartners({ className }: FitnetPartnersProps) {
   const id = useId();
-  const section = useRef<HTMLElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const finePointer = useRef(false);
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(false);
   const [documentVisible, setDocumentVisible] = useState(true);
@@ -59,14 +58,12 @@ export default function FitnetPartners({ className }: FitnetPartnersProps) {
   const [entering, setEntering] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const [focusBlocked, setFocusBlocked] = useState(false);
   const [focusedTab, setFocusedTab] = useState<TabIndex>(0);
   const [view, setView] = useState<{ active: TabIndex; target: TabIndex; phase: Phase; manual: boolean }>({ active: 0, target: 0, phase: 'idle', manual: false });
 
   useEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const pointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     const syncMotion = () => {
       setReduced(motion.matches);
       if (motion.matches) {
@@ -75,15 +72,13 @@ export default function FitnetPartners({ className }: FitnetPartnersProps) {
         setView((current) => ({ active: current.target, target: current.target, phase: 'idle', manual: false }));
       }
     };
-    const syncPointer = () => { finePointer.current = pointer.matches; if (!pointer.matches) setHovered(false); };
     const syncVisibility = () => setDocumentVisible(document.visibilityState === 'visible');
-    syncMotion(); syncPointer(); syncVisibility();
+    syncMotion(); syncVisibility();
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time playback gate after media and visibility sync
     setReady(true);
     motion.addEventListener('change', syncMotion);
-    pointer.addEventListener('change', syncPointer);
     document.addEventListener('visibilitychange', syncVisibility);
-    const element = section.current;
+    const element = previewRef.current;
     let observer: IntersectionObserver | undefined;
     if (element && 'IntersectionObserver' in window) {
       observer = new IntersectionObserver(([entry]) => {
@@ -103,12 +98,11 @@ export default function FitnetPartners({ className }: FitnetPartnersProps) {
     return () => {
       observer?.disconnect();
       motion.removeEventListener('change', syncMotion);
-      pointer.removeEventListener('change', syncPointer);
       document.removeEventListener('visibilitychange', syncVisibility);
     };
   }, []);
 
-  const running = ready && visible && documentVisible && !userPaused && !hovered && !focusBlocked;
+  const running = ready && visible && documentVisible && !userPaused && !focusBlocked;
 
   // The only timer: it schedules either a dwell, exit, or entrance phase.
   // Cleanup cancels stale work on selection, visibility, preference changes and Strict Mode remounts.
@@ -142,7 +136,6 @@ export default function FitnetPartners({ className }: FitnetPartnersProps) {
   useEffect(() => { if (!focusBlocked) setFocusedTab(view.active); }, [view.active, focusBlocked]);
 
   function selectTab(index: TabIndex) {
-    setUserPaused(true);
     setFocusedTab(index);
     setView((current) => {
       if (reduced || index === current.active) return { active: index, target: index, phase: 'idle', manual: true };
@@ -157,35 +150,36 @@ export default function FitnetPartners({ className }: FitnetPartnersProps) {
     else if (event.key === 'ArrowRight') next = ((index + 2) % 3) as TabIndex;
     else if (event.key === 'Home') next = 0;
     else if (event.key === 'End') next = 2;
-    else return; // Native button Enter/Space fires onClick and pauses autoplay.
+    else return;
     event.preventDefault();
     setFocusedTab(next);
     tabRefs.current[next]?.focus();
   }
 
   return (
-    <section id="partners" ref={section} dir="rtl" lang="fa" aria-labelledby={`${id}-heading`}
+    <section id="partners" dir="rtl" lang="fa" aria-labelledby={`${id}-heading`}
       className={[styles.section, className].filter(Boolean).join(' ')} data-entering={entering} data-reduced={reduced}>
       <div className={styles.layout}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}><span aria-hidden="true" />برای باشگاه‌ها</p>
           <h2 id={`${id}-heading`} className={styles.headline}>باشگاهت را به انتخاب بعدی ورزشکارها تبدیل کن</h2>
-          <p className={styles.description}>ظرفیت قابل رزرو باشگاهت را در فیتنت ارائه کن و رزروها، ورود ورزشکارها و وضعیت تسویه را از یک پنل دنبال کن.</p>
-          <div className={styles.actions}>
-            <a className={styles.primary} href="/contact/?path=gym">درخواست همکاری باشگاه <span aria-hidden="true">↖</span></a>
-            <a className={styles.secondary} href="/contact/?path=organizer">همکاری به‌عنوان برگزارکننده <span aria-hidden="true">←</span></a>
-          </div>
+          <p className={styles.description}>ظرفیت قابل رزرو باشگاهت را در فیت‌نت ارائه کن و رزروها، ورود ورزشکارها و وضعیت تسویه را از یک پنل دنبال کن.</p>
         </div>
-        <div className={styles.preview}
+        <div className={styles.actions}>
+          <a className={styles.primary} href="/contact/?path=gym">درخواست همکاری باشگاه <span aria-hidden="true">←</span></a>
+          <a className={styles.secondary} href="/contact/?path=organizer">همکاری به‌عنوان برگزارکننده <span aria-hidden="true">←</span></a>
+        </div>
+        <div ref={previewRef} className={styles.preview}
           onAnimationEnd={(event) => { if (event.target === event.currentTarget) setEntering(false); }}
-          onPointerEnter={(event) => { if (event.pointerType === 'mouse' && finePointer.current) setHovered(true); }}
-          onPointerLeave={() => setHovered(false)}
-          onFocusCapture={() => setFocusBlocked(true)}
+          onFocusCapture={(event) => {
+            const target = event.target;
+            if (target instanceof HTMLElement && target.matches(':focus-visible')) setFocusBlocked(true);
+          }}
           onBlurCapture={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocusBlocked(false);
           }}>
           <div className={styles.previewHeader}>
-            <div className={styles.brand}><svg width="23" height="23" viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M5 18V6h14M5 12h10" stroke="currentColor" strokeWidth="3" /><path d="m16 16 3 3 3-3" stroke="#E36F2E" strokeWidth="2" /></svg><span>فیتنت <span className={styles.brandSub}>/ پنل همکاری</span></span></div>
+            <div className={styles.brand}><svg width="23" height="23" viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M5 18V6h14M5 12h10" stroke="currentColor" strokeWidth="3" /><path d="m16 16 3 3 3-3" stroke="#E36F2E" strokeWidth="2" /></svg><span>فیت‌نت <span className={styles.brandSub}>/ پنل همکاری</span></span></div>
             <span className={styles.samplePill}>نسخهٔ نمایشی</span>
           </div>
           <p className={styles.previewLabel}>پیش‌نمایش پنل باشگاه — اطلاعات نمونه</p>

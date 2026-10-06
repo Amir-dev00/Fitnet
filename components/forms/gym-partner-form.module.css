@@ -1,0 +1,341 @@
+.form {
+  --indigo: #170b93;
+  --orange: #e36f2e;
+  --blue: #c3dbfc;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.intro {
+  margin: 0 0 8px;
+}
+
+.progress {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  list-style: none;
+  margin: 18px auto 22px;
+  padding: 0;
+  gap: 36px;
+}
+
+.progressItem {
+  position: relative;
+  display: flex;
+  flex: 0 0 72px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 72px;
+  min-width: 0;
+  gap: 8px;
+  text-align: center;
+}
+
+.marker {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-inline: auto;
+  border-radius: 999px;
+  background: #fff;
+  color: color-mix(in srgb, var(--indigo) 55%, #fff);
+  border: 2px solid color-mix(in srgb, var(--indigo) 18%, #fff);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  direction: ltr;
+}
+
+.marker svg {
+  width: 18px;
+  height: 18px;
+}
+
+.progressItem[data-state="current"] .marker {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 22%, #fff);
+}
+
+.progressItem[data-state="done"] .marker {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: #fff;
+}
+
+.progressLabel {
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--indigo) 55%, #fff);
+}
+
+.progressItem[data-state="current"] .progressLabel,
+.progressItem[data-state="done"] .progressLabel {
+  color: var(--indigo);
+  font-weight: 750;
+}
+
+.connector {
+  position: absolute;
+  top: 19px;
+  left: calc((100% - 40px) / 2);
+  width: calc(36px + 100% - 40px);
+  height: 2px;
+  transform: translateX(-100%);
+  background: color-mix(in srgb, var(--indigo) 16%, #fff);
+  z-index: 0;
+}
+
+.progressItem[data-state="done"] .connector {
+  background: var(--indigo);
+}
+
+.stage {
+  animation: stepIn 280ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.stage[data-direction="-1"] {
+  animation-name: stepInBack;
+}
+
+.legend {
+  padding: 0;
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--indigo);
+}
+
+.fields {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--indigo) 78%, transparent);
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--indigo) 48%, transparent);
+}
+
+.form input:not([type="checkbox"]),
+.form textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--indigo) 22%, transparent);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--indigo);
+  font: inherit;
+}
+
+.form textarea {
+  min-height: 120px;
+  resize: vertical;
+  border-radius: 12px;
+}
+
+.form input:not([type="checkbox"]):focus-visible,
+.form textarea:focus-visible,
+.form button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.form input:not([type="checkbox"])[aria-invalid="true"],
+.form textarea[aria-invalid="true"] {
+  border-color: var(--orange);
+}
+
+.error {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--orange);
+}
+
+.review {
+  display: grid;
+  gap: 12px;
+}
+
+.reviewCard {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--indigo) 10%, transparent);
+}
+
+.reviewCard h3 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: var(--indigo);
+}
+
+.reviewCard dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.reviewCard dt {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--indigo) 55%, transparent);
+}
+
+.reviewCard dd {
+  margin: 2px 0 0;
+  font-weight: 700;
+  color: var(--indigo);
+  overflow-wrap: anywhere;
+}
+
+.accept {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--indigo) 10%, transparent);
+  color: var(--indigo);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accept input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--indigo);
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 12px;
+  min-height: 44px;
+  padding: 8px 16px;
+}
+
+.prev,
+.next {
+  border: 1px solid transparent;
+}
+
+.prev {
+  background: #fff;
+  color: var(--indigo);
+  border-color: color-mix(in srgb, var(--indigo) 22%, transparent);
+}
+
+.next {
+  background: var(--indigo);
+  color: #fff;
+}
+
+.prev:disabled,
+.next:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.success {
+  text-align: center;
+  padding: 18px 8px 8px;
+}
+
+.successMark {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--orange) 18%, #fff);
+  color: var(--orange);
+}
+
+.successMark svg {
+  width: 22px;
+  height: 22px;
+}
+
+.success h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: var(--indigo);
+}
+
+.success p {
+  margin: 0 0 16px;
+}
+
+@media (max-width: 640px) {
+  .progress {
+    gap: 18px;
+  }
+  .progressItem {
+    flex-basis: 58px;
+    width: 58px;
+  }
+  .marker {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+  }
+  .connector {
+    top: 16px;
+    left: calc((100% - 34px) / 2);
+    width: calc(18px + 100% - 34px);
+  }
+  .progressLabel {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    animation: none;
+  }
+}
+
+@keyframes stepIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes stepInBack {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}

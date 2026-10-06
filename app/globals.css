@@ -209,3 +209,13 @@ button,
 summary {
   touch-action: manipulation;
 }
+
+button,
+[type="button"],
+[type="submit"],
+[type="reset"],
+.fn-btn,
+.fn-tabs button,
+.fn-cats button {
+  border-radius: 12px;
+}
