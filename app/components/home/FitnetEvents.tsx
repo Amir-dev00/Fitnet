@@ -35,19 +35,25 @@ export type FitnetEventsProps = {
 };
 
 const DEMO_ITEMS: readonly ApprovedFitnetEvent[] = [
-  { id: 'demo-training', approved: true, title: 'نمونهٔ رویداد تمرین گروهی' },
-  { id: 'demo-workshop', approved: true, title: 'نمونهٔ کارگاه ورزشی' },
-  { id: 'demo-yoga', approved: true, title: 'نمونهٔ کلاس یوگا' },
-  { id: 'demo-run', approved: true, title: 'نمونهٔ دویدن آزاد' },
-  { id: 'demo-cycle', approved: true, title: 'نمونهٔ کارگاه دوچرخه' },
+  { id: 'demo-training', approved: true, title: 'نمونهٔ رویداد تمرین گروهی', cover: { src: '/images/events/group-run.webp', alt: '' } },
+  { id: 'demo-workshop', approved: true, title: 'نمونهٔ کارگاه ورزشی', cover: { src: '/images/events/climbing.webp', alt: '' } },
+  { id: 'demo-yoga', approved: true, title: 'نمونهٔ کلاس یوگا', cover: { src: '/images/events/group-stretch.webp', alt: '' } },
+  { id: 'demo-run', approved: true, title: 'نمونهٔ دویدن آزاد', cover: { src: '/images/events/outdoor-stretch.webp', alt: '' } },
+  { id: 'demo-walk', approved: true, title: 'نمونهٔ پیاده‌روی شهری', cover: { src: '/images/events/city-walk.webp', alt: '' } },
+  { id: 'demo-entry', approved: true, title: 'نمونهٔ ورود به باشگاه', cover: { src: '/images/events/gym-entry.webp', alt: '' } },
+  { id: 'demo-break', approved: true, title: 'نمونهٔ توقف بین تمرین', cover: { src: '/images/events/gym-break.webp', alt: '' } },
+  { id: 'demo-visit', approved: true, title: 'نمونهٔ بازدید از باشگاه', cover: { src: '/images/events/gym-visit.webp', alt: '' } },
 ];
 
 const DEMO_DESCRIPTIONS = [
   'تمرین گروهی در فضایی مناسب؛ اطلاعات نمونه.',
   'آشنایی با یک مهارت ورزشی؛ اطلاعات نمونه.',
   'تمرکز و کشش آرام؛ اطلاعات نمونه.',
-  'دویدن همراه دیگران؛ اطلاعات نمونه.',
-  'آموزش پایهٔ دوچرخه؛ اطلاعات نمونه.',
+  'حرکت در فضای باز؛ اطلاعات نمونه.',
+  'پیاده‌روی در شهر؛ اطلاعات نمونه.',
+  'ورود به فضای تمرین؛ اطلاعات نمونه.',
+  'توقف کوتاه بین تمرین؛ اطلاعات نمونه.',
+  'گفتگو در فضای باشگاه؛ اطلاعات نمونه.',
 ] as const;
 
 const availabilityLabels = {

@@ -29,6 +29,7 @@
 .preview { margin-top: 14px; padding: 15px 12px; border-radius: 22px; background: var(--fp-indigo); color: white; box-shadow: 0 12px 30px #170b9312; }
 .previewHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
+.brandMark { display: block; width: 23px; height: 23px; object-fit: contain; }
 .brandSub { display: none; font-weight: 400; font-size: 11px; color: #d5d0fc; }
 .samplePill { border: 1px solid #ffffff40; padding: 4px 10px; border-radius: 999px; color: #e9e6ff; font-size: 11px; white-space: nowrap; }
 .previewLabel { color: #e9e6ff; margin: 20px 0 12px; font-size: 11px; line-height: 1.9; }

@@ -16,7 +16,7 @@ export function withinTehran(longitude:number,latitude:number){const b=data.boun
 const INITIAL={...projectTehran(51.405,35.72),zoom:3.2};
 type Point={x:number;y:number};
 type Gesture={points:Point[];camera:Camera};
-export default function TehranMap({markers=EMPTY,selectedId,onSelect,assetBase="/maps/tehran"}:TehranMapProps){
+function SvgTehranMap({markers=EMPTY,selectedId,onSelect,assetBase="/maps/tehran"}:TehranMapProps){
  const host=useRef<HTMLDivElement>(null);const help=useId();
  const [size,setSize]=useState({width:600,height:390});
  const [camera,setCamera]=useState<Camera>(INITIAL);
@@ -104,4 +104,202 @@ export default function TehranMap({markers=EMPTY,selectedId,onSelect,assetBase="
   </div>
   <p id={help} className={styles.note}>{valid.some(m=>m.isDemo)?'نشانگر باشگاه‌ها نمونه است. ':''}برای دیدن خیابان‌های فرعی نزدیک‌تر شوید. با فعال‌کردن جابه‌جایی، زوم دو‌انگشتی و چرخ ماوس هم فعال می‌شود.<span className={styles.sr}>کلیدهای جهت: جابه‌جایی؛ مثبت و منفی: زوم؛ Home: بازگشت به تهران.</span></p>
  </div>;
+}
+
+const NESHAN_RTL_TEXT = "https://static.neshan.org/sdk/mapboxgl/mapbox-gl-rtl-text.js";
+const NESHAN_STYLE = "https://static.neshan.org/sdk/maplibre/styles/light.json";
+const NESHAN_SDK = "https://static.neshan.org/sdk/maplibre/5.24.3/neshan-maplibre-sdk.umd.js";
+const NESHAN_CSS = "https://static.neshan.org/sdk/maplibre/5.24.3/neshan-maplibre-sdk.css";
+const NESHAN_HOME: [number, number] = [51.405, 35.72];
+const NESHAN_ZOOM = 12;
+const NESHAN_MIN_ZOOM = 11;
+const NESHAN_MAX_ZOOM = 17;
+
+type NeshanMap = {
+  remove: () => void;
+  zoomIn: (options?: { duration?: number }) => void;
+  zoomOut: (options?: { duration?: number }) => void;
+  getZoom: () => number;
+  easeTo: (options: { center?: [number, number]; zoom?: number; duration?: number }) => void;
+  panBy: (offset: [number, number], options?: { duration?: number }) => void;
+  on: (event: string, handler: () => void) => void;
+  dragPan: { enable: () => void; disable: () => void };
+  scrollZoom: { enable: () => void; disable: () => void };
+  boxZoom: { enable: () => void; disable: () => void };
+  doubleClickZoom: { enable: () => void; disable: () => void };
+  touchZoomRotate: { enable: () => void; disable: () => void };
+  keyboard: { disable: () => void };
+};
+type NeshanMarker = { remove: () => void; getElement: () => HTMLElement };
+type MapLibreApi = {
+  Map: new (options: Record<string, unknown>) => NeshanMap;
+  Marker: new (options: { element: HTMLElement; anchor?: string }) => { setLngLat: (lngLat: [number, number]) => { addTo: (map: NeshanMap) => NeshanMarker } };
+};
+
+let neshanSdk: Promise<MapLibreApi> | null = null;
+
+function loadNeshanSdk() {
+  const ready = () => (window as Window & { maplibregl?: { default?: MapLibreApi } }).maplibregl?.default;
+  if (ready()) return Promise.resolve(ready()!);
+  if (neshanSdk) return neshanSdk;
+  if (!document.querySelector("link[data-neshan-map]")) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = NESHAN_CSS;
+    link.dataset.neshanMap = "css";
+    document.head.appendChild(link);
+  }
+  neshanSdk = new Promise<MapLibreApi>((resolve, reject) => {
+    const finish = () => {
+      const api = ready();
+      if (api) resolve(api);
+      else reject(new Error("neshan sdk missing"));
+    };
+    const existing = document.querySelector<HTMLScriptElement>("script[data-neshan-map]");
+    if (existing) {
+      existing.addEventListener("load", finish, { once: true });
+      existing.addEventListener("error", () => reject(new Error("neshan sdk failed")), { once: true });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = NESHAN_SDK;
+    script.async = true;
+    script.dataset.neshanMap = "js";
+    script.onload = finish;
+    script.onerror = () => reject(new Error("neshan sdk failed"));
+    document.head.appendChild(script);
+  }).catch((error: unknown) => {
+    neshanSdk = null;
+    throw error;
+  });
+  return neshanSdk;
+}
+
+function setMapGestures(map: NeshanMap, enabled: boolean) {
+  for (const control of [map.dragPan, map.scrollZoom, map.boxZoom, map.doubleClickZoom, map.touchZoomRotate]) {
+    if (enabled) control.enable();
+    else control.disable();
+  }
+}
+
+function markerButton(marker: TehranMarker, pressed: boolean) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = styles.marker;
+  button.setAttribute("aria-pressed", pressed ? "true" : "false");
+  button.setAttribute("aria-label", `${marker.name}${marker.credits ? `، ${marker.credits} اعتبار` : ""}${marker.isDemo ? "، موقعیت نمونه" : ""}`);
+  button.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s7-6 7-12A7 7 0 0 0 5 9c0 6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span></span>`;
+  button.querySelector("span")!.textContent = marker.credits ? `${marker.credits} اعتبار` : marker.name;
+  return button;
+}
+
+function NeshanTehranMap({ markers = EMPTY, selectedId, onSelect, apiKey }: TehranMapProps & { apiKey: string }) {
+  const mapNode = useRef<HTMLDivElement>(null);
+  const help = useId();
+  const mapRef = useRef<NeshanMap | null>(null);
+  const onSelectRef = useRef(onSelect);
+  const selectedIdRef = useRef(selectedId);
+  const dragRef = useRef(false);
+  const markerNodes = useRef(new Map<string, HTMLButtonElement>());
+  const [dragEnabled, setDragEnabled] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [zoom, setZoom] = useState(NESHAN_ZOOM);
+  const valid = useMemo(() => markers.filter((marker) => withinTehran(marker.longitude, marker.latitude)), [markers]);
+  useLayoutEffect(() => { onSelectRef.current = onSelect; selectedIdRef.current = selectedId; dragRef.current = dragEnabled; });
+
+  useEffect(() => {
+    if (!mapNode.current) return;
+    let map: NeshanMap | null = null;
+    let cancelled = false;
+    const placed: NeshanMarker[] = [];
+    loadNeshanSdk().then((maplibre) => {
+      if (cancelled || !mapNode.current) return;
+      map = new maplibre.Map({
+        container: mapNode.current,
+        style: NESHAN_STYLE,
+        center: NESHAN_HOME,
+        zoom: NESHAN_ZOOM,
+        minZoom: NESHAN_MIN_ZOOM,
+        maxZoom: NESHAN_MAX_ZOOM,
+        attributionControl: true,
+        apiKey,
+        rtl: { url: NESHAN_RTL_TEXT, lazy: false },
+      });
+      map.keyboard.disable();
+      setMapGestures(map, dragRef.current);
+      mapRef.current = map;
+      const syncZoom = () => { if (map) setZoom(map.getZoom()); };
+      map.on("zoom", syncZoom);
+      map.on("load", () => {
+        if (cancelled || !map) return;
+        markerNodes.current.clear();
+        for (const marker of valid) {
+          const element = markerButton(marker, marker.id === selectedIdRef.current);
+          element.addEventListener("click", () => onSelectRef.current?.(marker.id));
+          markerNodes.current.set(marker.id, element);
+          placed.push(new maplibre.Marker({ element, anchor: "center" }).setLngLat([marker.longitude, marker.latitude]).addTo(map));
+        }
+        const current = valid.find((marker) => marker.id === selectedIdRef.current);
+        if (current) map.easeTo({ center: [current.longitude, current.latitude], duration: 0 });
+      });
+    }).catch(() => { if (!cancelled) setFailed(true); });
+    return () => {
+      cancelled = true;
+      placed.forEach((marker) => marker.remove());
+      markerNodes.current.clear();
+      map?.remove();
+      mapRef.current = null;
+    };
+  }, [apiKey, valid]);
+
+  useEffect(() => {
+    markerNodes.current.forEach((element, id) => {
+      element.setAttribute("aria-pressed", id === selectedId ? "true" : "false");
+    });
+    const marker = valid.find((item) => item.id === selectedId);
+    if (marker) mapRef.current?.easeTo({ center: [marker.longitude, marker.latitude], duration: 450 });
+  }, [selectedId, valid]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map) setMapGestures(map, dragEnabled);
+  }, [dragEnabled]);
+
+  const zoomBy = (direction: 1 | -1) => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (direction > 0) map.zoomIn({ duration: 250 });
+    else map.zoomOut({ duration: 250 });
+  };
+  const reset = () => mapRef.current?.easeTo({ center: NESHAN_HOME, zoom: NESHAN_ZOOM, duration: 450 });
+  const pan = (x: number, y: number) => mapRef.current?.panBy([x, y], { duration: 200 });
+
+  return <div className={styles.shell} dir="rtl">
+    <div className={styles.topline}><span>تهران و اطراف <span className={styles.secondary}>/ نقشهٔ نشان</span></span><span className={styles.north} aria-label="شمال نقشه در بالا است">↑ شمال</span></div>
+    <div className={styles.viewport} data-drag={dragEnabled} tabIndex={0} role="group" aria-label="نقشهٔ نشان برای تهران" aria-describedby={help}
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return;
+        const actions: Record<string, () => void> = {
+          ArrowLeft: () => pan(-80, 0), ArrowRight: () => pan(80, 0), ArrowUp: () => pan(0, -80), ArrowDown: () => pan(0, 80),
+          "+": () => zoomBy(1), "=": () => zoomBy(1), "-": () => zoomBy(-1), Home: reset,
+        };
+        if (actions[event.key]) { event.preventDefault(); actions[event.key](); }
+      }}>
+      <div ref={mapNode} className={styles.mapHost} />
+      <div className={styles.controls} aria-label="کنترل نقشه">
+        <button type="button" onClick={() => zoomBy(1)} disabled={zoom >= NESHAN_MAX_ZOOM} aria-label="بزرگ‌نمایی">+</button>
+        <button type="button" onClick={() => zoomBy(-1)} disabled={zoom <= NESHAN_MIN_ZOOM} aria-label="کوچک‌نمایی">−</button>
+        <button type="button" onClick={reset} aria-label="بازگشت به تهران">⌂</button>
+      </div>
+      {failed && <p className={styles.error} role="alert">نقشهٔ نشان بارگذاری نشد.</p>}
+      <div className={styles.bottom}><button type="button" className={styles.dragButton} aria-pressed={dragEnabled} onClick={() => setDragEnabled((value) => !value)}>{dragEnabled ? "پایان جابه‌جایی" : "جابه‌جایی نقشه"}</button></div>
+    </div>
+    <p id={help} className={styles.note}>{valid.some((marker) => marker.isDemo) ? "نشانگر باشگاه‌ها نمونه است. " : ""}برای دیدن خیابان‌های فرعی نزدیک‌تر شوید. با فعال‌کردن جابه‌جایی، زوم دو‌انگشتی و چرخ ماوس هم فعال می‌شود.<span className={styles.sr}>کلیدهای جهت: جابه‌جایی؛ مثبت و منفی: زوم؛ Home: بازگشت به تهران.</span></p>
+  </div>;
+}
+
+export default function TehranMap(props: TehranMapProps) {
+  const apiKey = process.env.NEXT_PUBLIC_NESHAN_API_KEY;
+  if (!apiKey) return <SvgTehranMap {...props} />;
+  return <NeshanTehranMap {...props} apiKey={apiKey} />;
 }

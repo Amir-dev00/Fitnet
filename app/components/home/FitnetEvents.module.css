@@ -257,6 +257,10 @@
   .cardStack { width: min(62vw, 250px); }
   .card[data-status='prev'] { transform: translateX(calc(-58px + var(--drag-x))) scale(.88) rotate(-2.5deg); }
   .card[data-status='next'] { transform: translateX(calc(58px + var(--drag-x))) scale(.88) rotate(2.5deg); }
+  .cardOverlay { padding: 14px 12px 12px; }
+  .cardBadge { margin-bottom: 6px; padding: 2px 8px; font-size: 10px; }
+  .cardTitle { font-size: 13px; line-height: 1.4; }
+  .cardDescription { margin-top: 4px; font-size: 11px; line-height: 1.45; }
 }
 @media (max-width: 700px) {
   .section { padding-inline: 20px; }
