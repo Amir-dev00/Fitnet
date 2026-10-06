@@ -179,7 +179,7 @@ export default function FitnetPartners({ className }: FitnetPartnersProps) {
             if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocusBlocked(false);
           }}>
           <div className={styles.previewHeader}>
-            <div className={styles.brand}><img className={styles.brandMark} src="/brand/logo-reverse.png" alt="" width={1124} height={1078} /><span>فیت‌نت <span className={styles.brandSub}>/ پنل همکاری</span></span></div>
+            <div className={styles.brand}><img className={styles.brandMark} src="/brand/logo-reverse.webp" alt="" width={1124} height={1078} /><span>فیت‌نت <span className={styles.brandSub}>/ پنل همکاری</span></span></div>
             <span className={styles.samplePill}>نسخهٔ نمایشی</span>
           </div>
           <p className={styles.previewLabel}>پیش‌نمایش پنل باشگاه — اطلاعات نمونه</p>

@@ -21,7 +21,7 @@ export function EventsIntro() {
               <img
                 loading="lazy"
                 alt=""
-                src="/images/photo-1571019614242-c5c5dee9f50b.jpg"
+                src="/images/photo-1571019614242-c5c5dee9f50b.webp"
                 width={800}
                 height={520}
               />
@@ -31,7 +31,7 @@ export function EventsIntro() {
               <img
                 loading="lazy"
                 alt=""
-                src="/images/photo-1517836357463-d25dfe09ce18.jpg"
+                src="/images/photo-1517836357463-d25dfe09ce18.webp"
                 width={800}
                 height={520}
               />

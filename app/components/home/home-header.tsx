@@ -3,7 +3,7 @@
 import { Dialog } from "@base-ui/react/dialog"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 
 const sectionLinks = [
   { key: "how", id: "how-it-works", label: "نحوه کار" },
@@ -31,7 +31,6 @@ export function HomeHeader() {
   const prevActive = useRef<SectionKey | null>(null)
   const placed = useRef(false)
   const lockUntil = useRef(0)
-  const titleId = useId()
   const pathname = usePathname()
   const onHome = pathname === "/"
   const active: SectionKey | null = onHome ? sectionActive : null
@@ -168,7 +167,7 @@ export function HomeHeader() {
           <span className="fn-float-capsule" aria-hidden="true" />
           <Link href="/" className="fn-float-logo" aria-label="فیت‌نت، صفحه اصلی">
             <img
-              src="/brand/fitnet-indigo-orange-logo.png"
+              src="/brand/fitnet-indigo-orange-logo.webp"
               alt=""
               width={2172}
               height={724}
@@ -221,7 +220,7 @@ export function HomeHeader() {
         <Dialog.Popup
           className="fn-nav-drawer"
           initialFocus={closeButton}
-          aria-labelledby={titleId}
+          aria-label="منو"
         >
           <div className="fn-nav-drawer-head">
             <Dialog.Close
@@ -233,7 +232,6 @@ export function HomeHeader() {
                 <path strokeLinecap="round" strokeWidth="2" d="M6 6l12 12M18 6L6 18" />
               </svg>
             </Dialog.Close>
-            <p id={titleId} className="fn-nav-drawer-title">منو</p>
           </div>
           <nav className="fn-nav-drawer-nav" aria-label="ناوبری موبایل">
             {sectionLinks.map((item) =>

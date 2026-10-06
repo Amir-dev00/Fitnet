@@ -4,7 +4,7 @@ export function Logo({ lockup = false }: { lockup?: boolean }) {
   return (
     <Link href="/" className="fn-brand" aria-label="فیت‌نت، صفحه اصلی">
       <span className="fn-logo-frame">
-        <img className="fn-logo" src="/brand/logo-reverse.png" width={1124} height={1078} alt="" />
+        <img className="fn-logo" src="/brand/logo-reverse.webp" width={1124} height={1078} alt="" />
       </span>
       {lockup ? (
         <span className="fn-brand-lockup">

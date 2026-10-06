@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 export const siteUrl = "https://fitnet.ir"
-const ogImage = `${siteUrl}/images/photo-1534438327276-14e5300c3a48.jpg`
+const ogImage = `${siteUrl}/images/photo-1534438327276-14e5300c3a48.webp`
 
 export function pageMeta(opts: {
   title: string

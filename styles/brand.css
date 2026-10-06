@@ -846,15 +846,6 @@ html[dir="rtl"] #hdrAurum .fn-float-nav .fn-float-link:active {
   border-bottom: 1px solid color-mix(in srgb, var(--fitnet-white) 16%, transparent);
 }
 
-.fn-nav-drawer-title {
-  margin: 0;
-  font-family: var(--fn-font);
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.6;
-  text-align: right;
-}
-
 .fn-nav-drawer-close {
   display: inline-grid;
   place-items: center;

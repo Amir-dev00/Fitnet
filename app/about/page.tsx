@@ -14,8 +14,8 @@ export default function AboutPage() {
       <h1>شهر، زمین تمرین توست.</h1>
       <p className="fn-lead">فیت‌نت باشگاه‌های همکار و رویدادهای ورزشی تأییدشده را در یک حساب جمع می‌کند. اعتبار را در کیف پول می‌بینی، زمان مناسب را رزرو می‌کنی و با QR وارد می‌شوی.</p>
       <div className="fn-grid cols-2" style={{ marginBottom: 28 }}>
-        <img src="/images/photo-1534438327276-14e5300c3a48.jpg" alt="فضای تمرین" width={800} height={520} style={{ width: "100%", height: 320, objectFit: "cover" }} />
-        <img src="/images/photo-1571019614242-c5c5dee9f50b.jpg" alt="" width={800} height={520} style={{ width: "100%", height: 320, objectFit: "cover" }} loading="lazy" />
+        <img src="/images/photo-1534438327276-14e5300c3a48.webp" alt="فضای تمرین" width={800} height={520} style={{ width: "100%", height: 320, objectFit: "cover" }} />
+        <img src="/images/photo-1571019614242-c5c5dee9f50b.webp" alt="" width={800} height={520} style={{ width: "100%", height: 320, objectFit: "cover" }} loading="lazy" />
       </div>
       <div className="fn-grid cols-3">
         <article className="fn-card"><h2>کاربر</h2><p>کشف، رزرو و ورود با یک کیف پول. لازم نیست برای هر باشگاه عضویت جدا بخری.</p></article>
